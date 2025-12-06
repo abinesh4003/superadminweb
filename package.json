@@ -39,6 +39,7 @@
     "serve:prerender": "cd dist/browser && http-server",
     "serve:ssr": "node dist/server",
     "vercel-build": "npm run build:ssr:prod",
+    "build:vercel": "npm run build:ssr:prod",
     "sprites": "node_modules/.bin/svg-sprite --config sprite-config.json src/assets/svg/*.svg"
   },
   "private": true,

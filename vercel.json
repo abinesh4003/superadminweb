@@ -4,16 +4,13 @@
     {
       "src": "dist/server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "dist/browser/**",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
-      "dest": "/dist/browser/$1"
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|json))",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" },
+      "dest": "/dist/server.js"
     },
     {
       "src": "/(.*)",
