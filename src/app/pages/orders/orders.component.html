@@ -1,0 +1,68 @@
+<pkz-sidebar>
+    <div class="sidebar">
+        <div class="list-group list-group-flush">
+            <button *ngxPermissionsOnly="getOrdersDashboardPermissions()"
+                    class="btn sidebar__btn-home"
+                    routerLink="dashboard"
+                    routerLinkActive="active"
+                    type="button">Dashboard
+            </button>
+            <div>
+                <button *ngxPermissionsOnly="getOrderAllPermissions()"
+                        class="list-group-item list-group-item-action"
+                        routerLink="all"
+                        routerLinkActive="active"
+                        type="button"
+                >
+                    <i aria-hidden="true"
+                       class="icon fa fa-list-alt"></i>
+                        Orders
+                    <button (click)="updateOrders(); $event.stopPropagation()" class="btn btn-primary btn-sm ml-auto">
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                    </button>
+                </button>
+            </div>
+
+            <button
+                    *ngxPermissionsOnly="getDeliveryAssistantsPermissions()"
+                    class="list-group-item list-group-item-action"
+                    routerLink="delivery-assistants"
+                    routerLinkActive="active"
+                    type="button"
+            >
+                <i aria-hidden="true"
+                   class="icon fa fa-users"></i>
+                Delivery Assistants
+                <button (click)="updateOrders(); $event.stopPropagation()" class="btn btn-primary btn-sm ml-auto">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+            </button>
+
+            <button
+                    *ngxPermissionsOnly="getSubscriptionPermissions()"
+                    class="list-group-item list-group-item-action"
+                    routerLink="subscription"
+                    routerLinkActive="active"
+                    type="button"
+            >
+                <i aria-hidden="true"
+                   class="icon fa fa-file"></i>
+                Subscription ({{subscriptionsCount}})
+                <button (click)="updateOrders(); $event.stopPropagation()" class="btn btn-primary btn-sm ml-auto">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="showOrders"
+         class="content orders-bg">
+        <router-outlet></router-outlet>
+    </div>
+
+    <div class="footer">
+        <pkz-footer></pkz-footer>
+    </div>
+
+
+</pkz-sidebar>

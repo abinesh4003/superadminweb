@@ -1,0 +1,52 @@
+.table-container {
+  margin-top: 15px;
+
+  ::ng-deep {
+    .datatable-body-row {
+      &:hover {
+        cursor: pointer;
+        border: 1px solid #616161 !important;
+      }
+    }
+
+    .datatable-header {
+      background-color: #e0e0e0;
+      color: #000000;
+    }
+
+    .datatable-row-even {
+      background-color: #ffffff !important;
+      border: none !important;
+    }
+
+    .datatable-row-odd {
+      background-color: #f5f5f5 !important;
+      border: none !important;
+    }
+  }
+}
+
+
+.green-check {
+  color: green;
+}
+
+.blue-check {
+  color: blue;
+}
+
+.grey-check {
+  color: silver;
+}
+
+.red {
+  color: red;
+}
+
+.font-size-1-4rem {
+  font-size: 1.4rem;
+}
+
+.w-25px {
+  width: 25px;
+}

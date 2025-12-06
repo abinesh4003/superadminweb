@@ -1,0 +1,89 @@
+<div class="modal-header">
+	<h5 class="modal-title">Add Custom Field</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<form [formGroup]="form" novalidate>
+		<div class="row">
+			<div class="col-8">
+				<div class="form-group row">
+					<label class="col-3 required col-form-label">
+						<span>Name</span>
+					</label>
+					<div class="col-8">
+						<input class="form-control"
+						       formControlName="display_name"
+						       [ngClass]="{'form-control-danger': isInvalidField('display_name')}"
+						>
+						<div *ngIf="isInvalidField('display_name')">
+							<div *ngIf="display_name.errors.required" class="error">
+								Name is required.
+							</div>
+							<div *ngIf="display_name.errors.duplicatedField" class="error">
+								Name already exists.
+							</div>
+							<div *ngIf="display_name.errors.minlength" class="error">
+								Name should consists of 3 more alphanumeric characters.
+							</div>
+							<div *ngIf="display_name.errors.emptyString" class="error">
+								Name should't be empty
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-3 col-form-label">Format</label>
+					<div class="col-8">
+						<select class="form-control" formControlName="format">
+							<option *ngFor="let option of formats" [ngValue]="option.id">{{option.name}}</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-3 col-form-label">
+						<span>Default value</span>
+					</label>
+					<div class="col-8">
+						<input class="form-control" formControlName="default">
+					</div>
+				</div>
+
+			</div>
+			<div class="col-4">
+				<div class="form-group row">
+					<label class="col-6">
+						<span>Required</span>
+					</label>
+					<div class="col-6">
+						<input class="form-control" type="checkbox" formControlName="required">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-6">
+						<span>Search</span>
+					</label>
+					<div class="col-6">
+						<input class="form-control" type="checkbox" formControlName="is_searchable">
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="form-group">
+			<label>Description</label>
+			<div>
+				<textarea class="form-control" rows="4" formControlName="description"></textarea>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<div class="float-right">
+		<button type="button" class="btn btn-light mr-2" (click)="dismiss()">Cancel</button>
+		<button type="button" [disabled]="!isFormValid()" class="btn btn-primary" (click)="close()">Create</button>
+	</div>
+</div>

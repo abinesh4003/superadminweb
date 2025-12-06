@@ -1,0 +1,158 @@
+<div class="delivery-assistant-container" *ngIf="assistantInfo$ | async as assistant">
+    <div class='d-flex flex-column'>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb smaller-font pb-3">
+                <li class="breadcrumb-item">
+                    <a href="#" routerLink="../">Assistants</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{assistant.first_name}} {{assistant.last_name}}
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="assistant-info">
+
+        <div class="personal-info">
+            <div class="d-flex">
+                <div class="d-flex flex-column justify-content-end mr-4 w-200px">
+                    <span class="pi-label justify-content-end">First Name:</span>
+                    <span class="pi-label justify-content-end">Last Name:</span>
+                    <span class="pi-label justify-content-end">Mobile Number:</span>
+                    <span class="pi-label justify-content-end">Email Id:</span>
+                </div>
+                <div class="d-flex flex-column w-250px">
+                    <span class="pi-label">{{assistant.first_name}}</span>
+                    <span class="pi-label">{{assistant.last_name}}</span>
+                    <span class="pi-label">+{{assistant?.mobile.dialing_code}} {{assistant?.mobile.number}}
+                        <i
+                                class="fa fa-check-circle verified ml-2"
+                                *ngIf="assistant?.mobile.is_verified"></i></span>
+                    <span class="pi-label">{{assistant.email.id}} <i
+                            class="fa fa-check-circle verified ml-2"
+                            *ngIf="assistant.email.is_verified"></i></span>
+                </div>
+            </div>
+            <div class="ml-3">
+                <img *ngIf="assistant.avatar?.length > 0" class="assistant-img"
+                     (click)="viewImage(assistant.avatar[0].name, iconOptions)"
+                     [src]="assistant.avatar[0].name | imageSecure:iconOptions | async"
+                     [attr.width]="iconOptions.width" alt="">
+            </div>
+        </div>
+        <div class="d-flex justify-content-between additional-info">
+            <div class="d-flex flex-column">
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 text-right">License (Both Sides):</span>
+                    <div class="d-flex align-items-start">
+                        <img *ngFor="let license of assistant.licence" class="license-img"
+                             (click)="viewImage(license.name, iconOptions2)"
+                             [src]="license.name | imageSecure:iconOptions2 | async"/>
+                    </div>
+                </div>
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 text-right">Vehicle Registration copy:</span>
+                    <div class="d-flex align-items-start">
+                        <img *ngFor="let vehicleReg of assistant.vehicleReg" class="license-img"
+                             (click)="viewImage(vehicleReg.name, iconOptions2)"
+                             [src]="vehicleReg.name | imageSecure:iconOptions2 | async"/>
+                    </div>
+                </div>
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 text-right">Vehicle photo:</span>
+                    <div class="d-flex align-items-start">
+                        <img *ngFor="let vehiclePhoto of assistant.vehiclePhoto" class="license-img"
+                             (click)="viewImage(vehiclePhoto.name, iconOptions2)"
+                             [src]="vehiclePhoto.name | imageSecure:iconOptions2 | async"/>
+                    </div>
+                </div>
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 text-right">Is Full Time:</span>
+                    <span>Yes</span>
+                </div>
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 text-right">Created at:</span>
+                    <span>10/10/2020</span>
+                </div>
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 d-flex align-items-center justify-content-end">Status:</span>
+                    <span [ngClass]="{'blue-color': getStatus(assistant.setting.status) === 'Active',
+                    'red-color': getStatus(assistant.setting.status) !== 'Approved'}">
+                        {{getStatus(assistant.setting.status)}}</span>
+                </div>
+                <div class="d-flex mt-3">
+                    <span class="w-200px mr-4 d-flex align-items-center justify-content-end">Deposit Amount:</span>
+                    <input type="text" [value]="assistant?.wallet?.deposit" class="deposit-amount" readonly>
+                </div>
+            </div>
+            <div class="agency-delivery-details">
+                <span class="title-small">
+                    Agency Details:
+                </span>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Merchant Name:</span>
+                    <span class="flex-0-6">{{assistant.merchant.first_name}} {{assistant.merchant.last_name}}</span>
+                </div>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Phone Number:</span>
+                    <span class="flex-0-6">+{{assistant.merchant.dialing_code}} {{assistant.merchant.number}}</span>
+                </div>
+                <div class="d-flex mb-3 mt-2">
+                    <span class="flex-0-4 mr-3 text-right">Location:</span>
+                    <span class="flex-0-6">
+                        <i class="fa fa-map-marker font-size-1-4rem color-purple"></i>
+                    </span>
+                </div>
+                <span class="title-small">
+                    Delivery Payment Details:
+                </span>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Day Delivery Fee:</span>
+                    <span class="flex-0-6">{{assistant?.merchant?.setting?.delivery?.day_delivery_charge}}</span>
+                </div>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Night Delivery Fee</span>
+                    <span class="flex-0-6">{{assistant?.merchant?.setting?.delivery?.night_delivery_charge}}</span>
+                </div>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Incentive Order Limit:</span>
+                    <span class="flex-0-6">{{assistant?.merchant?.setting?.delivery?.incentive?.incentive_order_limit}}</span>
+                </div>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Incentive %:</span>
+                    <span class="flex-0-6">{{assistant?.merchant?.setting?.delivery?.incentive?.incentive_percentage}}</span>
+                </div>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Per Kilometer:</span>
+                    <span class="flex-0-6">{{assistant?.merchant?.setting?.delivery?.per_kilometer_fee}}</span>
+                </div>
+                <div class="mt-2 d-flex">
+                    <span class="flex-0-4 mr-3 text-right">Fixed Salary:</span>
+                    <span class="flex-0-6">{{assistant?.merchant?.setting?.delivery?.fixed_salary}} / Month</span>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <button type="button" class="btn btn-light delivery-history-btn" (click)="takeAction(assistant._id, 4)"
+                    [disabled]="isButtonDisabled(assistant?.setting?.status, 4)">
+                Resigned
+            </button>
+            <button type="button" class="btn btn-light delivery-history-btn" (click)="takeAction(assistant._id, 3)"
+                    [disabled]="isButtonDisabled(assistant?.setting?.status, 3)">
+                Suspend
+            </button>
+            <button type="button" class="btn btn-light delivery-history-btn" (click)="takeAction(assistant._id, 2)"
+                    [disabled]="isButtonDisabled(assistant?.setting?.status, 2)">
+                Reject
+            </button>
+            <button type="button" class="btn btn-primary delivery-history-btn" (click)="approveAssistant(assistant._id)"
+                    [disabled]="isButtonDisabled(assistant?.setting?.status,1)">
+                Approve
+            </button>
+            <button type="button" class="btn btn-light delivery-history-btn" (click)="goBack()">
+                Back
+            </button>
+        </div>
+    </div>
+</div>
+

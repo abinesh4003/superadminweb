@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{data.status}} Order Confirmation</h5>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex justify-content-center">
+    Are you sure you want to {{data.status}} the Order?
+  </div>
+</div>
+<div class="modal-footer dispatch-order-buttons">
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-primary mr-3" (click)="onConfirm()">Yes</button>
+    <button type="button" class="btn btn-outline-grayed mr-2" (click)="dismiss()">No</button>
+  </div>
+</div>

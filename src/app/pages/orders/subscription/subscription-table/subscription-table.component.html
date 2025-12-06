@@ -1,0 +1,79 @@
+<div class="table-container">
+  <ngx-datatable
+          *ngIf="isPageLoaded"
+          #table
+          class="bootstrap"
+          pkzResponsiveDatatable
+          [rows]="rows"
+          [rowHeight]="35"
+          columnMode="flex"
+          [footerHeight]="40"
+          [externalPaging]="true"
+          [count]="page.count"
+          (activate)="onRowClick($event)"
+          [offset]="page.pageNumber"
+          [limit]="page.limit"
+          (page)="setPage($event)"
+  >
+    <ngx-datatable-column name="Sno" [flexGrow]="0.5">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+        {{rowIndex + 1 + page.pageNumber * page.limit}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Status" prop="status" [flexGrow]="0.6" *ngIf="+status !== 3">
+      <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+        <i aria-hidden="true" class="font-size-20px fa"
+        [ngClass]="getIsActiveAction(value) ? 'fa-check-circle' : 'fa-pause'"></i>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Subscription Type" prop="subsc_type" [flexGrow]="1"></ngx-datatable-column>
+
+    <ngx-datatable-column name="Start Date" prop="start_date" [flexGrow]="1">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value | date: 'dd/MM/yyy'}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Subscription Title" prop="title" [flexGrow]="1"></ngx-datatable-column>
+
+    <ngx-datatable-column name="Customer Name" prop="customer_name" [flexGrow]="1"></ngx-datatable-column>
+
+<!--    <ngx-datatable-column name="Shop Name" prop="shop_name" [flexGrow]="1"></ngx-datatable-column>-->
+
+    <ngx-datatable-column name="Delivery By" prop="delivery_by" [flexGrow]="1"></ngx-datatable-column>
+
+    <ngx-datatable-column name="Wallet Amount" prop="amount" [flexGrow]="1">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{roundWalletAmount(value)}}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Subscription Date" prop="subs_date" [flexGrow]="1">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        {{value | date: 'dd/MM/yyy HH:mm'}}
+      </ng-template>
+    </ngx-datatable-column>
+
+
+    <ngx-datatable-footer>
+      <ng-template
+              ngx-datatable-footer-template
+              let-rowCount="rowCount"
+              let-pageSize="pageSize"
+              let-selectedCount="selectedCount"
+              let-offset="offset">
+
+        <pkz-table-pagination
+                [rowCount]="rowCount"
+                [pageSize]="pageSize"
+                [selectedCount]="selectedCount"
+                [offset]="offset"
+                (page)="table.onFooterPage($event)"
+        ></pkz-table-pagination>
+      </ng-template>
+    </ngx-datatable-footer>
+
+  </ngx-datatable>
+</div>

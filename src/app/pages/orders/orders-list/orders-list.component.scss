@@ -1,0 +1,17 @@
+.order-list-tabs {
+  ::ng-deep {
+    .nav-tabs .nav-link {
+      background-color: #ffffff !important;
+      font-size: .9rem !important;
+      border-bottom-width: 0 !important;
+
+      &.active {
+        background-color: #F5F5F5 !important;
+      }
+    }
+
+    .nav-tabs {
+      border-bottom: none !important;
+    }
+  }
+}

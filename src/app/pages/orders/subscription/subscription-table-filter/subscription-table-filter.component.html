@@ -1,0 +1,33 @@
+<div class="order-list-filter">
+  <pkz-filter-form [config]="settings"
+                   (filterChanged)="onFilter($event)"
+                   [values]="filtersObj"
+                   [embedded]="true"
+                   class="py-2"
+  >
+    <div class="pr-0" [ngClass]="{'col-3': type2, 'col-4': !type2}">
+      <div class="col-12 form-group row align-items-center mt-1 mb-1"
+           [ngClass]="{'type2' : type2, 'pr-0' : !type2}">
+        <label class="text-right col-form-label col-form-label-sm shop-name-label">Shop Name:</label>
+        <div class="shop-search-input">
+          <ng-select [items]="stores$ | async"
+                     class="bootstrap ng-select-sm"
+                     bindLabel="display_name"
+                     bindValue="_id"
+                     [addTag]="false"
+                     [multiple]="false"
+                     [hideSelected]="false"
+                     [clearable]="false"
+                     typeToSearchText="Please enter 2 or more characters"
+                     [typeahead]="storesTypeahead$"
+                     [loading]="storesLoading"
+                     placeholder="Search Shop"
+                     (ngModelChange)="onStoreChange($event)"
+                     [(ngModel)]="store">
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <ng-content></ng-content>
+  </pkz-filter-form>
+</div>

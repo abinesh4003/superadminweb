@@ -1,0 +1,24 @@
+@import 'variables';
+
+.list-group {
+  &-item {
+    padding: 0.325rem 1.25rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    &-action {
+      &.active {
+        background-color: $side-active-bg;
+        color: $side-active-color;
+      }
+    }
+
+    &-title {
+      background-color: $tab-bg-color;
+      pointer-events: none;
+      cursor: default;
+      text-align: left;
+    }
+  }
+}

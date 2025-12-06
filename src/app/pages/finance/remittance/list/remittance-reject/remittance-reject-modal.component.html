@@ -1,0 +1,30 @@
+<div class="modal-header">
+	<h5 class="modal-title">Rejected Details</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-auto">
+			<strong>
+				<label class="col-form-label">Rejected Reference Id:</label>
+			</strong>
+		</div>
+		<div class="col-12">
+			<input disabled placeholder="Id" type="text" class="form-control" [ngModel]="data.reference_id">
+		</div>
+	</div>
+	<div class="row mt-3">
+		<div class="feedback-box col-12">
+			<span><strong>Reason for the Rejection:</strong></span>
+			<textarea [(ngModel)]="reason" class="form-control" rows="5"></textarea>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<div class="float-right">
+		<button [disabled]="!reason.length" type="button" class="btn btn-primary" (click)="submit()">Rejected</button>
+		<button type="button" class="btn btn-outline-primary mr-2" (click)="dismiss()">Close</button>
+	</div>
+</div>

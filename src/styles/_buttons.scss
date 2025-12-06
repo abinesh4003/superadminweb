@@ -1,0 +1,62 @@
+.btn-outline-grayed {
+  color: #424242;
+  background-color: #fff;
+  border-color: #757575;
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 59px;
+  height: 25px;
+
+  input {
+    display: none;
+
+    &:checked {
+      + {
+        .slider {
+
+          &::before {
+            left: 6px;
+            background-color: #8dd23c;
+            transform: translateX(26px);
+          }
+        }
+      }
+    }
+  }
+
+  .slider {
+    background-color: #ffffff;
+    position: absolute;
+    cursor: pointer;
+    top: -3px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #ccc;
+    transition: 0.4s;
+
+    &::before {
+      position: absolute;
+      content: '';
+      height: 22px;
+      width: 22px;
+      left: 1px;
+      bottom: 1px;
+      background-color: gray;
+      border: 2px solid #ccc;
+      transition: 0.4s;
+    }
+
+    &.round {
+      border-radius: 34px;
+
+      &::before {
+        border-radius: 50%;
+      }
+    }
+  }
+}

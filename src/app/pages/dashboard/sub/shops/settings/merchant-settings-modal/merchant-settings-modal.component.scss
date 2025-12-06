@@ -1,0 +1,19 @@
+.separator {
+  width: calc(100% + 76px);
+  height: 1px;
+  margin-left: -38px;
+  background-color: #eeeeee;
+}
+
+.merchant-settings-actions {
+  margin-top: 15px;
+
+  .btn {
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0;
+    height: 35px;
+  }
+}

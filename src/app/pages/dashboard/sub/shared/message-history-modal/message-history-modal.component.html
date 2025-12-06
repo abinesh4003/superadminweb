@@ -1,0 +1,29 @@
+<div class="modal-body">
+
+	<div *ngIf="data.messages?.length" class="messages">
+		<div *ngFor="let message of data.messages" class="message">
+			<div class="message__header">
+				<span class="message__sender"><strong>{{message.user}}</strong></span>
+				<span>&nbsp;:&nbsp;</span>
+				<span class="message__date">{{message.date | date:'dd/MM/yy'}}</span>
+			</div>
+			<div class="message__text">{{message.message}}</div>
+		</div>
+	</div>
+
+	<div *ngIf="data.isFeedbackAllowed" class="feedback-box">
+		<span><strong>Feedback box:</strong></span>
+		<textarea [(ngModel)]="data.feedback" class="form-control" rows="5"></textarea>
+	</div>
+
+</div>
+
+<div class="modal-footer justify-content-end">
+	<button type="button" class="btn btn-outline-grayed mr-2" (click)="dismiss()">Close</button>
+	<button *ngIf="data.isFeedbackAllowed"
+	        [disabled]="!data.feedback.length"
+	        type="button"
+	        class="btn btn-primary"
+	        (click)="close()"
+	>Save</button>
+</div>

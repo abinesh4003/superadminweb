@@ -1,0 +1,196 @@
+<nav *ngIf="isPageLoaded" aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a href="#" routerLink="../">{{rootBreadcrumbName}}</a>
+		</li>
+		<li class="breadcrumb-item active" aria-current="page">{{getSubBreadcrumbName()}}</li>
+	</ol>
+</nav>
+
+<div class="card" *ngIf="isPageLoaded">
+	<div class="card-body">
+		<form [formGroup]="form" novalidate>
+			<div class="row">
+				<div class="col-6">
+					<fieldset [disabled]="isFormDisabled()">
+						<div class="form-group row" *ngFor="let field of formConfig">
+							<label class="col-4 col-form-label" [ngClass]="{'required': field.required}">
+								<span>{{field.label}}</span>
+							</label>
+							<div class="col-8" [ngSwitch]="field.name">
+								<ng-container *ngSwitchCase="'category'">
+									<ng-container *ngIf="categories?.length">
+
+										<ng-container *ngFor="let index of selectorIndexes"
+										              [ngTemplateOutlet]="categorySelect"
+										              [ngTemplateOutletContext]="{
+										                options: getCategoriesOptions(index),
+										                index: index
+										              }"
+										></ng-container>
+
+										<ng-template #categorySelect let-index="index" let-options="options">
+											<select class="form-control"
+											        (ngModelChange)="onChangeSubCategory($event, index)"
+											        [ngModel]="selectedCategoryPartials[index]"
+											        [ngModelOptions]="{standalone: true}"
+											        [ngClass]="{
+											          'mt-3': index !== 0,
+											          'form-control-danger': index === 0 && isInvalidField('category'),
+											          'form-control-plaintext': isFormDisabled()
+										          }"
+											>
+												<option [ngValue]="defaultCategoryValue">{{defaultCategoryValue}}</option>
+												<option *ngFor="let category of options" [value]="category">{{category}}</option>
+											</select>
+										</ng-template>
+
+									</ng-container>
+								</ng-container>
+								<ng-container *ngSwitchCase="'keywords'">
+									<ng-select
+											class="bootstrap"
+											[items]="getOptions(field.name)"
+											[addTag]="true"
+											[multiple]="true"
+											[hideSelected]="true"
+											[formControlName]="field.name"
+									>
+										<ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+											<span [ngOptionHighlight]="search">{{item}}</span>
+										</ng-template>
+									</ng-select>
+								</ng-container>
+								<ng-container *ngSwitchDefault>
+									<div [ngSwitch]="field.type">
+										<ng-container *ngSwitchCase="'text'">
+											<input [formControlName]="field.name"
+											       [ngClass]="{
+											        'form-control-danger': isInvalidField(field.name),
+											        'form-control-plaintext': isFormDisabled()
+											       }"
+											       type="text" class="form-control"
+											       [readonly]="field.readonly"
+											>
+										</ng-container>
+										<ng-container *ngSwitchCase="'number'">
+											<input [formControlName]="field.name"
+											       [ngClass]="{
+											        'form-control-danger': isInvalidField(field.name),
+											        'form-control-plaintext': isFormDisabled()
+											       }"
+											       type="number"
+											       class="form-control"
+											>
+										</ng-container>
+										<ng-container *ngSwitchCase="'textarea'">
+											<textarea [formControlName]="field.name"
+											          [ngClass]="{
+													        'form-control-danger': isInvalidField(field.name),
+													        'form-control-plaintext': isFormDisabled()
+													       }"
+											          class="form-control"
+											          rows="4"
+											></textarea>
+										</ng-container>
+									</div>
+								</ng-container>
+								<div *ngIf="isInvalidField(field.name)">
+									<div *ngIf="form.get(field.name).errors.required || form.get(field.name).errors.emptyString" class="error">
+										{{field.label}} is required.
+									</div>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+
+					<div *ngIf="isAssignToAllowed()" class="form-group row">
+						<label class="col-4 col-form-label">
+							<span>Assign To:</span>
+						</label>
+
+						<div class="col-8">
+							<select class="form-control" formControlName="review_assigned">
+								<option value=""></option>
+								<option *ngFor="let user of assignUsers" [value]="user._id">{{user.user_name}}</option>
+							</select>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-6">
+
+					<div class="row">
+						<div class="col-10 offset-1">
+							<div class="row">
+								<ng-container *ngFor="let key of imagesKeys">
+									<div *ngIf="!isFormDisabled() || isFormDisabled() && imagesObj[key]" class="col-6 image-upload-field">
+										<pkz-image-upload
+												[disabled]="isFormDisabled()"
+												[reinitWithSource]="isCopyProduct() && !!imagesObj[key]"
+												[deleteAvailable]="!isFormDisabled() && hasPermission(perms.edit)"
+												[imageUrl]="imagesObj[key]"
+												[path]="imageOptions.path"
+												[width]="imageOptions.width"
+												[height]="imageOptions.width"
+												(imageChange)="onImageChange($event, key)"
+												(zoom)="onZoom($event, key)"
+										></pkz-image-upload>
+									</div>
+								</ng-container>
+							</div>
+
+							<button *ngIf="isMessageHistoryBtnAllowed() && !isFeedbackAllowed()"
+							        type="button"
+							        class="btn btn-outline-primary"
+							        (click)="openMessageHistory()"
+							>
+								Message history
+							</button>
+
+							<div *ngIf="isFeedbackAllowed()" class="form-group">
+								<div class="d-flex justify-content-between align-items-center mb-2">
+									<label *ngIf="isMDraftTab()">Request more info from customer:</label>
+									<label *ngIf="!isMDraftTab()">Feedback message:</label>
+									<button *ngIf="isMessageHistoryBtnAllowed()"
+									        type="button"
+									        class="btn btn-outline-primary"
+									        (click)="openMessageHistory()"
+									>
+										Message history
+									</button>
+								</div>
+
+								<textarea [ngClass]="{'form-control-danger': isShownFeedbackError}"
+								          formControlName="userFeedback"
+								          class="form-control"
+								          rows="5"
+								></textarea>
+								<div *ngIf="isShownFeedbackError" class="error">
+									Feedback box should not be empty, kindly provide the reason for an action.
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</form>
+	</div>
+
+	<div class="card-footer text-muted d-flex justify-content-around">
+		<button *ngIf="isCancelAllowed()" type="button" class="btn btn btn-outline-primary" (click)="onCancel()">Cancel</button>
+		<button *ngIf="isSaveAllowed()" [disabled]="form.pristine" type="button" class="btn btn btn-outline-primary" (click)="onSave()">Save</button>
+		<button *ngIf="isRejectAllowed()" type="button" class="btn btn btn-outline-primary" (click)="onReject()">Reject</button>
+		<button *ngIf="isSaveContinueAllowed()" type="button" class="btn btn btn-outline-primary" (click)="onSaveContinue()">Save and continue</button>
+		<button *ngIf="isSubmitContinueAllowed()" type="button" class="btn btn btn-primary" (click)="onSubmitContinue()">Submit and continue</button>
+		<button *ngIf="isSubmitForReviewAllowed()" type="button" class="btn btn btn-primary" (click)="onSubmitForReview()">Submit for review</button>
+		<button *ngIf="isApproveForSaleAllowed()" [disabled]="form.dirty" type="button" class="btn btn btn-primary" (click)="onApproveSale()">Approve for sale</button>
+
+		<button *ngIf="isTerminateAllowed()" type="button" class="btn btn btn-outline-primary" (click)="onTerminate()">Terminate</button>
+		<button *ngIf="isSuspendAllowed()" type="button" class="btn btn btn-outline-primary" (click)="onSuspend()">Suspend</button>
+		<button *ngIf="isOkAllowed()" type="button" class="btn btn btn-outline-primary" (click)="onCancel()">Ok</button>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  opacity: 1;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance:textfield;
+}
+
+.text-break-all {
+  word-break: break-all;
+}
+
+.border-dotted {
+  border-style: dotted;
+}
+
+.tox-tinymce-aux {
+  display: none;
+}

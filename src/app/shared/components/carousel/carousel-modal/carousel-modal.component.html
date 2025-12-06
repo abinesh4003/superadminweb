@@ -1,0 +1,5 @@
+<ngb-carousel *ngIf="data.images" (click)="onClose($event)" [activeId]="data.activeId" [interval]="0">
+	<ng-template ngbSlide *ngFor="let image of data.images" [id]="image.id">
+		<img [src]="image.url | async" alt="">
+	</ng-template>
+</ngb-carousel>

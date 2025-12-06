@@ -1,0 +1,14 @@
+<ng-sidebar-container>
+
+  <!-- A sidebar -->
+  <ng-sidebar [opened]="opened$ | async" mode="push" [autoFocus]="false" [animate]="false">
+    <ng-content select=".sidebar"></ng-content>
+  </ng-sidebar>
+
+  <!-- Page content -->
+  <div ng-sidebar-content>
+    <ng-content select=".content"></ng-content>
+    <ng-content select=".footer"></ng-content>
+  </div>
+
+</ng-sidebar-container>

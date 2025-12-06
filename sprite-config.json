@@ -1,0 +1,33 @@
+{
+  "dest": "src/styles/",
+  "mode": {
+    "css": {
+      "bust": false,
+      "dimensions": false,
+      "dest": "",
+      "render": {
+        "scss": {
+          "dest": "_sprite.scss",
+          "example": true
+        }
+      }
+    }
+  },
+  "shape": {
+    "dimension": {
+      "maxWidth": 30,
+      "maxHeight": 30,
+      "precision": 2,
+      "attributes": false
+    },
+    "spacing": {
+      "padding": 0,
+      "box": "content"
+    }
+  },
+  "svg": {
+    "xmlDeclaration": false,
+    "doctypeDeclaration": false,
+    "dimensionAttributes": false
+  }
+}

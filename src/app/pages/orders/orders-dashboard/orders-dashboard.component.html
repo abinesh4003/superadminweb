@@ -1,0 +1,243 @@
+<div *ngIf="isPageLoaded">
+    <div *ngIf="(filterFormSettings$ | async) as settings" class="dashboard-filter-wrapper">
+        <div>
+            <pkz-filter-form [config]="settings"
+                             (filterChanged)="onFilter($event)"
+                             [values]="filtersObj"
+                             [embedded]="true"
+                             class="py-2"
+            >
+                <div class="col-4">
+                    <div class="form-group row align-items-start">
+                        <label class="col-4 text-right col-form-label col-form-label-sm">Select store:</label>
+                        <div class="col-8">
+                            <ng-select [items]="stores$ | async"
+                                       class="bootstrap ng-select-sm"
+                                       bindLabel="display_name"
+                                       bindValue="_id"
+                                       [addTag]="false"
+                                       [multiple]="false"
+                                       [hideSelected]="false"
+                                       [clearable]="false"
+                                       typeToSearchText="Please enter 2 or more characters"
+                                       [typeahead]="storesTypeahead$"
+                                       [loading]="storesLoading"
+                                       placeholder="Search and select"
+                                       (ngModelChange)="onStoreChange($event)"
+                                       [(ngModel)]="store">
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+            </pkz-filter-form>
+        </div>
+        <div class="date-filter">
+
+            <div class="select-date__range btn-group btn-group-sm btn-group-toggle col-4" ngbRadioGroup
+                 [(ngModel)]="rangeModel" (ngModelChange)="onRangeChange()">
+                <label ngbButtonLabel class="btn-outline-primary btn-outline-primary-custom m-0 col">
+                    <input ngbButton type="radio" [value]="1"> Today
+                </label>
+                <label ngbButtonLabel class="btn-outline-primary btn-outline-primary-custom m-0 col">
+                    <input ngbButton type="radio" [value]="2"> Last 7 days
+                </label>
+                <label ngbButtonLabel class="btn-outline-primary btn-outline-primary-custom m-0 col">
+                    <input ngbButton type="radio" [value]="3"> Last 30 days
+                </label>
+            </div>
+
+            <div class="select-date__dp col-6">
+                <label class="m-0 mr-3 select-date__direction d-flex align-items-center">
+                    <input type="radio" [value]="customRange" [checked]="customRange" (change)="setCustomRange()">
+                    <span class=ml-2>From</span>
+                </label>
+
+                <div class="form-group mb-0">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" placeholder="dd/mm/yyyy"
+                               name="dpFrom" [(ngModel)]="datepickerModelFrom" (ngModelChange)="onDateChange($event, true)"
+                               ngbDatepicker #dFrom="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="dFrom.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="ml-3 mr-3 select-date__direction d-flex align-items-center">To</span>
+
+                <div class="form-group mb-0">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control" placeholder="dd/mm/yyyy" (ngModelChange)="onDateChange($event, false)"
+                               name="dpTo" [(ngModel)]="datepickerModelTo" ngbDatepicker #dTo="ngbDatepicker">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" (click)="dTo.toggle()" type="button">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" class="select-date__report d-flex align-items-center">Download report</a>
+        </div>
+    </div>
+    <div>
+        <div *ngIf="dashboardDataEmpty && topOrderLocations.length === 0 && chartData.length === 0">
+            <h4 class="py-5 text-center silver-text">No data available</h4>
+        </div>
+        <div *ngIf="!dashboardDataEmpty">
+            <div class="py-3 orders-title row mx-0">
+                <div class="col-7">Orders status</div>
+                <div class="col-5 text-center pr-5">Orders sources</div>
+            </div>
+            <div>
+                <div class="row mx-0 mb-4">
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Delivered"
+                                               *ngIf="checkIfExist(dashboardData?.delivered)"
+                                               [percent]="getPercent('delivered', 1)"
+                                               [value]="dashboardData?.delivered"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Cancelled"
+                                               [percent]="getPercent('cancelled', 1)"
+                                               *ngIf="checkIfExist(dashboardData?.cancelled)" [isWarn]="true"
+                                               [value]="(dashboardData?.cancelled)"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Orders"
+                                               *ngIf="checkIfExist(dashboardData?.total_orders)"
+                                               [value]="dashboardData?.total_orders"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Android"
+                                               *ngIf="checkIfExist(dashboardData?.order_source_android)"
+                                               [percent]="getPercent('order_source_android', 2)"
+                                               [value]="(dashboardData?.order_source_android)"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="iOS"
+                                               [percent]="getPercent('order_source_ios', 2)"
+                                               *ngIf="checkIfExist(dashboardData?.order_source_ios)"
+                                               [value]="dashboardData?.order_source_ios"></pkz-orders-dashboard-card>
+                </div>
+                <div class="row mx-0">
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Online Payment"
+                                               *ngIf="checkIfExist(dashboardData?.online_payment)"
+                                               [percent]="getPercent('online_payment', 3)"
+                                               value="₹ {{dashboardData?.online_payment?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="COD"
+                                               [percent]="getPercent('cod_payment', 3)"
+                                               *ngIf="checkIfExist(dashboardData?.cod_payment)"
+                                               value="₹ {{dashboardData?.cod_payment?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Payment"
+                                               *ngIf="checkIfExist(dashboardData?.total_payment)"
+                                               value="₹ {{dashboardData?.total_payment?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                    <div class="double-col">
+                        <pkz-orders-dashboard-card class="dashboard-card flex-0-5" label="Desktop"
+                                                   [percent]="getPercent('order_source_desktop', 2)"
+                                                   *ngIf="checkIfExist(dashboardData?.order_source_desktop)"
+                                                   value="{{dashboardData?.order_source_desktop}}"></pkz-orders-dashboard-card>
+                    </div>
+                </div>
+            </div>
+            <div class="py-3 orders-title">
+                Expense and Income
+            </div>
+            <div>
+                <div class="row mx-0">
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Service Fee"
+                                               *ngIf="checkIfExist(dashboardData?.service_fee)"
+                                               value="₹ {{dashboardData?.service_fee?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Gateway Fee"
+                                               *ngIf="checkIfExist(dashboardData?.gateway_fee)"
+                                               value="₹ {{dashboardData?.gateway_fee?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Amount"
+                                               *ngIf="checkIfExist(dashboardData?.total_amount)"
+                                               value="₹ {{dashboardData?.total_amount?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Profit"
+                                               *ngIf="checkIfExist(dashboardData?.bayfay_profit)"
+                                               value="₹ {{dashboardData?.bayfay_profit?.toFixed(2)}}"></pkz-orders-dashboard-card>
+                </div>
+            </div>
+            <div class="py-3 orders-title">
+                Customer Status
+            </div>
+            <div>
+                <div class="row mx-0 mb-4">
+                    <pkz-orders-dashboard-card class="dashboard-card" label="New Customers"
+                                               *ngIf="checkIfExist(dashboardData?.new_customers)"
+                                               [percent]="getPercent('new_customers', 4)"
+                                               [value]="dashboardData?.new_customers"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Repeated Customers"
+                                               *ngIf="checkIfExist(dashboardData?.repeated_users)"
+                                               [percent]="getPercent('repeated_users', 4)"
+                                               [value]="dashboardData?.repeated_users"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="High Value Orders"
+                                               *ngIf="checkIfExist(dashboardData?.high_value_orders)"
+                                               [value]="dashboardData?.high_value_orders"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Total Customers"
+                                               *ngIf="checkIfExist(dashboardData?.total_customers)"
+                                               [value]="dashboardData?.total_customers"></pkz-orders-dashboard-card>
+                </div>
+                <div class="row mx-0">
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Happy Customers"
+                                               *ngIf="checkIfExist(dashboardData?.happy_customers)"
+                                               [percent]="getPercent('happy_customers', 5)"
+                                               [value]="dashboardData?.happy_customers"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Satisfied"
+                                               *ngIf="checkIfExist(dashboardData?.satisfied_customers)"
+                                               [percent]="getPercent('satisfied_customers', 5)"
+                                               [value]="dashboardData?.satisfied_customers"></pkz-orders-dashboard-card>
+                    <pkz-orders-dashboard-card class="dashboard-card" label="Disappointed"
+                                               *ngIf="checkIfExist(dashboardData?.disappointed_customers)" [isWarn]="true"
+                                               [percent]="getPercent('disappointed_customers', 5)"
+                                               [value]="dashboardData?.disappointed_customers"></pkz-orders-dashboard-card>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mx-0 mb-2">
+            <div class="col-6 charts-title pt-4 pb-2 pl-5" *ngIf="chartData.length > 0">{{graphLabel}}</div>
+            <div class="col-6 charts-title px-5 pt-4 pb-2 d-flex justify-content-between"
+                 *ngIf="topOrderLocations?.length > 0">
+                <span class='pl-4'>Locations</span>
+                <span class="pr-4">Num of Orders</span>
+            </div>
+        </div>
+
+        <div class="row mx-0">
+            <div class="col-6">
+                <div class="chart" *ngIf="chartData.length > 0">
+                    <ngx-charts-bar-vertical
+                            [scheme]="colorScheme"
+                            [results]="monthsChartResults"
+                            [xAxis]="false"
+                            [showGridLines]="false"
+                            [yAxis]="true"
+                            [xAxisLabel]="xAxisLabel"
+                            [yAxisLabel]="yAxisLabel"
+                            [roundEdges]="false"
+                            [yScaleMax]="yScaleMax"
+                            [barPadding]="50"
+                    >
+                        <ng-template #tooltipTemplate let-model="model">
+                            <div class="py-2">
+                                <div class='text-left'>Total Orders: {{model.value}}</div>
+                                <div class='text-left'>Total
+                                    Payment: {{getChartElementByIndex(model.name).total_payment?.toFixed(2)}}</div>
+                                <div class='text-left'>
+                                    Profit: {{getChartElementByIndex(model.name).bayfay_profit?.toFixed(2)}}</div>
+                                <div class="text-left">
+                                    {{formatDate(getChartElementByIndex(model.name).from_date)}} -
+                                    {{formatDate(getChartElementByIndex(model.name).to_date)}}
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ngx-charts-bar-vertical>
+                </div>
+            </div>
+            <div class="col-6 flex-shrink-0 px-5">
+                <div class="d-flex flex-column location_number_of_orders_table" *ngIf="topOrderLocations?.length > 0">
+                    <div class="py-2 px-4 location_number_of_orders" *ngFor="let loc of topOrderLocations">
+                        <span class="location-name">{{loc._id}}</span>
+                        <span class="number-of-orders">{{loc.total_orders}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

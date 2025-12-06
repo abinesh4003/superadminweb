@@ -1,0 +1,22 @@
+.ads-preview {
+  display: flex;
+  font-size: 0.875rem;
+  background-color: #fff;
+  line-height: 1;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+
+  img {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ced4da;
+    margin-right: 10px;
+  }
+
+  &__text {
+    flex-grow: 1;
+    text-align: center;
+    align-self: center;
+  }
+}

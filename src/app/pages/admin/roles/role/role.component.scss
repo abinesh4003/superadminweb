@@ -1,0 +1,22 @@
+@import 'mixins';
+
+:host {
+  display: block;
+  margin-top: -47px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 31px;
+
+  .title {
+    color: #6c757d;
+    font-size: 1rem;
+  }
+
+  .actions {
+    @include actions-block(24px);
+  }
+}

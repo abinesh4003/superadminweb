@@ -1,0 +1,10 @@
+@mixin actions-block($fontSize: 20px) {
+  font-size: $fontSize;
+  display: flex;
+  justify-content: space-between;
+  line-height: 1.1;
+
+  &__item:not(:last-child) {
+    margin-right: 1rem;
+  }
+}

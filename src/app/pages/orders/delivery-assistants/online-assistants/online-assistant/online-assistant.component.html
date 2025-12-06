@@ -1,0 +1,103 @@
+<div class='online-assistant-container' *ngIf="assistantInfo$ | async as assistant">
+    <div class='d-flex flex-column'>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb smaller-font pb-3">
+                <li class="breadcrumb-item">
+                    <a href="#" routerLink="../../">Assistants</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{assistant.associate.first_name}} {{assistant.associate.last_name}}
+                </li>
+            </ol>
+        </nav>
+        <div class="online-assistant-info">
+            <div class="personal-info">
+                <div class="d-flex">
+                    <div class="d-flex flex-column justify-content-end mr-3 w-200px">
+                        <span class="pi-label justify-content-end">First Name:</span>
+                        <span class="pi-label justify-content-end">Last Name:</span>
+                        <span class="pi-label justify-content-end">Mobile Number:</span>
+                        <span class="pi-label justify-content-end">Email Id:</span>
+                    </div>
+                    <div class="d-flex flex-column w-250px">
+                        <span class="pi-label">{{assistant.associate.first_name}}</span>
+                        <span class="pi-label">{{assistant.associate.last_name}}</span>
+                        <span class="pi-label">+{{assistant.associate?.mobile.dialing_code}} {{assistant.associate?.mobile.number}}
+                            <i
+                                    class="fa fa-check-circle verified ml-2"
+                                    *ngIf="assistant.associate?.mobile.is_verified"></i></span>
+                        <span class="pi-label">{{assistant.associate.email.id}} <i
+                                class="fa fa-check-circle verified ml-2"
+                                *ngIf="assistant.associate.email.is_verified"></i></span>
+                    </div>
+                </div>
+                <div class="ml-3">
+                    <img *ngIf="assistant.associate.avatar?.length > 0" class="assistant-img"
+                         [src]="assistant.associate.avatar[0].name | imageSecure:iconOptions | async"
+                         [attr.width]="iconOptions.width" alt="">
+                </div>
+                <div class="d-flex align-items-center ml-5">
+                    <span>Today total delivery count: {{assistant.count}}</span>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column mt-1 location-info">
+                <div class="d-flex" *ngIf="assistant.status?.toLowerCase() !== 'idle'">
+                    <div class="d-flex w-200px justify-content-end mr-3">
+                        <span>Pick up address:</span>
+                    </div>
+                    <div class="d-flex w-250px">
+                        {{assistant.store.pickup_address.street}}
+                    </div>
+                    <div class="ml-3 mr-5 d-flex align-items-center">
+                        <a [href]="getGoogleMapsLink(assistant.store.location.coordinates)" target="_blank">
+                            <i class="fa fa-map-marker font-size-1-4rem color-purple ml-3"></i>
+                        </a>
+                    </div>
+                    <div class="d-flex flex-column mr-3 ml-3" *ngIf="assistant.status?.toLowerCase() !== 'idle'">
+                        <span class="text-right">Order id:</span>
+                        <span class="text-right mt-2">Payment Mode:</span>
+                        <span>Delivery Status:</span>
+                    </div>
+                    <div class="d-flex flex-column" *ngIf="assistant.status?.toLowerCase() !== 'idle'">
+                        <span>{{assistant.order_id}}</span>
+                        <span class="mt-2">{{assistant.payment_mode}}</span>
+                        <span>{{getDeliveryStatusById(assistant.delivery.status)}}</span>
+                    </div>
+                </div>
+                <div class="d-flex mt-5">
+                    <div class="d-flex w-200px justify-content-end mr-3">
+                        <span class="text-right">Delivery Assistant current location:</span>
+                    </div>
+                    <div class="d-flex pl-4">
+                        <a [href]="getGoogleMapsLink(assistant.location.coordinates)" target="_blank">
+                            <i class="fa fa-map-marker font-size-1-4rem color-blue"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="d-flex mt-5" *ngIf="assistant.status?.toLowerCase() !== 'idle'">
+                    <div class="d-flex w-200px justify-content-end mr-3">
+                        <span>Delivery address:</span>
+                    </div>
+                    <div class="d-flex w-250px d-flex flex-column">
+                        <span>{{assistant.delivery?.address.area}}</span>
+                        <span>{{assistant.delivery?.address.street}}</span>
+                        <span>{{assistant.delivery?.address.zipcode}}</span>
+                        <span>{{assistant.delivery?.address.landmark}}</span>
+                    </div>
+                    <div class="ml-3 mr-5 d-flex align-items-center">
+                        <a [href]="getGoogleMapsLink(assistant.delivery.location.coordinates)" target="_blank">
+                            <i class="fa fa-map-marker font-size-1-4rem color-green ml-3"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn btn-light delivery-history-btn" (click)="deliveryHistory()">Delivery
+                    History
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

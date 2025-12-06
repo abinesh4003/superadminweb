@@ -1,0 +1,107 @@
+<div class="modal-header">
+	<h5 class="modal-title">Payment Details</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-6">
+			<div class="row">
+				<div class="col-6 text-right">Submitted date:</div>
+				<div class="col-6 text-left px-0">{{order.payment_info.created_at | date:'dd/MM/yy'}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Merchant name:</div>
+				<div class="col-6 text-left px-0">{{order.payment_info.first_name}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">PhoneNo:</div>
+				<div class="col-6 text-left px-0">+{{order.payment_info.mobile.dialing_code}}&nbsp;{{order.payment_info.mobile.number}}</div>
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="row">
+				<div class="col-6 text-right"><strong>Pending amount:</strong></div>
+				<div class="col-6 text-left pl-0"><strong>₹ {{order.pending_amount | number:'1.1-1'}}</strong></div>
+			</div>
+			<div class="row">
+				<div class="col-6 text-right">Orders count:</div>
+				<div class="col-6 text-left pl-0"><strong>{{order.payment_info.order_count}}</strong></div>
+			</div>
+			<div class="row" *ngIf="order.payment_info?.payment_log?.bank_transfer">
+				<div class="col-6 text-right">Bank Transfer:</div>
+				<div class="col-6 text-left pl-0"><strong>₹ {{order.payment_info.payment_log.bank_transfer | number:'1.1-1'}}</strong></div>
+			</div>
+			<div class="row" *ngIf="order.payment_info?.payment_log?.paid_amount">
+				<div class="col-6 text-right">Payment Gateway:</div>
+				<div class="col-6 text-left pl-0"><strong>{{order.payment_info.payment_log.paid_amount}}</strong></div>
+			</div>
+			<div class="row" *ngIf="order.payment_info?.payment_log?.wallet_amount">
+				<div class="col-6 text-right">Wallet Amount:</div>
+				<div class="col-6 text-left pl-0"><strong>{{order.payment_info.payment_log.wallet_amount}}</strong></div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Submitted amount:</div>
+				<div class="col-6 text-left pl-0"><strong>₹ {{order.payment_info.amount | number:'1.1-1'}}</strong></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-5">
+		<div class="col-6">
+			<div class="mb-2">
+				<strong>Bank details</strong>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Account name:</div>
+				<div class="col-6 text-left px-0">{{order.bank_info.bank_info[0].account_name}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Bank name:</div>
+				<div class="col-6 text-left px-0">{{order.bank_info.bank_info[0].bank_name}}</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-6 text-right">Account&nbsp;number:</div>
+				<div class="col-6 text-left px-0">{{order.bank_info.bank_info[0].account_number}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">IFSC Code:</div>
+				<div class="col-6 text-left px-0">{{order.bank_info.bank_info[0].ifsc_code}}</div>
+			</div>
+		</div>
+
+		<div class="col-6">
+			<div class="mb-2">
+				<strong>Transaction details</strong>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Reference ID:</div>
+				<div class="col-6 text-left pl-0 text-break-all">{{order.payment_info.reference_id}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Status:</div>
+				<div class="col-6 text-left pl-0">{{order.payment_info.status | remittanceStatus: statusTypes}}</div>
+			</div>
+			<div class="row">
+				<div class="col-6 text-right">Mode:</div>
+				<div class="col-6 text-left pl-0">{{getPaymentModelById(order.payment_info.type)}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer d-flex justify-content-end">
+	<button type="button" *ngIf="isTransferredOrder" class="btn btn-outline-primary mr-3 modal__btn" (click)="close('approved')">Approved</button>
+	<button type="button" *ngIf="isTransferredOrder" class="btn btn-outline-primary mr-3 modal__btn" (click)="close('reject')">Reject</button>
+	<button type="button" class="btn btn-primary px-4 modal__btn" (click)="dismiss()">Ok</button>
+</div>

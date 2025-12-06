@@ -1,0 +1,49 @@
+<div class="modal-header">
+    <h5 class="modal-title">Change Order</h5>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="d-flex flex-column">
+        <div class="d-flex">
+            <span class="flex-0-6 text-right">Customer Purchase Amount:</span>
+            <span class="flex-0-4 pl-2 color-light-blue">{{data.totalAmount}}</span>
+        </div>
+        <div class="d-flex">
+            <span class="flex-0-6 text-right">Customer BayFay Cash:</span>
+            <div class="flex-0-4 pl-2">
+                <span class="color-light-blue mr-4">{{data.bfCash ? data.bfCash : '0.00'}}</span>
+                <input type="checkbox" [(ngModel)]="bfCash">
+            </div>
+        </div>
+    </div>
+    <div class="separator-eeeeee"></div>
+    <div class="d-flex">
+        <div class="flex-0-6 d-flex flex-column">
+            <span class="mb-1 d-flex">
+                <span class="flex-0-5 text-right">Shop Name:</span>
+                <span class="pl-2 color-light-blue flex-0-5">Shaan Mart</span>
+            </span>
+            <span class="d-flex">
+                <span class="flex-0-5 text-right">Product Cost:</span>
+                <span class="pl-2 color-light-blue flex-0-5">220.00</span>
+            </span>
+        </div>
+        <div class="d-flex flex-0-4">
+            <div class="flex-grow-1 d-flex justify-content-center align-items-center">
+                <span class="color-red">-20.0 less</span>
+            </div>
+            <div class="w-50px flex-shrink-0 d-flex align-items-center">
+                <input type="radio" class="change-order-radio-btn">
+            </div>
+        </div>
+    </div>
+    <div class="separator-eeeeee"></div>
+</div>
+<div class="modal-footer change-order-buttons">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-grayed mr-2" (click)="dismiss()">Close</button>
+        <button type="button" class="btn btn-primary mr-3" (click)="onConfirm()">Change Order</button>
+    </div>
+</div>

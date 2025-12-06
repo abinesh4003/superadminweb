@@ -1,0 +1,25 @@
+@import 'variables';
+
+.nav-tabs {
+  flex-wrap: nowrap;
+
+  .nav-item {
+    text-align: center;
+    flex-basis: 100px;
+    white-space: nowrap;
+  }
+
+  .nav-link {
+    color: $tab-text-color;
+    background-color: $tab-bg-color;
+    border-color: $tab-border-color;
+    border-bottom-color: #ddd;
+    padding: 0.3rem 0.5rem;
+
+    &.active {
+      background-color: $tab-bg-color-active;
+      border-color: $tab-border-color;
+      border-bottom-color: #ddd;
+    }
+  }
+}

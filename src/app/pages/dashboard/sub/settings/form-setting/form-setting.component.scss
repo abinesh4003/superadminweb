@@ -1,0 +1,108 @@
+.bg {
+  background-color: #f5f5f5;
+}
+
+.set-bnt-p {
+  padding: 0.1rem 0.5rem;
+}
+
+.set-bnt-f {
+  padding: 0.5rem 1.5rem;
+}
+
+.btn-Apply {
+  background-color: #0070d2;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+
+}
+
+.btnspace {
+  padding: 0 0 8px;
+}
+
+.set-form-sty {
+  padding: 0.3rem 0.45rem;
+  font-size: 0.8rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.6rem !important;
+}
+
+.select-color {
+  font-size: 12px;
+  width: 210px;
+  height: 20px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+}
+
+.blue-select {
+  background-color: #03a9f4;
+  border-color: #008ece;
+  color: #ffffff;
+}
+
+.lightgreen-select {
+  background-color: #d5ea00;
+  border-color: #aebf00;
+  color: #212121;
+}
+
+.green-select {
+  background-color: #4caf50;
+  border-color: #009c06;
+  color: #ffffff;
+}
+
+.turquoise-select {
+  background-color: #00bcd4;
+  border-color: #0091a3;
+  color: #ffffff;
+}
+
+.red-select {
+  background-color: #ff2727;
+  border-color: #dd0000;
+  color: #ffffff;
+}
+
+.image-size {
+  width: 90px;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.card-container {
+  border: 1px solid #9e9e9e;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  border-top: 0;
+}
+
+select {
+  height: 31px !important;
+}
+
+.bg-gray {
+  background-color: #f5f5f5;
+}
+
+.sub-card {
+  background-color: #fafafa;
+  border: #e0e0e0 solid 1px;
+  padding: 15px;
+}
+
+.label-form {
+  margin: 20px;
+  font-weight: 600;
+}
+
+textarea.ng-invalid, select.ng-invalid, input.ng-invalid {
+  border: 1px solid #dc3545 !important;
+}

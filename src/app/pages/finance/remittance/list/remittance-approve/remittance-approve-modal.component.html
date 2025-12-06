@@ -1,0 +1,34 @@
+<div class="modal-header">
+	<h5 class="modal-title">Reference Details</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-12">
+			<div class="row mb-3">
+				<div class="col-6">
+					<label class="col-form-label font-weight-bold">Reference Id</label>
+				</div>
+				<div class="col-6">
+					<input placeholder="Id" disabled type="text" class="form-control" [value]="data.reference_id">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<label class="col-form-label">Confirmation/Reference Id</label>
+				</div>
+				<div class="col-6">
+					<input placeholder="Id" type="text" class="form-control" [(ngModel)]="referenceId">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<div class="float-right">
+		<button type="button" class="btn btn-outline-primary mr-2" (click)="dismiss()">Close</button>
+		<button [disabled]="!referenceId.length" type="button" class="btn btn-primary" (click)="submit()">Submit</button>
+	</div>
+</div>

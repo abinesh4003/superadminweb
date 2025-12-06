@@ -1,0 +1,27 @@
+.question-tooltip {
+  font-size: 20px;
+}
+
+.form-legend {
+  position: relative;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+
+  &::after {
+    content: '';
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    position: absolute;
+    left: 100px;
+    right: 100px;
+    display: block;
+    top: 0;
+    bottom: 0;
+    border-radius: 5px;
+    pointer-events: none;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}

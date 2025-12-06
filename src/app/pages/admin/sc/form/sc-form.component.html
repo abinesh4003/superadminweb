@@ -1,0 +1,196 @@
+<div class="breadcrumbs-container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#" (click)="navigateToStores($event)">Store Category</a></li>
+			<li class="breadcrumb-item active" aria-current="page">{{getSubBreadcrumbName()}}</li>
+		</ol>
+	</nav>
+</div>
+
+<div class="row justify-content-center">
+	<div class="col-10">
+		<div class="row">
+			<form novalidate class="col-8" [formGroup]="form">
+				<fieldset [disabled]="isFormDisabled()">
+					<div class="form-group row">
+						<label for="staticDefaultStatus" class="col-6 col-form-label text-right">Default Status</label>
+						<div class="col-6">
+							<input type="text"
+							       class="form-control form-control-plaintext"
+							       id="staticDefaultStatus"
+							       [value]="status"
+							>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-6 col-form-label text-right">Shop Type</label>
+						<div class="col-6">
+							<select class="form-control"
+							        formControlName="type"
+							        [ngClass]="{'form-control-plaintext': isFormDisabled()}"
+							>
+								<option *ngFor="let option of types$ | async" [value]="option.id">{{option.name}}</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-6 col-form-label text-right">New store / Category name</label>
+						<div class="col-6">
+							<input formControlName="name"
+							       type="text"
+							       class="form-control"
+							       [ngClass]="{
+						          'form-control-danger': isInvalidField('name'),
+						          'form-control-plaintext': isFormDisabled()
+					            }"
+							>
+							<div *ngIf="isInvalidField('name')">
+								<div *ngIf="name.errors.required" class="error">
+									Name is required.
+								</div>
+								<div *ngIf="name.errors.duplicatedField" class="error">
+									Name already exists.
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div *ngIf="!(isFormDisabled() && !category_keywords.value.length)" class="form-group row">
+						<label class="col-6 col-form-label text-right">Search keywords</label>
+						<div class="col-6">
+							<ng-select
+									class="bootstrap"
+									[items]="[]"
+									[addTag]="true"
+									[multiple]="true"
+									[hideSelected]="true"
+									formControlName="category_keywords"
+							>
+								<ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+									<span [ngOptionHighlight]="search">{{item}}</span>
+								</ng-template>
+							</ng-select>
+						</div>
+					</div>
+
+					<ng-container *ngxPermissionsOnly="[perms.create, perms.edit]">
+						<div *ngIf="!isFormDisabled()" class="form-group row">
+							<label class="col-6 col-form-label text-right">Add category names</label>
+							<div class="col-6 d-flex">
+								<input [(ngModel)]="newCategoryName"
+								       [ngModelOptions]="{standalone: true}"
+								       type="text" class="form-control"
+								       [ngClass]="{'form-control-plaintext': isFormDisabled()}"
+								       (keyup.enter)="addCategoryName()"
+								>
+								<button [disabled]="!newCategoryName.length"
+								        type="button"
+								        class="btn btn-sm btn-outline-light text-success ml-2"
+								        (click)="addCategoryName()"
+								>
+									<i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
+					</ng-container>
+
+					<div class="form-group row">
+						<div class="offset-6 col-6">
+							<div class="categories-list">
+								<tree [tree]="categoriesTree" [settings]="{rootIsVisible: false}">
+									<ng-template let-node>
+										<span class="node-name text-truncate" [innerHTML]="node.value"></span>
+
+										<div class="node-buttons" *ngIf="!isFormDisabled()">
+											<ng-container *ngxPermissionsOnly="[perms.create]">
+												<i class="fa fa-plus text-success" aria-hidden="true" title="Edit" (click)="onAddCategory(node)"></i>
+											</ng-container>
+
+											<ng-container *ngxPermissionsOnly="[perms.edit]">
+												<i class="fa fa-pencil text-primary" aria-hidden="true" title="Edit" (click)="onRenameCategory(node)"></i>
+											</ng-container>
+
+											<ng-container *ngxPermissionsOnly="[perms.delete]">
+												<i class="fa fa-trash text-danger" aria-hidden="true" title="Edit" (click)="onRemoveCategory(node)"></i>
+											</ng-container>
+										</div>
+
+									</ng-template>
+								</tree>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+
+			<div class="col-4 text-center" *ngIf="!isFormDisabled() || isFormDisabled() && !!storeIcon">
+				<pkz-image-upload
+						title="Store Icon"
+						[disabled]="isFormDisabled()"
+						[deleteAvailable]="!isFormDisabled() && hasPermission(perms.edit)"
+						[imageUrl]="storeIcon"
+						[path]="imageOptions.path"
+						(imageChange)="onImageChange($event)"
+						(zoom)="onZoom()"
+				></pkz-image-upload>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-4">
+				<ng-container *ngxPermissionsOnly="[perms.edit]">
+					<button *ngIf="isEditPage()"
+					        type="button"
+					        [disabled]="!isFormValid()"
+					        class="btn btn-success float-right"
+					        (click)="onSave()"
+					>
+						Save
+					</button>
+				</ng-container>
+			</div>
+			<div class="col-4">
+				<div class="text-center">
+
+					<ng-container *ngxPermissionsOnly="[perms.create]">
+						<button *ngIf="isAddPage()"
+						        type="button"
+						        [disabled]="!isFormValid()"
+						        class="btn btn-success btn-block"
+						        (click)="onSaveNext()"
+						>
+							+ Create Store Category
+						</button>
+					</ng-container>
+
+					<ng-container *ngxPermissionsOnly="[perms.edit]">
+						<button *ngIf="isEditPage()"
+						        type="button"
+						        [disabled]="!isFormValid()"
+						        class="btn btn-success btn-block"
+						        (click)="onSaveNext()"
+						>
+							Save & Edit Store Category Template
+						</button>
+					</ng-container>
+
+					<ng-container *ngxPermissionsOnly="[perms.read]">
+						<button *ngIf="isViewPage()"
+						        class="btn btn-success btn-block"
+						        type="button"
+						        (click)="onNext()"
+						>View Store Category</button>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+

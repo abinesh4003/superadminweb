@@ -1,0 +1,57 @@
+.order-list-filter {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  margin: 15px 0;
+
+  ::ng-deep pkz-filter-form {
+    pkz-filter-form-select {
+      padding: 0 10px;
+
+      label {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+
+    pkz-filter-form-select:nth-child(1), pkz-filter-form-select:nth-child(4) {
+      label {
+        width: 110px !important;
+      }
+    }
+
+    pkz-filter-form-input {
+      label {
+        width: 77px;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      input {
+        width: calc(100% - 95px);
+      }
+    }
+
+    pkz-filter-form-select:nth-child(2), pkz-filter-form-select:nth-child(5) {
+      label {
+        width: 60px !important;
+      }
+    }
+  }
+
+  .shop-name-label {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 !important;
+    width: 77px;
+    margin-right: 16px;
+  }
+
+  .shop-search-input {
+    width: calc(100% - 93px)
+  }
+
+  .type2 {
+    margin-left: 0;
+    padding: 0 10px;
+  }
+}

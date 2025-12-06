@@ -1,0 +1,55 @@
+<div class="orders-list-filter-wrapper" *ngIf="(filterFormSettings$ | async) as settings">
+  <pkz-order-list-filter (onFilterChange)="onFilter($event)" [type2]="true" [status]="7"
+                         [settings]="settings">
+
+    <div class="col-9 d-flex">
+      <div class="btn-group btn-group-sm btn-group-toggle col-4 px-0" ngbRadioGroup
+           [(ngModel)]="rangeModel" (ngModelChange)="onRangeChange()">
+        <label ngbButtonLabel class="btn-outline-primary btn-outline-primary-custom m-0 col">
+          <input ngbButton type="radio" [value]="1"> Today
+        </label>
+        <label ngbButtonLabel class="btn-outline-primary btn-outline-primary-custom m-0 col">
+          <input ngbButton type="radio" [value]="2"> Last 7 days
+        </label>
+        <label ngbButtonLabel class="btn-outline-primary btn-outline-primary-custom m-0 col">
+          <input ngbButton type="radio" [value]="3"> Last 30 days
+        </label>
+      </div>
+
+      <div class="col-8 d-flex pr-0">
+        <label class="m-0 mr-3 d-flex align-items-center">
+          <input type="radio" [value]="customRange" [checked]="customRange" (change)="setCustomRange()">
+          <span class=ml-2>From</span>
+        </label>
+
+        <div class="mb-0">
+          <div class="input-group input-group-sm">
+            <input class="form-control" placeholder="dd/mm/yyyy"
+                   name="dpFrom" [(ngModel)]="datepickerModelFrom" (ngModelChange)="onDateChange($event, true)"
+                   ngbDatepicker #dFrom="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="dFrom.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <span class="ml-3 mr-3 select-date__direction d-flex align-items-center">To</span>
+
+        <div class="mb-0">
+          <div class="input-group input-group-sm">
+            <input class="form-control" placeholder="dd/mm/yyyy" (ngModelChange)="onDateChange($event, false)"
+                   name="dpTo" [(ngModel)]="datepickerModelTo" ngbDatepicker #dTo="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="dTo.toggle()" type="button">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </pkz-order-list-filter>
+</div>
+<pkz-orders-table [status]="7"></pkz-orders-table>

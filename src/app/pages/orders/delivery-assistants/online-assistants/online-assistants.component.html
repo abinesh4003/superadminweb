@@ -1,0 +1,6 @@
+<div class="online-assistants-list-filter-wrapper" *ngIf="(filterFormSettings$ | async) as settings">
+  <pkz-delivery-assistants-filter-form [settings]="settings"
+                                       [isOnline]="true"
+                                       (onFilterChange)="onFilter($event)"></pkz-delivery-assistants-filter-form>
+</div>
+<pkz-delivery-assistants-table [type]="type" [isOnline]="true"></pkz-delivery-assistants-table>

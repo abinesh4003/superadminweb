@@ -1,0 +1,103 @@
+<div class="card">
+	<div class="card-body p-0">
+
+		<div *ngIf="isPageLoaded">
+			<ng-container *ngIf="(filterFormSettings$ | async) as settings">
+				<pkz-filter-form [config]="settings"
+				                 (filterChanged)="onFilter($event)"
+				                 [values]="filtersObj"
+				                 [embedded]="true"
+				                 class="py-2"
+				>
+					<div *ngIf="hasPermission(perms.create_ad)" class="col-2 offset-4">
+						<button (click)="onCreateAd()" class="btn btn-outline-primary btn-sm w-100">Create Ad</button>
+					</div>
+				</pkz-filter-form>
+			</ng-container>
+
+			<ngx-datatable
+        #table
+				class="bootstrap"
+				pkzResponsiveDatatable
+				[rows]="rows"
+				[rowHeight]="35"
+				columnMode="flex"
+				[footerHeight]="40"
+				[externalPaging]="true"
+				[count]="page.count"
+				[offset]="page.pageNumber"
+				[limit]="page.limit"
+				(page)="setPage($event)"
+			>
+				<ngx-datatable-column name="S.no" [flexGrow]="0.5">
+					<ng-template let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+						{{rowIndex + 1}}
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column *ngIf="hasPermission(perms.create_ad)" name="Actions" [sortable]="false" [flexGrow]="1">
+					<ng-template let-row="row" ngx-datatable-cell-template>
+						<div class="actions">
+							<a href="#"
+							   [routerLink]="['edit', row._id]"
+							   title="Edit"
+							   class="actions__item"
+							>
+								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+							</a>
+						</div>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Shop Name" prop="store_name" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Merchant Name" prop="merchant_name" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Ad Type" prop="ad_type" [flexGrow]="1">
+					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						{{getAdName(value)}}
+					</ng-template>
+				</ngx-datatable-column>
+				<ngx-datatable-column name="Location" prop="location_name" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Impression" prop="impression" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Clicks" prop="clicks" [flexGrow]="0.5"></ngx-datatable-column>
+
+				<ngx-datatable-column name="Paid" prop="paid_cost" [flexGrow]="0.5">
+					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<span>{{!value ? 'Free' : value}}</span>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Expired On" prop="expiry_date" [flexGrow]="1">
+					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<span>{{value | date:'dd/MMM/yyyy'}}</span>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Created On" prop="created_at" [flexGrow]="1">
+					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<span>{{value | date:'dd/MMM/yyyy'}}</span>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-footer>
+					<ng-template
+							ngx-datatable-footer-template
+							let-rowCount="rowCount"
+							let-pageSize="pageSize"
+							let-selectedCount="selectedCount"
+							let-offset="offset">
+
+						<pkz-table-pagination
+								[rowCount]="rowCount"
+								[pageSize]="pageSize"
+								[selectedCount]="selectedCount"
+								[offset]="offset"
+								(page)="table.onFooterPage($event)"
+						></pkz-table-pagination>
+					</ng-template>
+				</ngx-datatable-footer>
+
+			</ngx-datatable>
+		</div>
+
+	</div>
+</div>

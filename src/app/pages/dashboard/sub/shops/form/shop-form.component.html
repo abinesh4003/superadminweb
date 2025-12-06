@@ -1,0 +1,587 @@
+<div *ngIf="isPageLoaded" class="row">
+  <div class="col-md-8">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb smaller-font">
+        <li class="breadcrumb-item">
+          <a href="#" (click)="onBreadcrumbClick($event)">{{rootBreadcrumbName}}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{getSubBreadcrumbName()}}</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="col-md-4 d-flex justify-content-end">
+    <button *ngIf="showBtnViewOtherShops"
+            type="button"
+            class="btn set-bnt-p set-btn m-2"
+    >
+      View this merchant other shops({{amountOfShop}})
+    </button>
+    <button *ngIf="isActiveTab()"
+            (click)="onNavToShopInventory()"
+            class="btn set-bnt-p set-btn m-2"
+            type="button"
+    >
+      Shop Inventory
+    </button>
+    <a title="Setting" (click)="onNavToSettings()" class="actions__item p-2 set-cursor">
+      <i class="fa fa-cogs" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>
+
+<div *ngIf="isPageLoaded" class="container card bg">
+  <div class="card-header bg">
+    <h6 *ngIf="isActiveTab()" class="text-center m-0">{{getSubBreadcrumbName()}} Details</h6>
+    <h6 *ngIf="!isActiveTab()" class="text-center m-0">New shop request for approval</h6>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <fieldset [disabled]="isFormDisabled()" class="col">
+          <div class=" row mb-1">
+            <div class="col-sm-4 mr-3">
+              <label class="set-label-font">Store Type</label>
+            </div>
+            <div class="col-sm-6">
+              <select class="form-control form-control-sm set-form-sty" id="storeType" formControlName="storeType">
+                <option *ngFor="let item of storeTypes$ | async" [value]="item.id">{{item.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-1 form-group">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="storeCategory">Store Category*</label>
+            </div>
+            <div class="col-md-6">
+              <select class="form-control form-control-sm set-form-sty" id="storeCategory" formControlName="storeCategory" name="storeCategory">
+                <option value="">Select store...</option>
+                <option *ngFor="let item of storeCategories$ | async" [value]="item._id">{{item.display_name}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="storeName">Store Name*</label>
+            </div>
+            <div class="col-md-6">
+              <input type="text" class="form-control set-form-sty" id="storeName" formControlName="storeName" name="storeName">
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font">Primary Mobile Number*</label>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend col-auto pl-0 pr-0">
+                  <span class="input-group-text pr-2 pl-2">+</span>
+                </div>
+                <input type="number"
+                       formControlName="primaryMobileDialCode"
+                       class="form-control col-2 text-center pl-2 pr-2"
+                >
+                <input type="number"
+                       formControlName="primaryMobileNo"
+                       class="form-control col-auto pl-2 pr-2"
+                >
+              </div>
+            </div>
+            <div class="col-sm-1 p-0">
+             <i *ngIf="mobileNumbers" class="fa"
+                [ngClass]="{
+                  'fa-check green': mobileNumbers.primary.is_verified,
+                  'fa-times red': !mobileNumbers.primary.is_verified
+                 }"
+             ></i>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4  mr-3">
+              <label class="set-label-font">Secondary Mobile Number</label>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend col-auto pl-0 pr-0">
+                  <span class="input-group-text pr-2 pl-2">+</span>
+                </div>
+                <input type="number"
+                       formControlName="secondaryMobileDialCode"
+                       class="form-control col-2 text-center pl-2 pr-2"
+                >
+                <input type="number"
+                       formControlName="secondaryMobileNo"
+                       class="form-control col-auto pl-2 pr-2"
+                >
+              </div>
+            </div>
+            <div class="col-sm-1 p-0">
+              <i *ngIf="mobileNumbers" class="fa"
+                 [ngClass]="{
+                  'fa-check green': mobileNumbers.secondary.is_verified,
+                  'fa-times red': !mobileNumbers.secondary.is_verified
+                 }"
+              ></i>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="emailId">Email Id</label>
+            </div>
+            <div class="col-md-6">
+              <input type="text" class="form-control set-form-sty" id="emailId" formControlName="emailId" name="emailId">
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="storeAddress">Store Address*</label>
+
+            </div>
+            <div class="col-md-6">
+              <textarea type="text"
+                        class="form-control set-form-sty"
+                        id="storeAddress"
+                        formControlName="storeAddress"
+                        rows="4"
+              ></textarea>
+
+            </div>
+            <div class="col-sm-1 p-0 ">
+              <span (click)="showMap()" class="show-map-btn">
+              <i class="fa fa-map-marker violet" aria-hidden="true"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="latitude">Latitude</label>
+            </div>
+            <div class="col-md-6">
+              <input type="text" class="form-control set-form-sty" id="latitude" formControlName="latitude" name="latitude">
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="longitude">Longitude</label>
+            </div>
+            <div class="col-md-6">
+              <input type="text" class="form-control set-form-sty" id="longitude" formControlName="longitude" name="longitude">
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font">Country*</label>
+            </div>
+            <div class="col-md-6">
+              <select formControlName="country" class="form-control form-control-sm set-form-sty">
+                <option *ngFor="let country of countries$ | async" [value]="country">{{country}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font">State*</label>
+            </div>
+            <div class="col-md-6">
+              <select formControlName="state" class="form-control form-control-sm set-form-sty">
+                <option *ngFor="let state of states" [value]="state">{{state}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font">City*</label>
+            </div>
+            <div class="col-md-6">
+              <select formControlName="city" class="form-control form-control-sm set-form-sty">
+                <option value="">Select city...</option>
+                <option *ngFor="let city of cities" [value]="city._id">{{city.name}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row mb-1">
+            <div class="col-md-4 mr-3">
+              <label class="set-label-font" for="pincode">Pincode*</label>
+            </div>
+            <div class="col-md-6">
+              <input type="number" class="form-control set-form-sty" id="pincode" formControlName="pincode" name="pincode">
+            </div>
+          </div>
+
+          <div class="form-group row card col-md-11">
+            <p class="set-font m-t-5">Shop Policy</p>
+            <div class="row">
+              <div class="col-12 col-sm-5">
+                <label class="set-label-font" for="productReplacement">Product Replacement Within*</label>
+              </div>
+              <div class=" col-12 col-sm-6">
+                <input type="number" class="form-control set-form-sty" id="productReplacement" formControlName="productReplacement"
+                  name="productReplacement">
+              </div>
+              <label class="pt-2 set-label-font">days</label>
+            </div>
+            <div class="row mb-3">
+              <div class="col-11 col-sm-5">
+                <label class="set-label-font" for="refundWithin">Refund Within*</label>
+              </div>
+              <div class=" col-11 col-sm-6">
+                <input type="number" class="form-control set-form-sty" id="refundWithin" formControlName="refundWithin"
+                  name="refundWithin">
+              </div>
+              <label class="pt-2 set-label-font">days</label>
+            </div>
+          </div>
+
+          <div class="form-group row card col-sm-11 mb-1">
+            <p class="set-font m-t-5">Near By Delivery</p>
+            <div class="row ">
+              <div class="col-sm-5">
+                <label class="set-label-font" for="deliveryDistance">Delivery Distance*</label>
+              </div>
+              <div class=" col-sm-6">
+                <select class="form-control form-control-sm set-form-sty"
+                        id="deliveryDistance"
+                        formControlName="deliveryDistance"
+                >
+                  <option *ngFor="let item of fg" [ngValue]="item">{{item}}</option>
+                </select>
+              </div><label class="pt-2 set-label-font">km</label>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-5 mb-3">
+                <label class="set-label-font">Delivery Time*</label>
+              </div>
+	            <div class=" col-12 col-sm-7">
+		            <div class="form-group d-flex">
+			            <label class="col-form-label-sm mb-0 pr-3">from:</label>
+			            <div class="input-group input-group-sm">
+				            <ngb-timepicker formControlName="deliveryTimeFrom"
+				                            size="small"
+				                            [spinners]="false"
+				                            [meridian]="true"
+				            ></ngb-timepicker>
+			            </div>
+		            </div>
+
+		            <div class=" col-12 col-sm-7">
+			            <div class="form-group d-flex">
+				            <label class="col-form-label-sm mb-0 pr-3">to:</label>
+				            <div class="input-group input-group-sm">
+					            <ngb-timepicker formControlName="deliveryTimeTo"
+					                            size="small"
+					                            [spinners]="false"
+					                            [meridian]="true"
+					            ></ngb-timepicker>
+				            </div>
+			            </div>
+		            </div>
+
+	            </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-5">
+                <label class="set-label-font" for="cashOnDelivery">Cash On Delivery*</label>
+              </div>
+              <div class=" col-12 col-sm-7">
+                <select class="form-control form-control-sm set-form-sty"
+                        id="cashOnDelivery"
+                        formControlName="cashOnDelivery"
+                        name="cashOnDelivery"
+                >
+                  <option [ngValue]="true">Yes</option>
+                  <option [ngValue]="false">No</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-12 col-sm-5">
+                <label class="set-label-font">COD limit status*</label>
+              </div>
+              <div class="col-12 col-sm-7">
+                <div class="row">
+                  <div class="col-5">
+                    <select formControlName="deliveryCODLimitType" class="form-control form-control-sm set-form-sty">
+                      <option *ngFor="let item of deliveryLimitTypes" [value]="item.id">{{item.name}}</option>
+                    </select>
+                  </div>
+                  <div class="col-7">
+                    <input formControlName="deliveryCODLimitValue" type="number" class="form-control set-form-sty">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-5">
+                <label class="set-label-font">Delivery Method*</label>
+              </div>
+              <div class="col-12 col-sm-7" formGroupName="deliveryMethod">
+                <div *ngFor="let item of deliveryMethods"
+                     class="form-check form-check-inline"
+                >
+                  <input class="form-check-input"
+                         type="checkbox"
+                         [formControlName]="item._id"
+                  >
+                  <label class="form-check-label">{{item.name}}</label>
+                </div>
+                <div *ngIf="form.get('deliveryMethod').hasError('checkboxRequired')" class="error">
+                  At least one delivery method should be selected
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-12 col-sm-5">
+                <label class="set-label-font">Delivery charges*</label>
+              </div>
+              <div class="col-12 col-sm-7">
+                <div class="row">
+                  <div class="col-4 pr-0">
+                    <input formControlName="deliveryFee" type="number" class="form-control set-form-sty">
+                  </div>
+                  <div class="col-3 pl-0 pr-0 align-items-center justify-content-center d-flex">
+                    <span class="charges-label gray">If < PC</span>
+                  </div>
+                  <div class="col-5 pl-0">
+                    <input formControlName="feeLimit" type="number" class="form-control set-form-sty">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </fieldset>
+
+
+        <div class="col">
+
+          <fieldset [disabled]="otherDeliveryIsLock || isFormDisabled()" class="form-group row card col-md-10 ml-4 p-3">
+
+            <p class="set-font m-t-5 mb-2">Distance Shipping</p>
+            <div class="row">
+              <label class="col-12 col-sm-5 set-label-font">Other Location</label>
+              <div class="col-12 col-sm-4">
+                <label class="switch set-label-font">
+                  <input type="checkbox" formControlName="otherDeliveryIsEnable">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              <div class="col-12 col-sm-3">
+                <i class="fa fa-lg gray"
+                   [ngClass]="{
+                    'fa-lock': otherDeliveryIsLock,
+                    'fa-unlock-alt': !otherDeliveryIsLock
+                    }"
+                   aria-hidden="true"
+                   (click)="changingStateOfLock()"
+                ></i>
+              </div>
+            </div>
+
+            <fieldset [disabled]="!otherDeliveryIsEnable.value">
+
+              <div class="row">
+                <div class="col-12 col-sm-5 mb-2">
+                  <label class="set-label-font">Cash On Delivery</label>
+                </div>
+                <div class=" col-12 col-sm-7">
+                  <select class="form-control form-control-sm set-form-sty"
+                          formControlName="otherCashOnDelivery"
+                          name="dsCashOnDelivery"
+                  >
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-5 mb-2">
+                  <label class="set-label-font">Delivery Method</label>
+                </div>
+                <div class=" col-12 col-sm-7" formGroupName="otherDeliveryMethod">
+                  <div *ngFor="let item of deliveryMethods"
+                       class="form-check form-check-inline"
+                  >
+                    <input class="form-check-input"
+                           type="checkbox"
+                           [formControlName]="item._id"
+                    >
+                    <label class="form-check-label">{{item.name}}</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-5 mb-3">
+                  <label class="set-label-font">Delivery charges*</label>
+                </div>
+                <div class="col-7">
+                  <div class="row">
+                    <div class="col-4 pr-0">
+                      <input formControlName="otherDeliveryFee" type="number" class="form-control set-form-sty">
+                    </div>
+                    <div class="col-3 pl-0 pr-0 align-items-center justify-content-center d-flex">
+                      <span class="charges-label gray">If < PC</span>
+                    </div>
+                    <div class="col-5 pl-0">
+                      <input formControlName="otherFeeLimit" type="number" class="form-control set-form-sty">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+
+          </fieldset>
+
+          <div class="form-group row card col-md-10 ml-4 pb-2">
+            <p class="set-font m-t-5">Private Shop Request</p>
+
+            <div class="row mb-1">
+              <label class="col-12 col-sm-5 set-label-font"> Private Shop Request
+              </label>
+              <div class="col-12 col-sm-4">
+                <input type="text"
+                       class="form-control-plaintext form-control set-form-sty"
+                       [disabled]="true"
+                       placeholder="{{privateStoreEnabled ? 'Yes' : 'No'}}"
+                >
+              </div>
+              <label class="switch set-label-font mt-1">
+                <input type="checkbox"
+                       [ngModel]="privateStoreEnabled"
+                       (ngModelChange)="onChangePrivateToggle($event)"
+                       [ngModelOptions]="{standalone: true}"
+                >
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="row mb-1">
+            <div class="col-12 col-sm-5">
+              <pkz-image-upload [disabled]="true" [deleteAvailable]="false" title="Private shop Icon" [imageUrl]="shopIcon"
+                [path]="imageOptions.path" (zoom)="onZoomIcon()">
+              </pkz-image-upload>
+            </div>
+            <div class="col-12 col-sm-5 ml-5">
+              <button class="mb-3" (click)="openShopImagesReview()">Shops photos for review</button>
+              <pkz-image-upload [disabled]="true" [deleteAvailable]="false" [imageUrl]="shopFirstImage" [path]="'shop/img/vw'" (zoom)="onZoomImage()"></pkz-image-upload>
+            </div>
+          </div>
+
+          <div class="row mb-1">
+            <div class="col-12 col-sm-5 ">
+              <label class="set-label-font">Feedback Message:</label>
+            </div>
+            <div class="d-inline-flex align-items-center">
+              <button type="button" class="btn set-bnt-p set-btn">Feedback History</button>
+            </div>
+            <div class=" col-12 col-sm-5 btnspace">
+              <button *ngIf="isFeedbackHistoryBtnAllowed() && !isFeedbackAllowed()" type="button" class="btn set-bnt-p set-btn"
+                (click)="openFeedbackHistory()">Feedback History</button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-11">
+              <textarea type="text"
+                        rows="5"
+                        class="form-control"
+                        id="userFeedback"
+                        formControlName="userFeedback"
+                        [ngClass]="{'form-control-danger': isShownFeedbackError}"
+                        placeholder="Feedback comments"
+                        name="userFeedback"
+              ></textarea>
+              <div *ngIf="isShownFeedbackError" class="error">
+                Feedback box should not be empty, kindly provide the reason for the {{feedbackErrorTextPart}}.
+              </div>
+            </div>
+          </div>
+
+	        <div *ngIf="isActiveTab()" class="form-group row card col-md-10 ml-4">
+		        <p class="set-font m-t-5">Shop current status(Open or Close)</p>
+
+		        <div class="row">
+			        <label class="col-12 col-sm-5 set-label-font">Public/Branded:</label>
+			        <div class="col-12 col-sm-4">
+				        <label class="switch set-label-font">
+					        <input type="checkbox" [disabled]="true" [checked]="shopData.is_open">
+					        <span class="slider round"></span>
+				        </label>
+			        </div>
+		        </div>
+
+		        <div class="row">
+			        <label class="col-12 col-sm-5 set-label-font">Private:</label>
+			        <div class="col-12 col-sm-4">
+				        <label class="switch set-label-font">
+					        <input type="checkbox" [disabled]="true" [checked]="shopData.private.is_open">
+					        <span class="slider round"></span>
+				        </label>
+			        </div>
+		        </div>
+	        </div>
+
+        </div>
+      </div>
+      <div>
+        <strong>Shop Availability</strong>
+        <div formGroupName="availability">
+          <div *ngFor="let item of shopAvailability"
+               class="form-check form-check-inline"
+          >
+            <input class="form-check-input"
+                   type="checkbox"
+                   [formControlName]="item.id"
+            >
+            <label class="form-check-label">{{item.name}}</label>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="isPageLoaded" class="card-footer bg">
+    <div class="d-flex justify-content-end">
+
+      <div class="d-inline-flex align-items-right" *ngIf="isRejectAllowed()">
+        <button type="button" class="btn p-2 pl-5 pr-5 set-bnt-p set-btn" (click)="onReject()">Reject</button>
+      </div>
+
+      <div class="d-inline-flex align-items-center ml-3" *ngIf="isTerminateAllowed()">
+        <button type="submit" class="btn p-2 pl-5 pr-5 set-bnt-p set-btn" (click)="onTerminate()">Terminate</button>
+      </div>
+
+      <div class="d-inline-flex align-items-center ml-3" *ngIf="isSuspendAllowed() && !isProductSuspended()" >
+        <button type="button" class="btn p-2 pl-5 pr-5 set-bnt-p set-btn" (click)="onSuspend()">Suspend</button>
+      </div>
+
+      <div class="d-inline-flex align-items-center ml-3" *ngIf="isSuspendAllowed() && isProductSuspended()" >
+        <button type="button" class="btn p-2 pl-5 pr-5 set-bnt-p set-btn" (click)="onApprove()">Go Live</button>
+      </div>
+
+      <div class="d-inline-flex align-items-center ml-3">
+        <button type="button" class="btn p-2 pl-5 pr-5 set-bnt-p set-btn" (click)="onCancel()">Cancel</button>
+      </div>
+
+      <div class="d-inline-flex align-items-center ml-3" *ngIf="isApproveAllowed()">
+        <button type="submit" class="btn p-2 pl-5 pr-5 set-bnt-p set-btn" (click)="onApprove()">Approve</button>
+      </div>
+
+      <div class="d-inline-flex align-items-center ml-3" *ngIf="isSaveAllowed()">
+        <button type="button" class="btn p-2 pl-5 pr-5 set-bnt-p btn-Approved" (click)="onSave()">Save</button>
+      </div>
+
+    </div>
+  </div>
+</div>

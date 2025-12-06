@@ -1,0 +1,17 @@
+<div class="modal-body">
+
+	<div class="feedback-box">
+		<span><strong>Reject reason:</strong></span>
+		<textarea [(ngModel)]="reason" class="form-control" rows="5"></textarea>
+	</div>
+
+</div>
+
+<div class="modal-footer justify-content-end">
+	<button type="button" class="btn btn-outline-primary mr-2" (click)="dismiss()">Close</button>
+	<button [disabled]="!reason.length"
+	        type="button"
+	        class="btn btn-primary"
+	        (click)="close()"
+	>Submit</button>
+</div>

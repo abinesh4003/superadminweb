@@ -1,0 +1,55 @@
+<pkz-sidebar>
+	<div class="sidebar">
+		<div class="list-group list-group-flush">
+
+			<button *ngxPermissionsOnly="promoCodePermissions"
+			        routerLink="promo"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-tags" aria-hidden="true"></i>
+				Promo Code
+			</button>
+
+			<button *ngxPermissionsOnly="broadcastPermissions"
+			        routerLink="broadcast"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-bullhorn" aria-hidden="true"></i>
+				Broadcast
+			</button>
+
+			<button *ngxPermissionsOnly="adsPermissions"
+			        routerLink="ads"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-money" aria-hidden="true"></i>
+				Sponsor Ads
+			</button>
+
+			<button *ngxPermissionsOnly="announcementPermissions"
+			        routerLink="announcement"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-rocket" aria-hidden="true"></i>
+				Announcement
+			</button>
+		</div>
+	</div>
+
+	<div class="content">
+		<router-outlet></router-outlet>
+	</div>
+
+	<div class="footer">
+		<pkz-footer></pkz-footer>
+	</div>
+
+</pkz-sidebar>

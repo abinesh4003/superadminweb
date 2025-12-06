@@ -1,0 +1,119 @@
+<div class="table-container">
+    <ngx-datatable
+            *ngIf="isPageLoaded"
+            #table
+            class="bootstrap"
+            pkzResponsiveDatatable
+            [rows]="rows"
+            [rowHeight]="35"
+            columnMode="flex"
+            [footerHeight]="40"
+            [externalPaging]="true"
+            [count]="page.count"
+            (activate)="onRowClicked($event)"
+            [offset]="page.pageNumber"
+            [limit]="page.limit"
+            (page)="setPage($event)"
+    >
+        <ngx-datatable-column name="Sno" [flexGrow]="0.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+                {{rowIndex + 1 + page.pageNumber * page.limit}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Action" [flexGrow]="0.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+                <i [ngClass]="getActionIcon(row)" class="font-size-1-4rem" *ngIf="type === onlineAssistantsType"></i>
+                <img [src]="getActionIcon(row)"
+                     *ngIf="type === allAssistantsType" class="w-25px">
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" [flexGrow]="0.5" *ngIf="type === allAssistantsType">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+                {{getStatus(row)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Elapsed Time" prop="location_area" [flexGrow]="1"
+                              *ngIf="type === allAssistantsType">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                0
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Merchant Name" prop="merchant_fname" [flexGrow]="1"
+                              *ngIf="type === allAssistantsType">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Online Time" prop="signin_time" [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <pkz-timer [from]="value"></pkz-timer>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Assistant Name" prop='first_name' [flexGrow]="1"
+                              *ngIf="type === allAssistantsType"></ngx-datatable-column>
+        <ngx-datatable-column name="Assistant Name" prop='associate.first_name' [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType"></ngx-datatable-column>
+        <ngx-datatable-column name="Phone Number" prop='mobile' [flexGrow]="1"
+                              *ngIf="type === allAssistantsType">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                {{getMobileNumber(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Online Time" prop="delivery.signin_time" [flexGrow]="1"
+                              *ngIf="type === allAssistantsType">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <pkz-timer [from]="value" *ngIf="value"></pkz-timer>
+                <span *ngIf="!value">-</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Shop Name" prop="store.display_name" [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType"></ngx-datatable-column>
+        <ngx-datatable-column name="Customer Name" prop="customer.first_name" [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType"></ngx-datatable-column>
+        <ngx-datatable-column name="Location" prop="location_area" [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType"></ngx-datatable-column>
+        <ngx-datatable-column name="Delivery Time" prop="location_area" [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                30 mins
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Delivery Status" prop="delivery.status" [flexGrow]="1"
+                              *ngIf="type === onlineAssistantsType">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                {{getDeliveryStatusById(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Status" prop="status" [flexGrow]="0.5"
+                              *ngIf="type === onlineAssistantsType"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Count" prop="count" [flexGrow]="0.5"
+                              *ngIf="type === onlineAssistantsType"></ngx-datatable-column>
+
+        <ngx-datatable-footer class="da-table-footer">
+            <ng-template
+                    ngx-datatable-footer-template
+                    let-rowCount="rowCount"
+                    let-pageSize="pageSize"
+                    let-selectedCount="selectedCount"
+                    let-offset="offset">
+
+                <pkz-table-pagination
+                        [rowCount]="rowCount"
+                        [pageSize]="pageSize"
+                        [selectedCount]="selectedCount"
+                        [offset]="offset"
+                        (page)="table.onFooterPage($event)"
+                ></pkz-table-pagination>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</div>

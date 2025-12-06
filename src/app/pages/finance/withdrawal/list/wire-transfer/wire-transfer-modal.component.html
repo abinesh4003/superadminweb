@@ -1,0 +1,26 @@
+<div class="modal-header">
+	<h5 class="modal-title">Wire Transfer Info</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="offset-1 col-10">
+			<div class="row">
+				<div class="col-auto">
+					<label class="col-form-label">Confirmation ID</label>
+				</div>
+				<div class="col-7">
+					<input placeholder="Id" type="text" class="form-control" [(ngModel)]="referenceId">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<div class="float-right">
+		<button type="button" class="btn btn-outline-primary mr-2" (click)="dismiss()">Close</button>
+		<button [disabled]="!referenceId.length" type="button" class="btn btn-primary" (click)="close()">Transfer</button>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+<div class="datatable-pager pager-limit">
+	<span class="pager-limit__title">Rows per page:</span>
+	<ul class="pager">
+		<li *ngFor="let limit of limits"
+		    [ngClass]="{'active': isActiveRowsPerPage(limit)}"
+		    class="pages active"
+		>
+			<a href="#" (click)="onChangeLimit($event, limit)">{{limit}}</a>
+		</li>
+	</ul>
+</div>
+
+<datatable-pager
+		[pagerLeftArrowIcon]="'datatable-icon-left'"
+		[pagerRightArrowIcon]="'datatable-icon-right'"
+		[pagerPreviousIcon]="'datatable-icon-prev'"
+		[pagerNextIcon]="'datatable-icon-skip'"
+		[page]="curPage"
+		[size]="pageSize"
+		[count]="rowCount"
+		[hidden]="!((rowCount / pageSize) > 1)"
+		(change)="onChangePager($event)">
+</datatable-pager>

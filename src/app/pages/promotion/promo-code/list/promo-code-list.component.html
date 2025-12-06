@@ -1,0 +1,117 @@
+<div class="card">
+	<div class="card-body p-0">
+
+		<div *ngIf="isPageLoaded">
+			<ng-container *ngIf="(filterFormSettings$ | async) as settings">
+				<pkz-filter-form [config]="settings"
+				                 (filterChanged)="onFilter($event)"
+				                 [values]="filtersObj"
+				                 [embedded]="true"
+				                 class="py-2"
+				>
+					<div class="col-2">
+						<button *ngIf="hasPermission(perms.create)" routerLink="add" class="btn btn-primary btn-sm w-100">Create Promo Code</button>
+					</div>
+				</pkz-filter-form>
+			</ng-container>
+
+			<ngx-datatable
+        #table
+				class="bootstrap"
+				pkzResponsiveDatatable
+				[rows]="rows"
+				[rowHeight]="35"
+				columnMode="flex"
+				[footerHeight]="40"
+				[externalPaging]="true"
+				[count]="page.count"
+				[offset]="page.pageNumber"
+				[limit]="page.limit"
+				(page)="setPage($event)"
+			>
+				<ngx-datatable-column name="S.no" [flexGrow]="0.5">
+					<ng-template let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+						{{rowIndex + 1}}
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Actions" [sortable]="false" [flexGrow]="1">
+					<ng-template let-row="row" ngx-datatable-cell-template>
+						<div class="actions">
+							<span class="actions__item">
+								<i *ngIf="row.promo_active_status === 1" class="fa fa-check-circle text-success" aria-hidden="true"></i>
+								<i *ngIf="row.promo_active_status === 2" class="fa fa-times-circle text-danger" aria-hidden="true"></i>
+							</span>
+							<a *ngIf="hasPermission(perms.edit)"
+							   href="#"
+							   [routerLink]="['edit', row._id]"
+							   title="Edit"
+							   class="actions__item"
+							>
+								<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+							</a>
+							<a *ngIf="hasPermission(perms.view) || hasPermission(perms.edit)"
+							   href="#"
+							   [routerLink]="['settings', row._id]"
+							   title="Settings"
+							   class="actions__item"
+							>
+								<i class="fa fa-pencil-square-fa fa-cog" aria-hidden="true"></i>
+							</a>
+						</div>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Title" prop="promo_title" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Promo Code" prop="promo_code" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Value" prop="code_pro_obj.code_value" [flexGrow]="0.5"></ngx-datatable-column>
+
+				<ngx-datatable-column name="Expiry Date" prop="expiry_date" [flexGrow]="1">
+					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<span>{{value | date:'dd/MMM/yyyy'}}</span>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Shop name" prop="shop_name" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Location" prop="location" [flexGrow]="1"></ngx-datatable-column>
+				<ngx-datatable-column name="Used Count" prop="applied_users" [flexGrow]="1">
+					<ng-template let-value="value" ngx-datatable-cell-template>
+						{{value || 0}}
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Created On" prop="created_at" [flexGrow]="1">
+					<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+						<span>{{value | date:'dd/MMM/yyyy'}}</span>
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-column name="Status" prop="promo_active_status" [flexGrow]="1">
+					<ng-template let-value="value" ngx-datatable-cell-template>
+						{{value === 1 ? 'Active' : 'Inactive'}}
+					</ng-template>
+				</ngx-datatable-column>
+
+				<ngx-datatable-footer>
+					<ng-template
+							ngx-datatable-footer-template
+							let-rowCount="rowCount"
+							let-pageSize="pageSize"
+							let-selectedCount="selectedCount"
+							let-offset="offset">
+
+						<pkz-table-pagination
+								[rowCount]="rowCount"
+								[pageSize]="pageSize"
+								[selectedCount]="selectedCount"
+								[offset]="offset"
+								(page)="table.onFooterPage($event)"
+						></pkz-table-pagination>
+					</ng-template>
+				</ngx-datatable-footer>
+
+			</ngx-datatable>
+		</div>
+
+	</div>
+</div>

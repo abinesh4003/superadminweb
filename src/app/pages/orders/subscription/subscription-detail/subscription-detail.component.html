@@ -1,0 +1,427 @@
+<div *ngIf="(orderInfo$ | async) as order"
+     class="d-flex py-2">
+    <div class='d-flex flex-column product-details'>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb smaller-font pb-3">
+                <li class="breadcrumb-item">
+                    <a href="#"
+                       routerLink="../../">{{prevRouteUrl}}</a>
+                </li>
+                <li aria-current="page"
+                    class="breadcrumb-item active">
+                    {{order.data.subsInfo.subscription_id}} - {{order.data.subsInfo.title}}
+                </li>
+            </ol>
+            <p class="breadcrumb custom-small-font-size">Subscription Status:
+                <span class="{{getParamsByStatusCode().textColor}} ml-1">{{getParamsByStatusCode().statusName}}</span>
+            </p>
+        </nav>
+        <div class="card order-details-box">
+            <div class="card-body pt-0">
+                <div *ngIf="(filterFormSettings$ | async) as settings"
+                     class="row">
+                    <pkz-filter-form (filterChanged)="onFilter($event, allProducts)"
+                                     [config]="settings"
+                                     [embedded]="true"
+                                     [values]="filtersObj"
+                                     class="py-2">
+                        <div class='col-8'>
+                            <span class=mr-3>Delivery Mode: <span
+                                    class="color-purple font-weight-bold">{{order.data.subsInfo.delivery_by}}</span></span>
+                            <span>Distance: <span class="color-red font-weight-bold">{{order.data.subsInfo.distance}}
+                                <span *ngIf="isNumber(order.data.subsInfo.distance)"> km</span></span></span>
+                        </div>
+                    </pkz-filter-form>
+                </div>
+
+                <ngx-datatable
+                    #table
+                    [count]="products.length"
+                    [footerHeight]="40"
+                    [limit]="products.length"
+                    [offset]="1"
+                    [rowHeight]="35"
+                    [rows]="products"
+                    class="bootstrap"
+                    columnMode="flex"
+                    pkzResponsiveDatatable
+                >
+                    <ngx-datatable-column [flexGrow]="0.3"
+                                          name="#"
+                                          prop="requested.at">
+                        <ng-template let-row="row"
+                                     let-rowIndex="rowIndex"
+                                     let-value="value"
+                                     ngx-datatable-cell-template>
+                            {{rowIndex + 1}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1"
+                                          name="Product Name"
+                                          prop="product_name"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="1"
+                                          name="UPS-EAN-SKU"
+                                          prop="sku">
+                        <ng-template let-row="row"
+                                     ngx-datatable-cell-template>
+                            {{getUpcOrSku(row)}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.5"
+                                          name="Unit"
+                                          prop="unit"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.5"
+                                          name="Quantity"
+                                          prop="qty"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.5"
+                                          name="Amount"
+                                          prop="amount"></ngx-datatable-column>
+                    <ngx-datatable-column [flexGrow]="0.5"
+                                          name="Store Name"
+                                          prop="store_name"></ngx-datatable-column>
+
+                </ngx-datatable>
+
+                <div class="d-flex mt-4 p-3 details-box">
+                    <div class="d-flex">
+                        <div class="d-flex flex-column flex-0-7">
+                            <div class="d-flex">
+                                <div class="flex-0-5">
+                                    <div class="d-flex mb-2">
+                                        <span class="flex-0-7 text-right mr-3">Applied Offer amount:</span>
+                                        <span class="flex-0-3">₹ {{order.data.subsInfo.applied_offer}}</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <span class="flex-0-7 text-right  mr-3">Total products:</span>
+                                        <span class="flex-0-3">{{allProducts.length}}</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <span class="flex-0-7 text-right  mr-3">Last recharged amount:</span>
+                                        <span class="flex-0-3">₹ {{order.data.subsInfo.payment_info.recharge_amount.toFixed(2)}}</span>
+                                    </div>
+                                </div>
+                                <div class="flex-0-5">
+                                    <div class="d-flex mb-2">
+                                        <span class="flex-0-6 text-right mr-3">Card payment fee %:</span>
+                                        <span class="flex-0-4">₹ {{order.data.subsInfo.service_fee.gateway_fee}}
+                                            ({{order.data.subsInfo.service_fee.gateway_percent}}%)
+                    </span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <span class="flex-0-6 text-right mr-3">UPC - Service Fee:</span>
+                                        <span class="flex-0-4">₹ {{order.data.subsInfo.service_fee.upc_fee}}
+                                            ({{order.data.subsInfo.service_fee.upc_percent}}%)</span>
+                                    </div>
+                                    <div class="d-flex mb-2">
+                                        <span class="flex-0-6 text-right mr-3">SKU - Service Fee:</span>
+                                        <span class="flex-0-4">₹ {{order.data.subsInfo.service_fee.sku_fee}}
+                                            ({{order.data.subsInfo.service_fee.sku_percent}}%)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="d-flex mb-2 mr-4">
+                                    <span class="flex-0-7 text-right mr-3 color-silver">Subscription Type:</span>
+                                    <span class="flex-0-3 color-purple">{{order.data.subsInfo.subsc_type}}</span>
+                                </div>
+                                <div class="d-flex mb-2 mr-4">
+                                    <span class="flex-0-7 text-right mr-3">Start Date:</span>
+                                    <div class="flex-0-3">
+                        <span class="color-red">
+                            {{getStartDate(order.data.subsInfo.subscription_info.var_start_date)}}
+                        </span>
+                                        <i (click)="openEditStartDateModal()"
+                                           *ngxPermissionsOnly="getSubscriptionPermission()[1]"
+                                           class="fa fa-edit edit-start-Date"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-2 mr-4">
+                                    <span class="flex-0-7 text-right mr-3">Customer Preferred Delivery Time:</span>
+                                    <div class="flex-0-3">
+                        <span class="color-red">
+                            {{getDeliveryTimeSlot(order.data.subsInfo.delivery_time_slot)}}
+                        </span>
+                                        <i (click)="openPreferredDeliveryTimeModal()"
+                                           *ngxPermissionsOnly="getSubscriptionPermission()[1]"
+                                           class="fa fa-edit edit-customer-preferred-delivery-time"></i>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-2 mr-4">
+                                    <span class="flex-0-7 text-right mr-3">Total Delivered:</span>
+                                    <span class="flex-0-3 color-light-blue">{{order.data.subsInfo.total_delivered}}</span>
+                                </div>
+                                <div class="d-flex mb-2 mr-4">
+                                    <span class="flex-0-7 text-right mr-3">Wallet Balance:</span>
+                                    <span class="flex-0-3 color-red">₹ {{order.data.subsInfo.subs_wallet}}</span>
+                                </div>
+                                <div class="d-flex mb-2 mr-4">
+                                    <span class="flex-0-7 text-right mr-3">Last Recharge Date:</span>
+                                    <span class="flex-0-3 color-light-blue">{{order.data.subsInfo.last_recharge_date | date: 'dd/MM/yyyy'}}</span>
+                                </div>
+
+                                <div *ngIf="order.data.subsInfo?.subscription_info?.scheduled_days"
+                                     class="mb-2 mt-3 scheduled-days">
+                                    <p class="color-silver">Scheduled Days:</p>
+                                    <p class="d-flex flex-wrap mb-0">
+                    <span *ngFor="let item of order.data.subsInfo?.subscription_info?.scheduled_days; last as last">
+                        {{'&nbsp;' + item + (last ? '' : ' | ')}}
+                    </span>
+                                    </p>
+                                </div>
+
+                                <div *ngIf="order.data.subsInfo?.subscription_info?.order_days"
+                                     class="d-flex flex-wrap mb-2 mt-3 order-days">
+                                    <div *ngFor="let item of getOrderDays(); index as index"
+                                         class="form-check custom-checkbox mr-3">
+                                        <input [checked]="item.isSelected"
+                                               class="form-check-input custom-control-input"
+                                               id="defaultCheck{{index}}"
+                                               type="checkbox"
+                                               value="">
+                                        <label class="form-check-label custom-control-label"
+                                               for="defaultCheck{{index}}">
+                                            {{item.dayName}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="d-flex mb-2 mt-3">
+                                    <button (click)="openOrderHistoryModal()"
+                                            class="btn btn-outline-light support-btn">
+                                        Order History
+                                    </button>
+                                    <button (click)="openRechargeLogModal()"
+                                            class="btn btn-outline-light support-btn mr-2 ml-2">
+                                        Recharge Log
+                                    </button>
+
+                                    <ng-container>
+                                        <button (click)="openRechargeReminderModal()"
+                                                *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                                class="btn btn-outline-light support-btn">
+                                            Recharge Reminder
+                                        </button>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-0-3 d-flex flex-column">
+                            <div class="d-flex mb-2">
+                                <span class="mr-3 ml-2">Delivery Charge: </span>
+                                <span
+                                        *ngIf="order.data.subsInfo.delivery_charge else zeroDelivery">₹ {{order.data.subsInfo.delivery_charge}}</span>
+                                <ng-template #zeroDelivery>
+                                    <span>₹ 0</span>
+                                </ng-template>
+                            </div>
+                            <div class="payment-mode">
+                                <div class="payment-mode-label">
+                                    Payment mode
+                                </div>
+                                <div class="d-flex mb-1">
+                                    <span class="flex-0-5 text-right mr-3">Promo:</span>
+                                    <span class="flex-0-5">₹ {{order.data.subsInfo.promo.price}}
+                                        <small *ngIf="order.data.subsInfo.promo.type"
+                                               class="color-silver">({{order.data.subsInfo.promo.type}}
+                                            )
+                                        <div class="d-inline-block"
+                                             ngbDropdown
+                                             placement="right-top">
+                                            <button class="btn btn-outline-primary promo-code-btn"
+                                                    id="dropdownConfig"
+                                                    ngbDropdownToggle><i class="fa fa-exclamation-circle"></i></button>
+                                            <div aria-labelledby="dropdownConfig"
+                                                 class="promo-code"
+                                                 ngbDropdownMenu>
+                                                {{order.data.subsInfo.promo.name}}
+                                            </div>
+                                        </div>
+                                    </small>
+                              </span>
+                                </div>
+                                <div class="d-flex mb-1">
+                                    <span class="flex-0-5 text-right mr-3">Sub Wallet:</span>
+                                    <span class="flex-0-5">₹ {{order.data.subsInfo.total_amount | number}}</span>
+                                </div>
+                                <div class="mb-1 separator-eeeeee"></div>
+                                <div class="d-flex mb-1 py-1">
+                                    <span class="flex-0-5 text-right mr-3">Amount:</span>
+                                    <span class="flex-0-5">₹ {{(+order.data.subsInfo.total_amount + +order.data.subsInfo.promo.price) | number}}</span>
+                                </div>
+                            </div>
+                            <div *ngIf="order.data.subsInfo.last_order_status"
+                                 class="d-flex mt-2"
+                                 style="font-size: 13px;">
+                                <span class="flex-0-5 text-right mr-3">Last Order Status:</span>
+                                <span class="flex-0-5 color-light-blue">{{order.data.subsInfo.last_order_status}}</span>
+                            </div>
+                            <div class="d-flex mt-2"
+                                 style="font-size: 13px;">
+                                <span class="flex-0-5 text-right mr-3">Next Order Date:</span>
+                                <span class="flex-0-5 color-red">
+                    {{order.data.subsInfo.subscription_info.nextDate | date: 'dd/MM/yyy'}}
+                </span>
+                            </div>
+                            <div class="d-flex mt-2"
+                                 style="font-size: 13px;">
+                                <span class="flex-0-5 text-right mr-3">Num Of Orders:</span>
+                                <span class="flex-0-5 color-light-blue">{{order.data.subsInfo.num_of_orders}}</span>
+                            </div>
+
+
+                            <ng-container>
+                                <button (click)="openSupportModal()"
+                                        *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                        class="btn btn-outline-light support-btn mb-2 mt-auto mx-auto">
+                                    Support Call Log
+                                </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="actions">
+                    <ng-container>
+                        <button (click)="openTransferAmountModal()"
+                                *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                class="btn btn-primary silver-button w-auto pl-2 pr-2">
+                            Transfer Amount
+                        </button>
+                    </ng-container>
+                    <div class="d-flex">
+                        <ng-container *ngIf="getStatus(order.data.subsInfo.status) === 1 && getStatus(order.data.subsInfo.status) !== 3">
+                            <button (click)="openPauseSubscriptionConfirmationModal()"
+                                    *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                    class="btn btn-primary silver-button">
+                                Pause
+                            </button>
+                        </ng-container>
+
+                        <ng-container *ngIf="getStatus(order.data.subsInfo.status) === 3">
+                            <button (click)="subsAction(4, 'subscribe')"
+                                    *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                    class="btn btn-primary">
+                                Subscribe
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="getStatus(order.data.subsInfo.status) === 2  && getStatus(order.data.subsInfo.status) !== 3">
+                            <button (click)="subsAction(1, 'activate', true)"
+                                    *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                    class="btn btn-primary silver-button">
+                                Activate
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="[1,2].includes(getStatus(order.data.subsInfo.status))">
+                            <button (click)="openUnsubscribeConfirmationModal()"
+                                    *ngxPermissionsOnly="getSubscriptionPermission()[1]; unauthorisedStrategy: disabledFunc"
+                                    class="btn btn-primary silver-button">
+                                Unsubscribe
+                            </button>
+                        </ng-container>
+
+                        <button (click)="goBack()"
+                                class="btn btn-primary silver-button mr-0 ml-5">
+                            Back
+                        </button>
+                    </div>
+
+
+                    <!--          <button class="btn btn-primary silver-button" *ngIf="[1,2,3,4].includes(order.status)"-->
+                    <!--                  (click)="cancelOrder(order)">-->
+                    <!--            Cancel Order-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary blue-button" *ngIf="order.status === 1"-->
+                    <!--                  (click)="openAcceptOrderConfirmationModal(order)">Accept Order-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary blue-button" *ngIf="order.status === 2"-->
+                    <!--                  (click)="openDispatchOrderConfirmationModal(order)">Dispatch Order-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary silver-button" *ngIf="order.status === 3"-->
+                    <!--                  (click)="openDeliverOrderConfirmationModal(order)">Deliver Order-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary silver-button w-160px"-->
+                    <!--                  *ngIf="order.status === 2 || order.status === 3 || order.status === 4"-->
+                    <!--                  [class.btn__green]="order?.assistant_info?.assistant_id"-->
+                    <!--                  (click)="openAssignDeliveryBoyModal(order)">-->
+                    <!--            {{order?.assistant_info?.assistant_id ? 'Associate Assigned' : 'Assign Delivery Boy'}}-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary blue-button" *ngIf="order.status === 3"-->
+                    <!--                  (click)="openShipOrderConfirmationModal(order)">Ship Order-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary blue-button" *ngIf="order.status === 4"-->
+                    <!--                  (click)="openDeliverOrderConfirmationModal(order)">Deliver Order-->
+                    <!--          </button>-->
+                    <!--          <button class="btn btn-primary silver-button mr-0" *ngIf="[1,2,3,4].includes(order.status)"-->
+                    <!--                  (click)="goBack()">Back-->
+                    <!--          </button>-->
+                    <!--          <div class="w-100 d-flex justify-content-center align-items-center"-->
+                    <!--               *ngIf="[5,6,7].includes(order.status)">-->
+                    <!--            <button class="btn btn-primary blue-button back-primary-btn" (click)="goBack()"-->
+                    <!--                    *ngIf="[5,6,7].includes(order.status)">Back-->
+                    <!--            </button>-->
+                    <!--          </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-details-right-sidebar">
+        <div class="inner-box">
+        <span class="shop-contact-details-label mb-1">
+            Shop contact details
+        </span>
+            <ng-container *ngFor="let shop of order.data.productsInfo; first as first">
+                <hr *ngIf="!first">
+                <span class="prop-name mb-1">
+                Shop Name:
+            </span>
+                <span class="prop-value mb-1">{{shop._id.store_name}}</span>
+                <span class="prop-name mb-1">
+                Mobile Number:
+            </span>
+                <span class="prop-value mb-1">+{{shop._id.store.mobile.primary.dialing_code}} {{shop._id.store.mobile.primary.number}}</span>
+                <span class="prop-name mb-1">
+                Location:
+            </span>
+                <span class="prop-value mb-1 pl-0 d-flex">
+                <a [href]="getGoogleMapsLink(shop._id.store.coord.coordinates)"
+                   target="_blank">
+                          <i class="fa fa-map-marker shop-location-icon color-purple"></i>
+                </a>
+                <span>{{shop._id.store.address.street}}</span>
+            </span>
+            </ng-container>
+        </div>
+
+
+        <div class="inner-box">
+              <span class="shop-contact-details-label mb-1">
+                Customer details
+            </span>
+            <span class="prop-name mb-1">
+                Customer Name:
+            </span>
+            <span class="prop-value mb-1">{{order.data.subsInfo.customer.name}}</span>
+            <span class="prop-name mb-1">
+                Mobile Number:
+            </span>
+            <span class="prop-value mb-1">+{{order.data.subsInfo.customer.mobile.dialing_code}} {{order.data.subsInfo.customer.mobile.number}}</span>
+        </div>
+
+        <div class="inner-box">
+             <span class="shop-contact-details-label mb-1">
+                Delivery details:
+            </span>
+            <span class="prop-name mb-1">
+                Address:
+            </span>
+            <span class="prop-value mb-1 pl-0 d-flex">
+                <a [href]="getGoogleMapsLink(order.data.subsInfo.subscription_info.deliveryAddress.location.coordinates)"
+                   target="_blank">
+                    <i class="fa fa-map-marker shop-location-icon color-red"></i>
+                </a>
+                <span>{{getDeliveryAddress(order)}}</span>
+            </span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+
+<div class='d-flex flex-column'>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb smaller-font pb-3">
+      <li class="breadcrumb-item">
+        <a routerLink="../">Agency Remittance</a>
+      </li>
+      <li aria-current="page"
+          class="breadcrumb-item active">
+        COD History
+      </li>
+    </ol>
+  </nav>
+</div>
+
+
+<ngx-datatable
+        *ngIf="isPageLoaded"
+        #table
+        (page)="setPage($event)"
+        [count]="page.count"
+        [externalPaging]="true"
+        [footerHeight]="40"
+        [limit]="page.limit"
+        [offset]="page.pageNumber"
+        [rowHeight]="35"
+        [rows]="rows"
+        class="bootstrap history__table mb-5"
+        columnMode="flex"
+        pkzResponsiveDatatable
+>
+  <ngx-datatable-column [flexGrow]="1"
+                        name="Status">
+    <ng-template let-row="row.order_info"
+                 ngx-datatable-cell-template>
+      <div class="d-flex flex-column flex-md-row justify-content-between cod__history__item">
+        <div class="img__holder">
+          <img alt=""
+               [src]="row.store_image | imageSecure:shopIconOptions | async">
+        </div>
+        <div class="cod__info ml-md-4 mr-md-auto">
+          <div class="cod__info--details">
+            <div class="detail--item ">
+              <div class="detail--item__title cod__info--title">{{row.store_name}}</div>
+            </div>
+            <div class="detail--item font-weight-bold">
+              <div class="detail--item__title">Order Id:</div>
+              <div>#{{row.order_id}}</div>
+            </div>
+            <div class="detail--item">
+              <div class="detail--item__title">Order Placed On:</div>
+              <div>{{row.ordered.at | date:'dd/MM/yy hh:mm a'}}</div>
+            </div>
+            <div class="detail--item">
+              <div class="detail--item__title">Delivered On:</div>
+              <div>{{row.delivered_at | date:'dd/MM/yy hh:mm a'}}</div>
+            </div>
+            <div class="detail--item">
+              <div class="detail--item__title">Delivered Within:</div>
+              <div class="red-color">{{row.delivered_within}}</div>
+            </div>
+            <div class="detail--item">
+              <div class="detail--item__title">Delivery Fee:</div>
+              <div class="blue-color">₹ {{row.delivery_fee}}</div>
+            </div>
+            <div class="detail--item">
+              <div class="detail--item__title">COD Amount:</div>
+              <div class="red-color">₹ {{row.cod_amount}}</div>
+            </div>
+            <div class="detail--item">
+              <div class="detail--item__title">Online Amount:</div>
+              <div class="red-color">₹ {{row.online_offer_amt}} (Agency DISC/CB)</div>
+            </div>
+          </div>
+        </div>
+        <div class="avatar__holder">
+          <img alt=""
+               [src]="row.customer_image | imageSecure:userIconOptions | async">
+          <p>{{row.customer_full_name}}</p>
+        </div>
+      </div>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-footer>
+    <ng-template
+            let-offset="offset"
+            let-pageSize="pageSize"
+            let-rowCount="rowCount"
+            let-selectedCount="selectedCount"
+            ngx-datatable-footer-template>
+
+      <pkz-table-pagination
+              (page)="table.onFooterPage($event)"
+              [offset]="offset"
+              [pageSize]="pageSize"
+              [rowCount]="rowCount"
+              [selectedCount]="selectedCount"
+      ></pkz-table-pagination>
+    </ng-template>
+  </ngx-datatable-footer>
+
+</ngx-datatable>
+<div class="total__amount--cnt">
+  Order count: <span>{{order_count | number:'1.1-1'}}</span>&nbsp;| Agency offer amt: <span>{{agency_offer_amt | number:'1.1-1'}}</span>&nbsp; | Total amount: <span>{{totalCodAmount | number:'1.1-1'}}</span>
+</div>

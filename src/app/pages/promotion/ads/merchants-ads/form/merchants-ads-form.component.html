@@ -1,0 +1,173 @@
+<div class="card">
+	<div class="card-body pt-0">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb smaller-font">
+				<li class="breadcrumb-item">
+					<a href="#" (click)="onBreadcrumbClick($event)">Merchant Ads</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">{{getBreadcrumb()}}</li>
+			</ol>
+		</nav>
+
+		<form *ngIf="isPageLoaded" [formGroup]="form" novalidate>
+			<fieldset [disabled]="isFormDisabled()">
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Ad Type:</label>
+					<div class="col-3">
+						<select class="form-control form-control-sm set-form-sty"
+						        formControlName="ad_type"
+						        [ngClass]="{
+						          'form-control-danger': isInvalidField('ad_type'),
+						          'form-control-plaintext': isFormDisabled() || isEditPage()
+						        }"
+						>
+							<option value="">Select...</option>
+							<option *ngFor="let item of adTypes" [ngValue]="item.id">{{item.name}}</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Select store:</label>
+					<div class="col-3">
+						<input *ngIf="isEditPage()"
+						       class="form-control form-control-sm"
+						       type="text"
+						       [ngClass]="{'form-control-plaintext': isFormDisabled() || isEditPage()}"
+						       [value]="storeData.store_name"
+						>
+						<ng-select *ngIf="!isEditPage()"
+						           [items]="stores$ | async"
+						           class="bootstrap ng-select-sm"
+						           bindLabel="display_name"
+						           [addTag]="false"
+						           [multiple]="false"
+						           [hideSelected]="false"
+						           [clearable]="false"
+						           typeToSearchText="Please enter 2 or more characters"
+						           [typeahead]="storesTypeahead$"
+						           [loading]="storesLoading"
+						           placeholder="Search and select"
+						           formControlName="selectedStore">
+						</ng-select>
+					</div>
+				</div>
+
+				<div *ngIf="storeIcon" class="form-group">
+					<label class="mr-3 offset-4 col-form-label col-form-label-sm">Shaan Stores:</label>
+					<img [src]="storeIcon | imageSecure:iconOptions | async" [attr.width]="iconOptions.width" alt="">
+				</div>
+
+				<div *ngIf="isBannerType" class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Banner Ad:</label>
+					<div class="col-auto">
+						<pkz-image-upload
+								[disabled]="isFormDisabled()"
+								[smallIcons]="true"
+								[deleteAvailable]="!isFormDisabled()"
+								[imageUrl]="bannerImg"
+								[path]="bannerImageOptions.path"
+								[width]="360"
+								[height]="null"
+								[minHeight]="100"
+								(imageChange)="onImageChange($event)"
+								(zoom)="onZoomBanner()"
+						>
+							<span class="placeholder">Store Icon (360x100)</span>
+						</pkz-image-upload>
+					</div>
+				</div>
+
+				<div *ngIf="isTextType" class="form-group row">
+					<label class="col-5 mt-4 text-right col-form-label col-form-label-sm">Ad Text:</label>
+					<div class="col-4">
+						<label class="col-form-label col-form-label-sm pull-right">
+							<span *ngIf="!isFormDisabled()">{{form.get('ad_text').value.length}}/140</span>
+						</label>
+						<textarea [readOnly]="isFormDisabled()"
+						          [ngClass]="{'form-control-danger': isInvalidField('ad_text')}"
+						          formControlName="ad_text"
+						          class="form-control"
+						          rows="4"
+						></textarea>
+						<div *ngIf="form.get('ad_text').hasError('maxlength') && !isFormDisabled()" class="error">
+							Max length should be less or equal 140 characters
+						</div>
+					</div>
+				</div>
+
+				<div *ngIf="isTextType" class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Preview:</label>
+					<div class="col-4">
+						<div class="ads-preview">
+							<img [src]="storeIcon | imageSecure:iconOptions | async" alt="" [attr.width]="iconOptions.width / 2">
+							<div class="ads-preview__text">{{form.get('ad_text').value}}</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="offset-2 col-8">
+						<div class="form-group row">
+							<label class="offset-3 col-form-label col-form-label-sm">Expires On:</label>
+							<div class="col-3 ">
+								<div class="input-group input-group-sm">
+									<input class="form-control"
+									       [ngClass]="{'form-control-danger': isInvalidField('expiry_date')}"
+									       placeholder="dd-mm-yyyy"
+									       formControlName="expiry_date"
+									       ngbDatepicker
+									       #dExp="ngbDatepicker"
+									       [minDate]="minDpDate"
+									>
+									<div class="input-group-append">
+										<button class="btn btn-outline-secondary" (click)="dExp.toggle()" type="button">
+											<i class="fa fa-calendar" aria-hidden="true"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<label class="col-form-label col-form-label-sm">Paid:</label>
+							<div class="col-2">
+								<input type="number"
+								       [ngClass]="{'form-control-danger': isInvalidField('paid_cost')}"
+								       class="form-control form-control-sm"
+								       formControlName="paid_cost"
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="row mt-3">
+				<div class="offset-3 col-6">
+					<div class="row">
+						<div class="col">
+							<button type="button" class="btn btn-sm btn-outline-success w-100" (click)="onBack()">Back</button>
+						</div>
+
+						<div *ngIf="isEditPage() && hasPermission(perms.edit)" class="col">
+							<button type="button"
+							        class="btn btn-sm  w-100"
+							        (click)="onToggleActivate()"
+							        [ngClass]="{
+							          'btn-outline-danger': storeData.is_active,
+							          'btn-outline-success': !storeData.is_active
+							        }"
+							>
+								{{storeData.is_active ? 'Deactivate' : 'Activate' }}
+							</button>
+						</div>
+						<div class="col" *ngIf="isEditPage() ? hasPermission(perms.edit) : hasPermission(perms.create_ad)">
+							<button type="button" class="btn btn-sm btn-outline-primary w-100" (click)="onSubmit()">{{isEditPage() ? 'Save' : 'Create Ad'}}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</div>
+

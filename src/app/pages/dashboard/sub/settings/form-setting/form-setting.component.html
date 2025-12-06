@@ -1,0 +1,579 @@
+<div class="card-container bg-gray p-3">
+	<div class="container card-body">
+		<form novalidate>
+			<ng-container *ngIf="isGeneric" [ngTemplateOutlet]="genericTpl"></ng-container>
+			<ng-container *ngIf="isPublic || isBranded" [ngTemplateOutlet]="publicBrandedTpl"></ng-container>
+			<ng-container *ngIf="isPrivate" [ngTemplateOutlet]="privateTpl"></ng-container>
+		</form>
+
+		<div class="d-flex justify-content-end">
+			<div class="d-inline-flex align-items-center mt-4 mr-2">
+				<button *ngIf="isGeneric&&isGeneralEdit"
+				        type="submit"
+				        class="btn p-2 pl-5 pr-5 set-bnt-p btn-Apply"
+				        (click)="onGeneralApply()">Apply
+				</button>
+				<button *ngIf="(isBranded||isPublic)&&isBasicEdit"
+				        type="submit"
+				        class="btn p-2 pl-5 pr-5 set-bnt-p btn-Apply"
+				        (click)="onBasicApply()">Apply
+				</button>
+				<button *ngIf="isPrivate&&isPrivateEdit"
+				        type="submit" class="btn p-2 pl-5 pr-5 set-bnt-p btn-Apply"
+				        (click)="onPrivateApply()">Apply
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #genericTpl>
+	<ng-container [formGroup]="form">
+		<!-- Cart Type* -->
+		<div class="row mb-2">
+			<div class="col-7">
+				<div class="row">
+					<div class="col-7 text-right">
+						<label class="set-label-font">Cart Type*</label>
+					</div>
+					<div class="col-4">
+						<select class="form-control set-form-sty" formControlName="cartType">
+							<option *ngFor="let item of cartTypes" [value]="item._id">{{item.name}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mb-2">
+			<strong>Store app properties:</strong>
+		</div>
+
+		<div class="row">
+			<div class="col-7">
+
+				<div class="sub-card mb-4">
+					<!-- Maximum delivery distance (Nearby):* -->
+					<div class="row mb-2">
+						<div class="col-7 text-right">
+							<label class="set-label-font"
+							       for="maximumDeliveryDistance"
+							>
+								Maximum delivery distance (Nearby):*
+							</label>
+						</div>
+						<div class="col-4">
+							<input type="text" class="form-control set-form-sty" id="maximumDeliveryDistance"
+							       name="maximumDeliveryDistance"
+							       formControlName="maximumDeliveryDistance">
+						</div>
+						<label class="col-1 pl-0">Km</label>
+					</div>
+
+					<!-- Cash on delivery -->
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font" for="cashOnDelivery">Cash on delivery: </label>
+						</div>
+						<div class="col-4">
+							<label class="switch set-label-font">
+								<input type="checkbox" id="cashOnDelivery" name="cashOnDelivery" checked
+								       formControlName="cashOnDelivery">
+								<span class="slider round"></span>
+							</label>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Delivery info - NearBy: </label>
+						</div>
+						<div class="col-5">
+
+							<div class="row">
+								<div class="col-auto">
+									<label class="set-label-font">Within: </label>
+								</div>
+								<div class="col-3 px-0">
+									<input type="number" class="form-control set-form-sty" formControlName="deliveryInfoDuration">
+								</div>
+								<div class="col">
+									<select class="form-control set-form-sty" formControlName="deliveryInfoDurationUnit">
+										<option *ngFor="let item of durationUnits" [value]="item">{{item}}</option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="sub-card mb-4">
+					<!-- Other location enabled -->
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font" for="otherLocationEnabled">Other locations enabled:</label>
+						</div>
+						<div class="col-4">
+							<label class="switch set-label-font">
+								<input type="checkbox" id="otherLocationEnabled" name="otherLocationEnabled"
+								       formControlName="otherLocationEnabled">
+								<span class="slider round"></span>
+							</label>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Delivery info - Other Location: </label>
+						</div>
+						<div class="col-5">
+
+							<div class="row">
+								<div class="col-auto">
+									<label class="set-label-font">Within: </label>
+								</div>
+								<div class="col-3 px-0">
+									<input type="number" class="form-control set-form-sty" formControlName="otherDeliveryInfoDuration">
+								</div>
+								<div class="col">
+									<select class="form-control set-form-sty" formControlName="otherDeliveryInfoDurationUnit">
+										<option *ngFor="let item of durationUnits" [value]="item">{{item}}</option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+				<!-- Inventory limit per store -->
+				<div class="row mb-2">
+					<div class="col-7 text-right">
+						<label class="set-label-font" for="defaultInventory">Inventory limit per store:* </label>
+					</div>
+					<div class="col-4">
+						<input type="text" class="form-control set-form-sty" id="defaultInventory" name="defaultInventory"
+						       formControlName="defaultInventory">
+					</div>
+				</div>
+
+				<!-- Product stock limit -->
+				<div class="row mb-2">
+					<div class="col-7 text-right">
+						<label class="set-label-font" for="defaultProductStockLimit">Product stock limit:* </label>
+					</div>
+					<div class="col-4">
+						<input class="form-control set-form-sty" id="defaultProductStockLimit" name="defaultProductStockLimit"
+						       formControlName="defaultProductStockLimit">
+					</div>
+				</div>
+
+				<!-- Minimum number of days (Replacement) -->
+				<div class="row mb-2">
+					<div class="col-7 text-right">
+						<label class="set-label-font" for="replacement">Minimum number of days (Replacement):* </label>
+					</div>
+					<div class="col-4">
+						<input type="text" class="form-control set-form-sty" id="replacement" name="replacement"
+						       formControlName="replacement">
+					</div>
+				</div>
+
+				<!-- Minimum number of days (refund) -->
+				<div class="row mb-2">
+					<div class="col-7 text-right">
+						<label class="set-label-font" for="refund">Minimum number of days (refund):* </label>
+					</div>
+					<div class="col-4">
+						<input type="text" class="form-control set-form-sty" id="refund" name="refund" formControlName="refund">
+					</div>
+				</div>
+
+				<!-- Maximum product margin -->
+				<div class="row mb-2">
+					<div class="col-7 text-right">
+						<label class="set-label-font" for="maximumProductMargin">Maximum product margin (%):* </label>
+					</div>
+					<div class="col-4">
+						<input type="text" class="form-control set-form-sty" id="maximumProductMargin" name="maximumProductMargin"
+						       formControlName="maximumProductMargin">
+					</div>
+				</div>
+
+				<!-- Negative cost -->
+				<div class="row mb-2">
+					<div class="col-7 text-right">
+						<label class="set-label-font" for="negativeCost">Negative cost (%): </label>
+					</div>
+					<div class="col-4">
+						<input type="text" class="form-control set-form-sty" id="negativeCost" name="negativeCost"
+						       formControlName="negativeCost">
+					</div>
+				</div>
+
+				<div class="mb-2">
+					<strong>Merchant Settings:</strong>
+				</div>
+
+				<div class="sub-card mb-4">
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Shop Auto Open/Close:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="allow_auto_openclose">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Enable Delivery:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="enable_delivery">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Restaurants:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="is_restaurants">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Food Items:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="is_food_items">
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-5">
+				<div class="row justify-content-center mb-4">
+
+					<div class="col-auto">
+						<div class=" row align-items-center h-100">
+							<img class="image-size" src="assets/images/support_setting.png">
+						</div>
+					</div>
+
+					<div class="col-auto ml-0">
+						<div class="row align-items-center h-100">
+							<div>
+								<div class="ml-0 mb-3">
+									<select class="select-color blue-select" formControlName="tooltip_blue">
+										<option selected value="100" disabled hidden></option>
+										<option *ngFor="let item of tooltips" [value]="item.key_id">{{item.display_name}}</option>
+									</select>
+								</div>
+								<div class="ml-4 mb-3">
+									<select class="select-color lightgreen-select" formControlName="tooltip_lightgreen">
+										<option selected value="100" disabled hidden></option>
+
+										<option *ngFor="let item of tooltips" [value]="item.key_id">{{item.display_name}}</option>
+									</select>
+								</div>
+								<div class="ml-5 mb-3">
+									<select class="select-color green-select" formControlName="tooltip_green">
+										<option selected value="100" disabled hidden></option>
+										<option *ngFor="let item of tooltips" [value]="item.key_id">{{item.display_name}}</option>
+									</select>
+								</div>
+								<div class="ml-4 mb-3">
+									<select class="select-color turquoise-select" formControlName="tooltip_turquoise">
+										<option selected value="100" disabled hidden></option>
+										<option *ngFor="let item of tooltips" [value]="item.key_id">{{item.display_name}}</option>
+									</select>
+								</div>
+								<div class="ml-0">
+									<select class="select-color red-select" formControlName="tooltip_red">
+										<option selected value="100" disabled hidden></option>
+										<option *ngFor="let item of tooltips" [value]="item.key_id">{{item.display_name}}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="mb-2">
+					<strong>Orders:</strong>
+				</div>
+
+				<div class="sub-card mb-4">
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Delivery notes:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="ordersDeliveryNotes">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Attachment:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="ordersDeliveryAttachment">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-7 text-right">
+							<label class="set-label-font">Enable Subscription:</label>
+						</div>
+						<div class="col-4">
+							<input type="checkbox" formControlName="ordersDeliveryEnableSubscription">
+						</div>
+					</div>
+				</div>
+
+				<div class="mb-2">
+					<strong>Customer: Restrict cancel order from</strong>
+				</div>
+
+				<div class="sub-card pr-1 pl-2" formGroupName="cancelStageSelected">
+					<div *ngFor="let option of cancelStageList; last as isLast"
+					     class="form-check form-check-inline"
+					     [ngClass]="{'mr-0': isLast }"
+					>
+						<input class="form-check-input"
+						       [formControlName]="option.id"
+						       type="checkbox"
+						       id="cancelStage{{option.id}}"
+						>
+						<label class="form-check-label" for="cancelStage{{option.id}}">{{option.name}}</label>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</ng-container>
+</ng-template>
+
+<ng-template #publicBrandedTpl>
+	<ng-container [formGroup]="form">
+		<!-- Public shop status -->
+		<div class="row mb-2">
+			<div class="col-sm-5 mr-2 text-right">
+				<label class="set-label-font" for="publicShopStatus">Public shop status </label>
+			</div>
+			<div class="col-sm-4">
+				<label class="switch set-label-font mt-1">
+					<input type="checkbox" id="publicShopStatus" name="publicShopStatus" formControlName="publicShopStatus">
+					<span class="slider round"></span>
+				</label>
+			</div>
+		</div>
+
+		<div class="mb-2">
+			<strong>Store app properties:</strong>
+		</div>
+
+		<!-- Commissions cost -->
+		<div class=" row mb-2">
+			<div class="col-sm-5 mr-2  text-right">
+				<label class="set-label-font" for="commissionsCost">Commissions cost (%):* </label>
+			</div>
+			<div class="col-sm-2">
+				<input type="text" class="form-control set-form-sty" id="commissionsCost" name="commissionsCost"
+				       formControlName="commissionsCost">
+			</div>
+		</div>
+
+		<div class="mb-2">
+			<strong>Customer app properties:</strong>
+		</div>
+
+		<!-- Shop product frame size -->
+		<div class=" row mb-2">
+			<div class="col-sm-3 mr-2 text-right">
+				<label class="set-label-font" for="defaultShopproductFrameSize">Shop product frame size:
+				</label>
+			</div>
+			<div class="col-sm-2 pr-4">
+				<select class="form-control set-form-sty" id="defaultShopproductFrameSize"
+				        name="defaultShopproductFrameSize"
+				        formControlName="defaultShopproductFrameSize">
+					<option *ngFor="let item of frameSizes" [value]="item._id">{{item.name}}</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="sub-card">
+			<!-- Cashback offer -->
+			<div class=" row mb-2">
+				<div class="col-sm-3 text-right">
+					<label class="set-label-font " for="cashbackOffer">Cashback offer (%): </label>
+				</div>
+				<div class="col-sm-2 mr-4 pr-3">
+					<input type="text" class="form-control set-form-sty" id="cashbackOffer " name="cashbackOffer"
+					       formControlName="cashbackOffer">
+				</div>
+
+				<!-- Min Purchase amount -->
+				<div class="col-sm-3 ml-4 text-right">
+					<label class="set-label-font" for="minPurchaseAmount">Min Purchase amount: </label>
+				</div>
+				<div class="col-sm-2 pr-4">
+					<input type="text" class="form-control set-form-sty" id="minPurchaseAmount" name="minPurchaseAmount"
+					       formControlName="minPurchaseAmount">
+				</div>
+			</div>
+
+			<!-- Maximum Purchase amount -->
+			<div class=" row mb-2">
+				<div class="col-sm-3 mr-0 text-right">
+					<label class="set-label-font" for="maxPurchaseAmount">Maximum Purchase amount: </label>
+				</div>
+				<div class="col-sm-2  pr-3">
+					<input type="text" class="form-control set-form-sty" id="maxPurchaseAmount" name="maxPurchaseAmount"
+					       formControlName="maxPurchaseAmount">
+				</div>
+			</div>
+
+		</div>
+	</ng-container>
+</ng-template>
+
+<ng-template #privateTpl>
+	<ng-container [formGroup]="form">
+		<div class="mb-2">
+			<strong>Store app properties:</strong>
+		</div>
+
+		<!-- Private commissions cost -->
+		<div class=" row mb-2">
+			<div class="col-sm-5 mr-2  text-right">
+				<label class="set-label-font" for="privateCommissionsCost">Commissions cost (%):* </label>
+			</div>
+			<div class="col-sm-2">
+				<input type="text" class="form-control set-form-sty" id="privateCommissionsCost" name="privateCommissionsCost"
+				       formControlName="privateCommissionsCost">
+			</div>
+		</div>
+
+		<div class="sub-card mt-2 mb-2">
+
+			<!-- Subscription amount -->
+			<div class="row mb-2">
+				<div class="col-sm-5 mr-2  text-right">
+					<label class="set-label-font" for="subscriptionAmount">Subscription amount:
+					</label>
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control set-form-sty" id="subscriptionAmount" name="subscriptionAmount"
+					       formControlName="subscriptionAmount"
+					       (change)="changeMonthPrice($event, quarterlyPersent.value, halfyearlyPercent.value, yearlyPercent.value)">
+				</div>
+				<label class="mt-2">/Month</label>
+			</div>
+
+			<!-- Quarterly -->
+			<div class="row mb-2">
+				<div class="col-sm-5 mr-2  text-right">
+					<label class="set-label-font" for="quarterly">Quarterly(%):
+					</label>
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control set-form-sty" id="quarterly" name="quarterly"
+					       formControlName="quarterly" (change)="changeAmount($event, 3)" #quarterlyPersent>
+				</div>
+				<label class="mt-2">Total ={{quarterly}}</label>
+			</div>
+
+			<!-- Halfyearly -->
+			<div class="row mb-2">
+				<div class="col-sm-5 mr-2  text-right">
+					<label class="set-label-font" for="halfyearly">Halfyearly(%):
+					</label>
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control set-form-sty" id="halfyearly" name="halfyearly"
+					       formControlName="halfyearly" (change)="changeAmount($event, 6)" #halfyearlyPercent>
+				</div>
+				<label class="mt-2">Total ={{halfyearly}}</label>
+			</div>
+
+			<!-- Yearly -->
+			<div class="row mb-2">
+				<div class="col-sm-5 mr-2  text-right">
+					<label class="set-label-font" for="yearly">Yearly(%):
+					</label>
+				</div>
+				<div class="col-sm-2">
+					<input type="text" class="form-control set-form-sty" id="yearly" name="yearly" formControlName="yearly"
+					       (change)="changeAmount($event, 12)" #yearlyPercent>
+				</div>
+				<label class="mt-2">Total ={{yearly}}</label>
+			</div>
+
+		</div>
+
+		<label class="label-form">Customer app properties: </label>
+
+		<!-- Shop product frame size -->
+		<div class=" row mb-2">
+			<div class="col-sm-3 mr-2 text-right">
+				<label class="set-label-font" for="privateShopproductFrameSize">Shop product frame size:
+				</label>
+			</div>
+			<div class="col-sm-2 pr-4">
+				<select class="form-control set-form-sty" id="privateShopproductFrameSize"
+				        name="privateShopproductFrameSize"
+				        formControlName="privateShopproductFrameSize">
+					<option *ngFor="let item of frameSizes" [value]="item._id">{{item.name}}</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="sub-card">
+			<!-- Cashback offer -->
+			<div class=" row mb-2">
+				<div class="col-sm-3 text-right">
+					<label class="set-label-font " for="privateCashbackOffer">Cashback offer (%): </label>
+				</div>
+				<div class="col-sm-2 mr-4 pr-3">
+					<input type="text" class="form-control set-form-sty" id="privateCashbackOffer "
+					       name="privateCashbackOffer"
+					       formControlName="privateCashbackOffer">
+				</div>
+
+				<!-- Min Purchase amount -->
+				<div class="col-sm-3 ml-4 text-right">
+					<label class="set-label-font" for="privateMinPurchaseAmount">Min Purchase amount: </label>
+				</div>
+				<div class="col-sm-2 pr-4">
+					<input type="text" class="form-control set-form-sty" id="privateMinPurchaseAmount"
+					       name="privateMinPurchaseAmount"
+					       formControlName="privateMinPurchaseAmount">
+				</div>
+			</div>
+
+			<!-- Maximum Purchase amount -->
+			<div class=" row mb-2">
+				<div class="col-sm-3 mr-0 text-right">
+					<label class="set-label-font" for="privateMaxPurchaseAmount">Maximum Purchase amount: </label>
+				</div>
+				<div class="col-sm-2  pr-3">
+					<input type="text" class="form-control set-form-sty" id="privateMaxPurchaseAmount"
+					       name="privateMaxPurchaseAmount"
+					       formControlName="privateMaxPurchaseAmount">
+				</div>
+			</div>
+
+		</div>
+	</ng-container>
+</ng-template>

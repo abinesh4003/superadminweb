@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs" role="tablist">
+	<li *ngFor="let tab of tabs"
+	    class="nav-item"
+	    (click)="selectTab($event, tab)"
+	>
+		<a class="nav-link"
+		   [ngClass]="{'disabled': tab.disabled}"
+		   [routerLink]="tab.disabled ? null : tab.route"
+		   [routerLinkActive]="tab.disabled ? '' : 'active'"
+		   [queryParams]="tab.queryParams"
+		   [routerLinkActiveOptions]="{ exact: tab.exact === true }"
+		   data-toggle="tab"
+		   role="tab"
+		>
+			{{tab.title}}
+		</a>
+	</li>
+</ul>
+<div>
+	<router-outlet></router-outlet>
+</div>

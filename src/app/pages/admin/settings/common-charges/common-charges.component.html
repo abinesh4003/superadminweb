@@ -1,0 +1,50 @@
+<div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col-9 offset-1">
+
+				<form [formGroup]="form" novalidate>
+					<fieldset [disabled]="false">
+
+						<div *ngFor="let item of formPercentValuesArray" class="row" [formGroupName]="item.type">
+							<div class="col-8">
+								<div class="form-group row">
+									<label class="col-7 col-form-label text-right">{{item.label}}</label>
+									<div class="col-5">
+										<input type="number" class="form-control" formControlName="fee">
+									</div>
+								</div>
+							</div>
+							<div class="col-4">
+								<div class="form-group row">
+									<label class="col-4 col-form-label text-right">GST %:</label>
+									<div class="col-8">
+										<input type="number" class="form-control" formControlName="gst">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row mt-4" formGroupName="amount_withdrawal_fee">
+							<div class="col-8">
+								<div class="form-group row">
+									<label class="col-7 col-form-label text-right">Amount withdrawal fee:</label>
+									<div class="col-5">
+										<input type="number" class="form-control" formControlName="fee">
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="card-footer d-flex justify-content-end">
+		<button type="button" class="btn btn btn-primary" (click)="onApply()">Apply</button>
+	</div>
+</div>

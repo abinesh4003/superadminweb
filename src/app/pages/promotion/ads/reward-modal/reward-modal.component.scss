@@ -1,0 +1,21 @@
+.list {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  list-style: none;
+  padding: 0.375rem 0.75rem;
+  max-height: 400px;
+  overflow: auto;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    line-height: 30px;
+    margin-bottom: 5px;
+  }
+}
+
+.buttons {
+  font-size: 22px;
+  display: flex;
+  justify-content: space-between;
+}

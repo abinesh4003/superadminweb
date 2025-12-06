@@ -1,0 +1,76 @@
+.dashboard-filter-wrapper {
+  background-color: #ffffff;
+  padding-bottom: 10px;
+  border: 1px solid #e0e0e0;
+
+  .btn-outline-primary-custom {
+    border-color: #03a9f4;
+
+    &.active {
+      background-color: #03a9f4 !important;
+    }
+  }
+}
+
+.charts-title {
+  color: #757575;
+  box-sizing: border-box;
+}
+
+.date-filter {
+  display: flex;
+
+  .select-date__dp {
+    display: flex;
+  }
+}
+
+.dashboard-card {
+  flex: 0.2;
+}
+
+.double-col {
+  flex: 0.4;
+  display: flex;
+  justify-content: center;
+}
+
+.flex-0-5 {
+  flex: 0.5 !important;
+}
+
+.orders-title {
+  color: #757575;
+  width: 100%;
+}
+
+.chart {
+  height: 300px;
+  display: flex;
+}
+
+.location_number_of_orders_table {
+  border: 1px solid #e0e0e0;
+  border-bottom-width: 0;
+
+  .location_number_of_orders {
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .number-of-orders {
+      background-color: silver;
+      border-radius: 15px;
+      padding: 2px 15px;
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+}
+
+
+.silver-text {
+  color: #757575;
+}

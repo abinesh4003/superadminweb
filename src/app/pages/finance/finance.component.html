@@ -1,0 +1,42 @@
+<pkz-sidebar>
+	<div class="sidebar">
+		<div class="list-group list-group-flush">
+			<button *ngxPermissionsOnly="withdrawalPermissions"
+			        routerLink="withdrawal"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-money" aria-hidden="true"></i>
+				Merchant Withdrawal
+			</button>
+			<button *ngxPermissionsOnly="remittancePermissions"
+					routerLink="remittance"
+					routerLinkActive="active"
+					type="button"
+					class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-money" aria-hidden="true"></i>
+				Agency Remittance
+			</button>
+			<button *ngxPermissionsOnly="offersPermissions"
+			        routerLink="offers"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<i class="icon fa fa-gift" aria-hidden="true"></i>
+				Manage Offers
+			</button>
+		</div>
+	</div>
+
+	<div class="content">
+		<router-outlet></router-outlet>
+	</div>
+
+	<div class="footer">
+		<pkz-footer></pkz-footer>
+	</div>
+
+</pkz-sidebar>

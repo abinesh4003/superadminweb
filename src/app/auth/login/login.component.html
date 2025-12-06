@@ -1,0 +1,42 @@
+<pkz-auth-block>
+	<h2 class="title">Login</h2>
+	<form (ngSubmit)="login()" #form="ngForm" autocomplete="off">
+		<div *ngIf="showMessages.error && errors && errors.length > 0 && !submitted"
+		     class="alert alert-danger" role="alert">
+			<div><strong>Oh snap!</strong></div>
+			<div *ngFor="let error of errors">{{ error }}</div>
+		</div>
+		<div *ngIf="showMessages.success && messages && messages.length > 0 && !submitted"
+		     class="alert alert-success" role="alert">
+			<div><strong>Hooray!</strong></div>
+			<div *ngFor="let message of messages">{{ message }}</div>
+		</div>
+
+		<div class="form-group">
+			<label for="input-email">Email address</label>
+			<input name="email_id" [(ngModel)]="user.email_id" id="input-email" pattern=".+@.+\..+"
+			       class="form-control" placeholder="Email address" autofocus
+			       [required]="isEmailRequired"
+			>
+		</div>
+
+		<div class="form-group">
+			<div class="d-flex justify-content-between align-items-start">
+				<label for="input-password">Password</label>
+				<!--TODO: implement later-->
+				<!--<a class="forgot-password" routerLink="../request-password">Forgot Password?</a>-->
+			</div>
+			<input name="password" [(ngModel)]="user.password" type="password" id="input-password"
+			       class="form-control" placeholder="Password"
+			       [required]="isPasswordRequired"
+			>
+		</div>
+
+		<button [disabled]="submitted || !form.valid" class="btn btn-block btn-secondary"
+		        [class.btn-pulse]="submitted"
+		>
+			Login
+		</button>
+
+	</form>
+</pkz-auth-block>

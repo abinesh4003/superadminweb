@@ -1,0 +1,103 @@
+<div class="breadcrumbs-container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active" aria-current="page">Users</li>
+		</ol>
+	</nav>
+	<button *ngxPermissionsOnly="[perms.create]" type="button" class="btn btn-success" routerLink="add/user">+ New User</button>
+</div>
+
+<div>
+	<ng-container *ngIf="(filterFormSettings$ | async) as settings">
+		<pkz-filter-form [config]="settings"
+		                 (filterChanged)="onFilter($event)"
+		                 [values]="filtersObj"
+		></pkz-filter-form>
+	</ng-container>
+
+	<ngx-datatable
+			class="bootstrap"
+			pkzResponsiveDatatable
+			[rows]="rows$ | async"
+			[rowHeight]="35"
+			columnMode="force"
+			[footerHeight]="40"
+	>
+		<ngx-datatable-column name="S.no" prop="sno" [minWidth]="55" [maxWidth]="80"></ngx-datatable-column>
+
+		<ngx-datatable-column [sortable]="false" prop="profile_image">
+			<ng-template ngx-datatable-cell-template let-value="value">
+				<img [src]="value | imageSecure:imageOptions | async" alt="" [attr.height]="imageOptions.height / 2">
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Actions" [sortable]="false" [minWidth]="85" [maxWidth]="100">
+			<ng-template ngx-datatable-cell-template let-row="row">
+				<div class="actions">
+					<ng-container *ngxPermissionsOnly="[perms.edit]">
+						<a href="#" [routerLink]="['edit', row._id]" title="Edit" class="actions__item">
+							<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+						</a>
+					</ng-container>
+					<ng-container *ngxPermissionsOnly="[perms.view]">
+						<a href="#" [routerLink]="['view', row._id]" title="View" class="actions__item">
+							<i class="fa fa-list-alt" aria-hidden="true"></i>
+						</a>
+					</ng-container>
+				</div>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Login" prop="user_name"></ngx-datatable-column>
+
+		<ngx-datatable-column name="First name" prop="first_name"></ngx-datatable-column>
+
+		<ngx-datatable-column name="Last name" prop="last_name"></ngx-datatable-column>
+
+		<ngx-datatable-column name="Email" prop="email_id"></ngx-datatable-column>
+
+		<ngx-datatable-column name="Last Connection" prop="log.recent">
+			<ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+				<span>{{value | date:'dd/MM/yy'}}</span>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Created" prop="created.at">
+			<ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+				<span>{{value | date:'dd/MM/yy'}}</span>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Status" prop="log.is_active" [minWidth]="70" [maxWidth]="90">
+			<ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+				<span>{{value ? 'Active' : 'Inactive'}}</span>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column [sortable]="false" [minWidth]="80" [maxWidth]="100">
+			<ng-template ngx-datatable-cell-template let-row="row">
+				<div class="actions">
+
+					<ng-container *ngxPermissionsOnly="[perms.suspend]">
+						<a *ngIf="row.log.is_active" href="#" title="Suspend" (click)="onSuspend($event, row)" class="actions__item text-primary">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</a>
+
+						<a *ngIf="!row.log.is_active" href="#" title="Unsuspend" (click)="onUnsuspend($event, row)" class="actions__item text-primary">
+							<i class="fa fa-unlock-alt" aria-hidden="true"></i>
+						</a>
+					</ng-container>
+
+					<ng-container *ngxPermissionsOnly="[perms.delete]">
+						<a href="#" title="Delete" (click)="onDelete($event, row)" class="actions__item text-danger">
+							<i class="fa fa-trash-o"></i>
+						</a>
+					</ng-container>
+
+				</div>
+			</ng-template>
+		</ngx-datatable-column>
+
+	</ngx-datatable>
+
+</div>

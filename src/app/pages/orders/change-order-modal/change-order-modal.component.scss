@@ -1,0 +1,51 @@
+.change-order-buttons {
+  .btn {
+    width: 120px;
+    border-radius: 0;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.color-light-blue {
+  color: #03a9f4;
+}
+
+.separator-eeeeee {
+  width: 100%;
+  height: 1px;
+  background-color: #eeeeee;
+  margin: 16px 0;
+}
+
+.flex-0-5 {
+  flex: 0.5;
+}
+
+.flex-0-6 {
+  flex: 0.6;
+}
+
+.flex-0-4 {
+  flex: 0.4;
+}
+
+.w-50px {
+  width: 50px;
+}
+
+.change-order-radio-btn {
+  width: 20px;
+  height: 20px;
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+.color-red {
+  color: #ff2727 !important;
+}

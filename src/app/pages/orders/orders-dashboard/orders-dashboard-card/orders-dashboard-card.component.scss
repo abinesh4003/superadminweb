@@ -1,0 +1,30 @@
+.orders_dashboard_card_item {
+  padding: 10px;
+  height: 96px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin-right: 50px;
+
+  .orders_dashboard_card_label {
+    color: #616161;
+    font-size: 0.9rem;
+  }
+
+  .orders_dashboard_card_value {
+    font-size: 1.4rem;
+  }
+
+  .orders_dashboard_card_percent {
+    font-size: 0.85rem;
+    color: #0288d1;
+  }
+
+  .red-percentage {
+    color: #f92f28 !important;
+  }
+}

@@ -1,0 +1,104 @@
+<div class="card">
+	<div class="card-body">
+
+		<form [formGroup]="form" novalidate>
+			<fieldset [disabled]="isFormDisabled()">
+				<div class="form-group row">
+					<label class="col-6 text-right">Manage Offer Status:</label>
+					<div class="col-6">
+						<label class="switch">
+							<input type="checkbox" formControlName="status">
+							<span class="slider round"></span>
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-6 text-right col-form-label">Cash back method:</label>
+					<div class="col-2">
+						<select formControlName="cashback_type_val"
+						        class="form-control"
+						        [ngClass]="{
+						          'form-control-danger': isInvalidField('cashback_type_val'),
+						          'form-control-plaintext': isFormDisabled()
+					          }"
+						>
+							<option *ngFor="let option of form.get('cashback_type').value; let i = index" [ngValue]="i">{{option}}</option>
+						</select>
+						<div *ngIf="isInvalidField('cashback_type_val')">
+							<div *ngIf="form.get('cashback_type_val').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-6">
+						<div class="form-group row">
+							<label class="col-6 offset-4 text-right col-form-label">Referrer A(%):</label>
+							<div class="col-2">
+								<input type="number"
+								       class="form-control"
+								       formControlName="referer_A"
+								       [ngClass]="{
+								          'form-control-danger': isInvalidField('referer_A'),
+								          'form-control-plaintext': isFormDisabled()
+							          }"
+								>
+								<div *ngIf="isInvalidField('referer_A')">
+									<div *ngIf="form.get('referer_A').hasError('required')" class="error">Field is required.</div>
+									<div *ngIf="form.get('referer_A').hasError('max')" class="error">Value  shouldn't exceed 100</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-6 offset-4 text-right col-form-label">Referee B(%):</label>
+							<div class="col-2">
+								<input type="number"
+								       class="form-control"
+								       formControlName="referee_B"
+								       [ngClass]="{
+								          'form-control-danger': isInvalidField('referee_B'),
+								          'form-control-plaintext': isFormDisabled()
+							          }"
+								>
+								<div *ngIf="isInvalidField('referee_B')">
+									<div *ngIf="form.get('referee_B').hasError('required')" class="error">Field is required.</div>
+									<div *ngIf="form.get('referee_B').hasError('max')" class="error">Value  shouldn't exceed 100</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-4 d-flex align-items-center">
+						<div class="form-group row">
+							<label class="col-auto text-right col-form-label">Max Limit:</label>
+							<div class="col-4">
+								<input type="number"
+								       class="form-control"
+								       formControlName="max_limit"
+								       [ngClass]="{
+								          'form-control-danger': isInvalidField('max_limit'),
+								          'form-control-plaintext': isFormDisabled()
+							          }"
+								>
+								<div *ngIf="isInvalidField('max_limit')">
+									<div *ngIf="form.get('max_limit').hasError('required')" class="error">
+										Field is required.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+
+	</div>
+
+	<div *ngIf="!isFormDisabled()" class="card-footer d-flex justify-content-end">
+		<button type="button" class="btn btn btn-primary" (click)="onApply()">Apply</button>
+	</div>
+</div>

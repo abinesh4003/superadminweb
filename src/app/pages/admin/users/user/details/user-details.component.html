@@ -1,0 +1,136 @@
+<div class="row mt-3">
+	<form novalidate [formGroup]="form" class="col-6">
+		<fieldset [disabled]="isFormDisabled()">
+			<div class="form-group row">
+				<label class="col-4 col-form-label">First name</label>
+				<div class="col-8">
+					<input formControlName="first_name"
+					       type="text"
+					       class="form-control"
+					       [ngClass]="{
+					        'form-control-danger': isInvalidField('first_name'),
+					        'form-control-plaintext': isFormDisabled()
+				          }"
+					>
+					<div *ngIf="isInvalidField('first_name')">
+						<div *ngIf="first_name.errors.required" class="error">
+							First name is required.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-4 col-form-label">Last name</label>
+				<div class="col-8">
+					<input formControlName="last_name"
+					       type="text"
+					       class="form-control"
+					       [ngClass]="{
+					        'form-control-danger': isInvalidField('last_name'),
+					        'form-control-plaintext': isFormDisabled()
+					        }"
+					>
+					<div *ngIf="isInvalidField('last_name')">
+						<div *ngIf="last_name.errors.required" class="error">
+							Last name is required.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-4 col-form-label">Email</label>
+				<div class="col-8">
+					<input formControlName="email_id"
+					       type="text"
+					       class="form-control"
+					       [ngClass]="{
+					        'form-control-danger': isInvalidField('email_id'),
+					        'form-control-plaintext': isFormDisabled()
+					        }"
+					>
+					<div *ngIf="isInvalidField('email_id')">
+						<div *ngIf="email_id.errors.required" class="error">
+							Email is required.
+						</div>
+						<div *ngIf="email_id.errors.email" class="error">
+							Email is not valid.
+						</div>
+						<div *ngIf="email_id.errors.duplicatedField" class="error">
+							Email already exists.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div *ngIf="!isFormDisabled()" class="form-group row" formGroupName="passwords">
+				<label class="col-4 col-form-label">Password</label>
+				<div class="col-8">
+					<input formControlName="password"
+					       type="password"
+					       class="form-control"
+					       [ngClass]="{'form-control-danger': isInvalidField('password') || isInvalidField('passwords')}"
+					>
+					<div *ngIf="isInvalidField('password')">
+						<div *ngIf="password.errors.required" class="error">
+							Password is required.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div *ngIf="!isFormDisabled()" class="form-group row" formGroupName="passwords">
+				<label class="col-4 col-form-label">Confirm password</label>
+				<div class="col-8">
+					<input formControlName="confirm_password"
+					       type="password"
+					       class="form-control"
+					       [ngClass]="{'form-control-danger': isInvalidField('confirm_password') || isInvalidField('passwords')}"
+					>
+					<div *ngIf="isInvalidField('confirm_password')">
+						<div *ngIf="confirm_password.errors.required" class="error">
+							Confirm password is required.
+						</div>
+					</div>
+
+					<div *ngIf="isInvalidField('passwords')">
+						<div *ngIf="passwords.hasError('mismatch')" class="error">
+							Passwords aren't the same.
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="mt-2">
+				<label class="small" for="changeOnNext">
+					Must change password at next logon
+				</label>
+				<input formControlName="is_reset" type="checkbox" id="changeOnNext">
+			</div>
+
+			<div class="mt-5" *ngIf="!isFormDisabled()">
+				<ng-container *ngxPermissionsOnly="[perms.create]">
+					<button *ngIf="!isEditPage()" type="button" class="btn btn-success" (click)="submitForm()">Create user</button>
+				</ng-container>
+
+				<ng-container *ngxPermissionsOnly="[perms.edit]">
+					<button *ngIf="isEditPage()" type="button" class="btn btn-success" (click)="submitForm()">Save user</button>
+				</ng-container>
+			</div>
+
+		</fieldset>
+	</form>
+
+	<div class="col-6 text-center" *ngIf="!isFormDisabled() || isFormDisabled() && !!userPhoto">
+		<pkz-image-upload
+				[disabled]="isFormDisabled()"
+				[deleteAvailable]="!isFormDisabled() && hasPermission(perms.edit)"
+				[title]="userPhotoTitle"
+				[imageUrl]="userPhoto"
+				[path]="imageOptions.path"
+				(imageChange)="onImageChange($event)"
+				(zoom)="onZoom()"
+		></pkz-image-upload>
+	</div>
+</div>

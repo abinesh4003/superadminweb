@@ -1,0 +1,5 @@
+<div class="assistants-list-filter-wrapper" *ngIf="(filterFormSettings$ | async) as settings">
+    <pkz-delivery-assistants-filter-form [settings]="settings"
+                                         (onFilterChange)="onFilter($event)"></pkz-delivery-assistants-filter-form>
+</div>
+<pkz-delivery-assistants-table [type]="type"></pkz-delivery-assistants-table>

@@ -1,0 +1,5 @@
+<div class="orders-list-filter-wrapper" *ngIf="(filterFormSettings$ | async) as settings">
+  <pkz-subscription-table-filter (onFilterChange)="onFilter($event)" [status]="0"
+                         [settings]="settings"></pkz-subscription-table-filter>
+</div>
+<pkz-subscription-table [status]="0"></pkz-subscription-table>

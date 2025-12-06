@@ -1,0 +1,9 @@
+<form class="filters-row form-inline" [formGroup]="form" novalidate [ngClass]="{'embedded': embedded}">
+	<ng-container *ngFor="let field of config"
+	              pkzFilterDynamicField
+	              [fieldConfig]="field"
+	              [form]="form"
+	></ng-container>
+
+	<ng-content></ng-content>
+</form>

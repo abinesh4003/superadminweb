@@ -1,0 +1,67 @@
+<header>
+	<nav class="navbar navbar-dark fixed-top">
+
+		<button class="navbar__toggle-sidebar" type="button" (click)="onToggleSidebar()">
+			<i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+		</button>
+		<a class="navbar-brand" href="#"></a>
+
+		<ul class="navbar-menu">
+			<li *ngIf="hasDashboardPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/dashboard">Dashboard</button>
+			</li>
+
+			<li *ngIf="hasFinancePermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/finance">Finance</button>
+			</li>
+
+			<li *ngIf="hasPromotionPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/promotion">Promotion</button>
+			</li>
+
+			<li *ngIf="hasMerchantsPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/merchants">Merchants</button>
+			</li>
+
+			<li *ngIf="hasShopsPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/shops">Shops</button>
+			</li>
+
+			<li *ngIf="hasBillingsPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/billings">Billings</button>
+			</li>
+
+			<li *ngIf="hasOrdersPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/orders">Orders</button>
+			</li>
+
+			<li *ngIf="hasAdminPermission$ | async" class="navbar-menu__item" routerLinkActive="active">
+				<button class="btn btn-light btn-sm border-radius-0 w-90px" routerLink="/pages/admin">Admin</button>
+			</li>
+
+<!--			TODO: uncomment once section will be implemented-->
+<!--			<li class="navbar-menu__item" routerLinkActive="active">-->
+<!--				<button class="btn btn-light btn-sm" routerLink="/pages/messages">Messages</button>-->
+<!--			</li>-->
+
+		</ul>
+
+		<div class="d-flex">
+<!--			<select class="form-control form-control-sm">-->
+<!--				<option>India</option>-->
+<!--				<option>Canada</option>-->
+<!--				<option>United States</option>-->
+<!--			</select>-->
+
+			<button class="navbar-user-picture">
+				<i class="fa fa-user-circle-o"></i>
+			</button>
+
+			<button class="btn btn-outline-light btn-sm" routerLink="/auth/logout">
+				<i class="fa fa-sign-out" aria-hidden="true"></i>
+				Logout
+			</button>
+		</div>
+
+	</nav>
+</header>

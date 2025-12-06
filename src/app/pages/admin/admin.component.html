@@ -1,0 +1,69 @@
+<pkz-sidebar>
+	<div class="sidebar">
+		<div class="list-group list-group-flush">
+			<button *ngxPermissionsOnly="getScPermissions()"
+							routerLink="sc"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<span class="icon icon--bg svg-store-category"></span>
+				Store Category
+			</button>
+			<button *ngxPermissionsOnly="getUsersPermissions()"
+			        routerLink="users"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<span class="icon icon--bg svg-users"></span>
+				Users
+			</button>
+			<button *ngxPermissionsOnly="getRolesPermissions()"
+			        routerLink="roles"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<span class="icon icon--bg svg-roles-permission"></span>
+				Admin Roles
+			</button>
+			<button *ngxPermissionsOnly="getProfilePermissions()"
+			        routerLink="profile"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<span class="icon icon--bg svg-profile"></span>
+				Profile
+			</button>
+			<button *ngxPermissionsOnly="getSettingsPermissions()"
+			        routerLink="settings"
+			        routerLinkActive="active"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				<span class="icon icon--bg svg-settings"></span>
+				Settings
+			</button>
+<!--			TODO: uncomment once section will be implemented-->
+<!--			<button routerLink="info"-->
+<!--			        routerLinkActive="active"-->
+<!--			        type="button"-->
+<!--			        class="list-group-item list-group-item-action"-->
+<!--			>-->
+<!--				<span class="icon icon&#45;&#45;bg svg-information"></span>-->
+<!--				Information-->
+<!--			</button>-->
+		</div>
+	</div>
+
+	<div class="content">
+		<router-outlet></router-outlet>
+	</div>
+
+	<div class="footer">
+		<pkz-footer></pkz-footer>
+	</div>
+
+</pkz-sidebar>

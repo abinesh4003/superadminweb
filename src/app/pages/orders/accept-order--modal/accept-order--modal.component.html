@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <h5 class="modal-title">Accept Order</h5>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="d-flex justify-content-center px-5 py-3 flex-column">
+    <span class="mb-3">Expected Delivery Time:</span>
+    <pkz-date-time-picker [(ngModel)]="stringDateModel"
+                          [seconds]="false"
+                          [inputDatetimeFormat]="dateTimeFormat"></pkz-date-time-picker>
+    <span class="error-message" *ngIf="showError">Please select delivery date</span>
+  </div>
+</div>
+<div class="modal-footer accept-order-actions">
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-grayed mr-2" (click)="dismiss()">Close</button>
+    <button type="button" class="btn btn-primary mr-3" (click)="onConfirm()">Accept</button>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+.modal {
+  &.modal-carousel {
+    text-align: center;
+
+    &-single {
+      .carousel-control-prev,
+      .carousel-control-next {
+        display: none;
+      }
+    }
+
+    .modal-content {
+      border: none;
+      background-color: transparent;
+    }
+
+    .modal-dialog {
+      display: inline-flex;
+      width: 100vw;
+      max-width: none;
+      outline: none;
+    }
+
+    .carousel {
+      outline: 0;
+
+      .carousel-inner {
+        outline: 0;
+        margin: auto;
+        max-width: calc(100% - 100px);
+
+        img {
+          display: inline-block;
+          max-width: 100%;
+        }
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        top: calc(50vh - 25px);
+        bottom: auto;
+      }
+    }
+  }
+
+  &-size-700 {
+    .modal-dialog {
+      max-width: 700px;
+    }
+  }
+
+  &-size-1000 {
+    .modal-dialog {
+      max-width: 1000px;
+    }
+  }
+}

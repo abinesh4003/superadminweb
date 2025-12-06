@@ -1,0 +1,25 @@
+<div class="breadcrumbs-container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active" aria-current="page">Roles</li>
+		</ol>
+	</nav>
+</div>
+
+<div class="row">
+	<div class="col-3 mb-3">
+		<div *ngxPermissionsOnly="[perms.create]" class="pr-3 pl-3">
+			<button (click)="onAddRole()" type="button" class="btn btn-outline-grayed btn-sm btn-block">+ New role</button>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="(navItems$ | async) as navs">
+	<pkz-routed-vertical-nav
+			*ngIf="navs?.length"
+			[groups]="groups"
+			[navs]="navs"
+			[navWidth]="3"
+			[contentWidth]="9"
+	></pkz-routed-vertical-nav>
+</div>

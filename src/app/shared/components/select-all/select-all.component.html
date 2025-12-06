@@ -1,0 +1,24 @@
+<div *ngIf="items?.length" class="select-all">
+	<div class="title-row">
+		<span>{{areaTitle}}:</span>
+		<div>
+			<label class="small" for="selectAll">Select all</label>
+			<input type="checkbox" id="selectAll" [ngModel]="isSelectedAll" (ngModelChange)="onSelectAll($event)">
+		</div>
+	</div>
+
+	<div class="form-group add-list">
+		<ul class="add-list__table">
+			<li *ngFor="let item of formattedItems">
+				<label [for]="item.value" [ngClass]="{'text-muted': item.disabled}">
+					{{item.name}}
+				</label>
+				<input type="checkbox" class="float-right"
+				       [id]="item.value"
+				       [disabled]="item.disabled"
+				       [ngModel]="item.checked"
+				       (ngModelChange)="toggleItem($event, item)">
+			</li>
+		</ul>
+	</div>
+</div>

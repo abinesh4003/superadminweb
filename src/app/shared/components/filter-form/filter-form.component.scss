@@ -1,0 +1,30 @@
+@import 'variables';
+
+:host {
+  display: block;
+  flex-grow: 1;
+}
+
+:host::ng-deep {
+  .form-control {
+    flex-grow: 1;
+    border-color: $filter-border-color;
+  }
+}
+
+.filters-row {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  font-size: 14px;
+
+  &:not(.embedded) {
+    background-color: $gray-5;
+    border: 1px solid $filter-border-color;
+    padding: 0 5px;
+
+    > * {
+      padding: 5px 0;
+    }
+  }
+}

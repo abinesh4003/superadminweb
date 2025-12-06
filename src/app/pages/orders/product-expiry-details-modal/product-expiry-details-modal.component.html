@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h5 class="modal-title silver-text">Expiry Details of {{data.productName}}</h5>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body d-flex flex-column silver-text">
+    <div class="d-flex">
+        <div class="flex-0-35 text-center">Manufacture Date</div>
+        <div class="flex-0-35 text-center">Expiry Date</div>
+        <div class="flex-0-3 text-center">Months Left</div>
+    </div>
+    <div class="separator-eeeeee"></div>
+    <div class="d-flex" *ngFor="let date of data.dates">
+        <div class="flex-0-35 text-center">{{formatDate(date.mfg_date)}}</div>
+        <div class="flex-0-35 text-center">{{formatDate(date.exp_date)}}</div>
+        <div class="flex-0-3 text-center">{{getDiff(date.mfg_date, date.exp_date)}}</div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-outline-grayed close-expiry-dates-btn" (click)="dismiss()">Close</button>
+    </div>
+</div>

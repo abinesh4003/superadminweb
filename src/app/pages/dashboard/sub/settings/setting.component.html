@@ -1,0 +1,9 @@
+<div class="mt-3">
+	<pkz-status-tabs
+			[tabs]="tabs"
+			[activeTabId]="activeTabId$ | async"
+			(selectTab)="onSelectTab($event)"
+	></pkz-status-tabs>
+
+	<pkz-form-setting></pkz-form-setting>
+</div>

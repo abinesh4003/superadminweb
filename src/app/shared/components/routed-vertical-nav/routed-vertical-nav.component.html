@@ -1,0 +1,23 @@
+<div class="row">
+	<div class="col-{{navWidth}}">
+		<div class="list-group list-group-flush" *ngFor="let group of formattedGroups">
+			<button *ngIf="group.navs.length" type="button" class="list-group-item list-group-item-title">{{group.name}}</button>
+			<button *ngFor="let nav of group.navs"
+			        (click)="selectTab($event, nav)"
+			        [disabled]="nav.disabled"
+			        [routerLink]="nav.disabled ? null : nav.route"
+			        [routerLinkActive]="nav.disabled ? '' : 'active'"
+			        [queryParams]="nav.queryParams"
+			        [routerLinkActiveOptions]="{ exact: nav.exact === true }"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			>
+				{{nav.title}}
+			</button>
+		</div>
+	</div>
+
+	<div class="col-{{contentWidth}}">
+		<router-outlet></router-outlet>
+	</div>
+</div>

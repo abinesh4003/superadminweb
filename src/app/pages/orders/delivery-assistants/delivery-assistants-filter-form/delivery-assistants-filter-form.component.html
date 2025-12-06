@@ -1,0 +1,33 @@
+<div class="delivery-assistants-list-filter">
+    <div class="delivery-assistants-list-filter-container">
+        <pkz-filter-form [config]="settings"
+                         (filterChanged)="onFilter($event)"
+                         [values]="filtersObj"
+                         [embedded]="true"
+                         class="py-2"
+        >
+          <div class="form-group col-6">
+            <label class="col-form-label text-right mr-3">
+              Merchant
+            </label>
+            <div class="flex-grow-1">
+              <ng-select [items]="merchants$ | async"
+                         class="bootstrap ng-select-sm search-agency"
+                         bindLabel="display_name"
+                         bindValue="merchant_id"
+                         [addTag]="false"
+                         [multiple]="false"
+                         [hideSelected]="false"
+                         [clearable]="false"
+                         typeToSearchText="Please enter 2 or more characters"
+                         [typeahead]="merchantsTypeahead$"
+                         [loading]="merchantsLoading"
+                         placeholder="Search and select"
+                         (ngModelChange)="onMerchantChange($event)"
+                         [(ngModel)]="merchant">
+              </ng-select>
+            </div>
+          </div>
+        </pkz-filter-form>
+    </div>
+</div>

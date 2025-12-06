@@ -1,0 +1,51 @@
+<div class="modal-header">
+	<h5 class="modal-title">Bulk Inventory Upload</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+
+<div class="modal-body">
+	<div *ngIf="isFileProgress">
+		<p>{{file.name}}</p>
+		<p>Status:
+			<span *ngIf="!isFileUploaded">Uploading...</span>
+			<span *ngIf="isFileUploaded">Uploaded</span>
+		</p>
+		<ngb-progressbar
+				type="success"
+				height="1.5rem"
+				[value]="getUploadedValue()"
+				[striped]="true"
+				[animated]="!isFileUploaded"
+		>
+		</ngb-progressbar>
+	</div>
+
+	<div *ngIf="!isFileProgress">
+		<div><span>Importing your products from Excel(.csv)</span></div>
+		<div><span>Follow these steps:</span></div>
+		<div><span>1. Download the excel template to your computer by clicking the Download template button.</span></div>
+		<div><span>2. Enter your data into the template file, minding the column order.</span></div>
+		<div><span>3. Click Upload file.</span></div>
+
+		<br>
+
+		<div><span>Important:</span></div>
+		<div><span>1. Do not change the column order in the template file.</span></div>
+		<div><span>2. If you do not have data for a particular column, leave it empty and do not move or delete the column.</span></div>
+	</div>
+</div>
+
+<div class="modal-footer" [ngClass]="{'justify-content-center': isFileProgress}">
+	<button *ngIf="isFileProgress" type="button" class="btn btn-light pr-5 pl-5" (click)="close()">Done</button>
+
+	<div *ngIf="!isFileProgress">
+		<button type="button" class="btn btn-primary mr-5" (click)="onDownload()">Download template</button>
+		<button type="button" class="btn btn-light mr-2" (click)="dismiss()">Cancel</button>
+		<label class="btn btn-primary mb-0">
+			Upload
+			<input [hidden]="true" type="file" accept=".csv" (change)="onFileChange($event)">
+		</label>
+	</div>
+</div>

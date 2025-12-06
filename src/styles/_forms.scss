@@ -1,0 +1,56 @@
+@import 'variables';
+
+.form-control {
+  &-danger {
+    border-color: $red-2;
+  }
+
+  &-plaintext {
+    &:disabled {
+      background: none;
+      appearance: none;
+    }
+  }
+}
+
+form {
+  .error {
+    color: $red-2;
+    font-size: 12px;
+  }
+}
+
+.form-text {
+  &.error {
+    margin-left: 1rem;
+    color: $red-2;
+  }
+}
+
+.form-group {
+  label {
+    &.required {
+      & > span {
+        display: inline-block;
+        padding-right: 10px;
+        position: relative;
+
+        &::after {
+          content: '*';
+          font-size: 1rem;
+          position: absolute;
+          right: 0;
+        }
+      }
+    }
+  }
+}
+
+.form-control.form-control-plaintext[readonly] {
+  background-color: transparent;
+
+  &:focus {
+    box-shadow: none;
+    border: none;
+  }
+}

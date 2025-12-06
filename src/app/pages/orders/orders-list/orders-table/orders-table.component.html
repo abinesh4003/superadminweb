@@ -1,0 +1,89 @@
+<div class="table-container">
+    <ngx-datatable
+            *ngIf="isPageLoaded"
+            #table
+            class="bootstrap"
+            pkzResponsiveDatatable
+            [rows]="rows"
+            [rowHeight]="35"
+            columnMode="flex"
+            [footerHeight]="40"
+            [externalPaging]="true"
+            [count]="page.count"
+            (activate)="onRowClick($event)"
+            [offset]="page.pageNumber"
+            [limit]="page.limit"
+            (page)="setPage($event)"
+    >
+        <ngx-datatable-column name="Sno" [flexGrow]="0.5">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template let-rowIndex="rowIndex">
+                {{rowIndex + 1 + page.pageNumber * page.limit}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Support" prop="ordered" [flexGrow]="0.5">
+            <ng-template let-value="value" ngx-datatable-cell-template let-row="row">
+                <i [class]="getSupportIconByStatus(row)" aria-hidden="true" class="font-size-20px closed-envelope"
+                   [ngClass]="{'opened-envelope' : getSupportIconByStatus(row) === 'fa fa-envelope-open'}"></i>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Elapsed Time" prop="ordered.at" [flexGrow]="1">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <pkz-timer [from]="value"></pkz-timer>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Order Id" prop="order_id" [flexGrow]="1"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Shop Category" prop="category" [flexGrow]="1"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Customer Name" prop="customer.name" [flexGrow]="1"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Shop Name" prop="store.display_name" [flexGrow]="1"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Distance" prop="distance" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{printDistance(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Promo Amount" prop="offer" [flexGrow]="1">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                {{getPromo(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Total Amount" prop="prices.net_price" [flexGrow]="1">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                {{roundPrice(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Payment mode" prop="payment_mode" [flexGrow]="1"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Source" prop="order_source" [flexGrow]="0.8">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                {{getSource(value)}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template
+                    ngx-datatable-footer-template
+                    let-rowCount="rowCount"
+                    let-pageSize="pageSize"
+                    let-selectedCount="selectedCount"
+                    let-offset="offset">
+
+                <pkz-table-pagination
+                        [rowCount]="rowCount"
+                        [pageSize]="pageSize"
+                        [selectedCount]="selectedCount"
+                        [offset]="offset"
+                        (page)="table.onFooterPage($event)"
+                ></pkz-table-pagination>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</div>

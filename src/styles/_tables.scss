@@ -1,0 +1,78 @@
+@import 'mixins';
+@import 'variables';
+
+.ngx-datatable {
+  &.bootstrap {
+
+    &.scroll-horz:not(.scroll-vertical) {
+      .datatable-body {
+        .datatable-scroll {
+          display: inline-block;
+        }
+      }
+    }
+
+    .datatable-header {
+      color: #ffffff;
+      background-color: $gray-3;
+      height: 35px !important;
+      display: flex;
+      align-items: center;
+
+      .datatable-header-cell {
+        border-bottom: none;
+        padding: 0 0.75rem;
+
+        .datatable-header-cell-template-wrap {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+      }
+
+      .datatable-checkbox {
+        margin-bottom: 0;
+      }
+    }
+
+    .datatable-body {
+      .datatable-body-row {
+        padding: 0;
+
+        &.active {
+          color: #212529;
+
+          &.datatable-row-even {
+            background-color: rgba(0, 0, 0, 0.05);
+          }
+          &.datatable-row-odd {
+            background-color: transparent;
+          }
+        }
+      }
+
+      .datatable-body-cell {
+        display: flex;
+        align-items: center;
+        padding: 0 0.75rem;
+
+        .datatable-body-cell-label {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+
+        .actions {
+          @include actions-block(20px);
+        }
+
+      }
+
+      .datatable-scroll {
+        display: block;
+      }
+
+      .badge {
+        font-size: 90%;
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h5 class="modal-title">List Nearby Delivery Boy's</h5>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="d-flex justify-content-between px-4">
+        <div class="d-flex">
+            <span class="mr-2 d-flex align-items-center">Location:</span>
+            <span class="silver-text d-flex align-items-center">{{data.shopLocation}}</span>
+        </div>
+        <select class="form-control form-control-sm distance-select" [(ngModel)]="distance" (change)="getAvailableDeliveryAssociates()">
+            <option *ngFor="let p of distances" [value]="p">{{p}}km</option>
+        </select>
+    </div>
+
+    <div class="d-flex flex-column" *ngFor="let deliveryBoy of deliveryBoys">
+        <div class="separator-eeeeee"></div>
+        <div class="d-flex">
+            <div class="radio-button-wrapper">
+                <input type="radio" name="deliveryBoy" [value]="deliveryBoy._id" [checked]="selectedDeliveryAssistant === deliveryBoy._id" (change)="setDeliveryBoy(deliveryBoy._id)">
+            </div>
+            <div class="d-flex flex-column">
+                <span class="font-weight-bold mb-1">{{deliveryBoy.first_name}} {{deliveryBoy.last_name}}</span>
+                <span class="mb-1">Standing: {{roundDistance(deliveryBoy.distance)}}km from shop</span>
+                <span class="mb-1">Contact no: +{{deliveryBoy.mobile.dialing_code}} {{deliveryBoy.mobile.number}}</span>
+                <span class="mb-1 red" *ngIf="deliveryBoy.status === 0">Idle</span>
+                <span class="mb-1 green" *ngIf="deliveryBoy.status === 1">In Service</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer delivery-boy-actions">
+    <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-primary mr-3" (click)="onAssign()" [disabled]="!selectedDeliveryAssistant">Assign</button>
+    </div>
+</div>

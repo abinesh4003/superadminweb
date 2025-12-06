@@ -1,0 +1,100 @@
+<div class="card">
+	<div class="card-body pt-0" *ngIf="isPageLoaded">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb smaller-font">
+				<li class="breadcrumb-item">
+					<a href="#" routerLink="../../">{{rootBreadcrumbName}}</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">Settings</li>
+			</ol>
+		</nav>
+
+<!--		TODO required fields?-->
+		<form [formGroup]="form" novalidate>
+			<fieldset [disabled]="isFormDisabled()">
+
+<!--				<div class="form-group row">-->
+<!--					<label class="col-5 text-right col-form-label col-form-label-sm">Select Store:</label>-->
+<!--					<div class="col-3">-->
+<!--						<select class="form-control form-control-sm">-->
+<!--							<option value="">Shaan Super Market</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--				</div>-->
+
+<!--				<div class="form-group row">-->
+<!--					<label class="col-5 text-right col-form-label col-form-label-sm">Select Target Audience:</label>-->
+<!--					<div class="col-3">-->
+<!--						<select class="form-control form-control-sm">-->
+<!--							<option value="">Car Users(20)</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--				</div>-->
+
+<!--				<div class="form-group row">-->
+<!--					<div class="offset-5 col-3 d-flex justify-content-between">-->
+<!--						<div class="form-check form-check-inline">-->
+<!--							<input class="form-check-input" type="checkbox" value="">-->
+<!--							<label class="form-check-label col-form-label col-form-label-sm">Push notification</label>-->
+<!--						</div>-->
+
+<!--						<div class="form-check form-check-inline mr-0">-->
+<!--							<input class="form-check-input" type="checkbox" value="">-->
+<!--							<label class="form-check-label col-form-label col-form-label-sm">SMS</label>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+
+<!--				<div class="form-group row">-->
+<!--					<label class="col-5 text-right col-form-label col-form-label-sm">Select Template:</label>-->
+<!--					<div class="col-3">-->
+<!--						<select class="form-control form-control-sm">-->
+<!--							<option value="">Custom</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--				</div>-->
+
+<!--				<div class="form-group row">-->
+<!--					<div class="offset-2 col-8">-->
+<!--						<label class="d-flex justify-content-between col-form-label col-form-label-sm">-->
+<!--							<span>SMS and Push notification text</span>-->
+<!--							<span>{{form.get('text').value.length}}/160</span>-->
+<!--						</label>-->
+<!--						<textarea formControlName="text" class="form-control" rows="5"></textarea>-->
+<!--					</div>-->
+<!--				</div>-->
+
+				<div class="row mt-4">
+					<div class="offset-5 col-2">
+						<div  class="row">
+							<div class="col-12">
+<!--								<button type="button" class="btn btn-sm btn-outline-danger w-100" (click)="onDeactivate()">Deactivate</button>-->
+								<button type="button"
+								        class="btn btn-sm  w-100"
+								        (click)="onToggleActivate()"
+								        [ngClass]="{
+							          'btn-outline-danger': isActivePromo(),
+							          'btn-outline-primary': !isActivePromo()
+							        }"
+								>
+									<span *ngIf="isActivePromo()">Deactivate</span>
+									<span *ngIf="!isActivePromo()">Activate</span>
+								</button>
+							</div>
+
+<!--							<div class="col-5">-->
+<!--								<button type="button" class="btn btn-sm btn-outline-primary w-100" (click)="onSubmitRequest()">Submit Request</button>-->
+<!--							</div>-->
+
+<!--							<div class="col-2">-->
+<!--								<button type="button" class="btn btn-sm btn-primary w-100" (click)="onSave()">Save</button>-->
+<!--							</div>-->
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+		</form>
+	</div>
+</div>

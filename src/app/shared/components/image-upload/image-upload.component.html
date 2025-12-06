@@ -1,0 +1,34 @@
+<div class="upload-image">
+	<p *ngIf="title" class="text-center" [ngStyle]="{'width.px': width}">{{title}}</p>
+	<div class="upload-image__container"
+	     [ngClass]="{'active': isImageAvailable()}"
+	     [ngStyle]="{
+	      'width.px': width,
+	      'height.px': height,
+	      'min-height.px': minHeight
+	     }"
+	>
+		<label>
+			<input accept=".png, .jpg, .jpeg" #fileInput type="file" (change)="onImageChange($event)" [disabled]="disabled">
+		</label>
+		<img *ngIf="hasUploadedImage" [src]="imageResource" [alt]="fileInput.name">
+		<img *ngIf="imageUrl?.length && !reinitWithSource" [src]="imageUrl | imageSecure:imageOptions | async" alt="">
+		<span *ngIf="!isImageAvailable()" class="overlay">
+			<span #ref>
+				<ng-content select=".placeholder"></ng-content>
+			</span>
+			<span *ngIf="ref.children.length === 0">500x500px</span>
+		</span>
+		<div class="btn-group-vertical buttons" [ngClass]="{'buttons--small': smallIcons}">
+			<button type="button" class="btn btn-outline-secondary rounded-0" (click)="onZoom()" [disabled]="!isImageAvailable()">
+				<i class="fa fa-search-plus" aria-hidden="true"></i>
+			</button>
+			<button *ngIf="!disabled" type="button" class="btn btn-outline-secondary rounded-0" (click)="fileInput.click()">
+				<i class="fa fa-folder-open" aria-hidden="true"></i>
+			</button>
+			<button *ngIf="deleteAvailable && isImageAvailable()" type="button" class="btn btn-outline-secondary rounded-0" (click)="onImageDelete()">
+				<i class="fa fa-times" aria-hidden="true"></i>
+			</button>
+		</div>
+	</div>
+</div>

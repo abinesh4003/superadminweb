@@ -1,0 +1,11 @@
+<div class="set-mt">
+	<pkz-status-tabs
+			[tabs]="tabs"
+			[activeTabId]="activeTabId$ | async"
+			(selectTab)="onSelectTab($event)"
+	></pkz-status-tabs>
+</div>
+
+<div class="tab-content">
+  <router-outlet></router-outlet>
+</div>

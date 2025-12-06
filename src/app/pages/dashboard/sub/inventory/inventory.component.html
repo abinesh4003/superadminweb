@@ -1,0 +1,11 @@
+<pkz-products-status></pkz-products-status>
+
+<pkz-status-tabs
+		[tabs]="tabs$ | async"
+		[activeTabId]="activeTabId$ | async"
+		(selectTab)="onSelectTab($event)"
+></pkz-status-tabs>
+
+<div class="tab-content">
+  <router-outlet></router-outlet>
+</div>

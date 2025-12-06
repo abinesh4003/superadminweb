@@ -1,0 +1,41 @@
+<div class="mt-3">
+	<div class="row">
+		<fieldset class="col-5" [disabled]="isViewPage()">
+			<h5>Support location Access</h5>
+
+			<div class="form-group">
+				<label>Country</label>
+				<select class="form-control form-control-sm"
+				        [ngModel]="countrySubject$ | async"
+				        (ngModelChange)="onChangeCountry($event)"
+				>
+					<option [value]="''">None</option>
+					<option *ngFor="let country of countries$ | async" [value]="country">{{locationValueToName(country)}}</option>
+				</select>
+			</div>
+
+			<pkz-select-all
+					*ngIf="states"
+					areaTitle="States"
+					[items]="states"
+					[selectedItems]="selectedStates"
+					(select)="onSelectStates($event)"
+			></pkz-select-all>
+
+			<pkz-select-all
+					*ngIf="cities"
+					areaTitle="City"
+					[items]="cities"
+					[selectedItems]="selectedCities"
+					(select)="onSelectCities($event)"
+			></pkz-select-all>
+
+			<ng-container *ngxPermissionsOnly="[perms.edit]">
+				<div class="mt-5" *ngIf="!isViewPage()">
+					<button type="button" class="btn btn-success" (click)="onSave()">Save</button>
+				</div>
+			</ng-container>
+
+		</fieldset>
+	</div>
+</div>

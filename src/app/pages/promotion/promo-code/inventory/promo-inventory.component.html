@@ -1,0 +1,384 @@
+<div class="card">
+	<div class="card-body pt-0" *ngIf="isPageLoaded">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb smaller-font">
+				<li class="breadcrumb-item">
+					<a href="#" routerLink="../../">{{rootBreadcrumbName}}</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">
+					<span *ngIf="isAddPage">Create</span>
+					<span *ngIf="isEditPage">Edit</span>
+					Code
+				</li>
+			</ol>
+		</nav>
+
+		<form [formGroup]="form" novalidate>
+			<fieldset [disabled]="isFormDisabled()">
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Promo Title:</label>
+					<div class="col-3">
+						<input [ngClass]="{
+										'form-control-danger': isInvalidField('promo_title'),
+										'form-control-plaintext': isFormDisabled()
+										}"
+						       type="text"
+						       class="form-control form-control-sm"
+						       placeholder="Title"
+						       formControlName="promo_title"
+						>
+						<div *ngIf="isInvalidField('promo_title')">
+							<div *ngIf="form.get('promo_title').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Enter Promo Code:</label>
+					<div class="col-3">
+						<input [ngClass]="{
+										'form-control-danger': isInvalidField('promo_code'),
+										'form-control-plaintext': isFormDisabled()
+										}"
+						       type="text"
+						       class="form-control form-control-sm"
+						       placeholder="Promo Code"
+						       formControlName="promo_code"
+						       (keyup)="onTypePromo($event)"
+						>
+						<div *ngIf="isInvalidField('promo_code')">
+							<div *ngIf="form.get('promo_code').hasError('required')" class="error">
+								Field is required.
+							</div>
+							<div *ngIf="form.get('promo_code').hasError('duplicatedField')" class="error">
+								Code already exists. Please try another code.
+							</div>
+						</div>
+					</div>
+					<div class="col-2">
+						<button *ngIf="!isFormDisabled()"
+						        type="button"
+						        (click)="onGenerateCode()"
+						        class="btn border-dotted btn-sm btn-outline-primary w-100"
+						>
+							Generate Code
+						</button>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm mb-0">Set Expiry Date:</label>
+					<div class="col-3">
+						<div class="input-group input-group-sm">
+							<input class="form-control"
+							       [ngClass]="{
+											'form-control-danger': isInvalidField('expiry_date'),
+											'form-control-plaintext': isFormDisabled()
+											}"
+							       placeholder="DD/MM/YYYY"
+							       formControlName="expiry_date"
+							       ngbDatepicker
+	                   #dFrom="ngbDatepicker"
+							>
+							<div class="input-group-append" *ngIf="!isFormDisabled()">
+								<button class="btn btn-outline-secondary" (click)="dFrom.toggle()" type="button">
+									<i class="fa fa-calendar" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
+						<div *ngIf="isInvalidField('expiry_date')">
+							<div *ngIf="form.get('expiry_date').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm mb-0">
+						<span>Hide from public:</span>
+					</label>
+					<div class="col-3 d-flex align-items-center">
+						<input class="form-control" type="checkbox" formControlName="hide_from_public">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm mb-1">
+						<span>Special Code:</span>
+					</label>
+					<div class="col-3 d-flex align-items-center">
+						<input class="form-control" type="checkbox" formControlName="special_code">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Customer Type:</label>
+					<div class="col-3">
+						<select [ngClass]="{
+											'form-control-danger': isInvalidField('customer_type'),
+											'form-control-plaintext': isFormDisabled()
+											}"
+						        class="form-control form-control-sm"
+						        formControlName="customer_type"
+						>
+							<option selected disabled value="">Select...</option>
+							<option *ngFor="let item of dropdownLists.customer_type" [ngValue]="item.id">{{item.name}}</option>
+						</select>
+						<div *ngIf="isInvalidField('customer_type')">
+							<div *ngIf="form.get('customer_type').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-legend">
+					<div class="form-group row">
+						<label class="col-5 text-right col-form-label col-form-label-sm">Promo Code Type:</label>
+						<div class="col-3">
+							<select [ngClass]="{
+											'form-control-danger': isInvalidField('promo_code_value_type'),
+											'form-control-plaintext': isFormDisabled()
+											}"
+							        class="form-control form-control-sm"
+							        formControlName="promo_code_value_type"
+							>
+								<option selected disabled value="">Select...</option>
+								<option *ngFor="let option of dropdownLists.promo_code_limit_type" [ngValue]="option.id">{{option.name}}</option>
+							</select>
+							<div *ngIf="isInvalidField('promo_code_value_type')">
+								<div *ngIf="form.get('promo_code_value_type').hasError('required')" class="error">
+									Field is required.
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-5 text-right col-form-label col-form-label-sm">Promo Code Value:</label>
+						<div class="col-3">
+							<div class="row">
+								<div class="col-6">
+									<input [ngClass]="{
+													'form-control-danger': isInvalidField('promo_code_value'),
+													'form-control-plaintext': isFormDisabled()
+													}"
+									       type="number"
+									       class="form-control form-control-sm"
+									       formControlName="promo_code_value"
+									       placeholder="Value"
+									>
+									<div *ngIf="isInvalidField('promo_code_value')">
+										<div *ngIf="form.get('promo_code_value').hasError('required')" class="error">
+											Field is required.
+										</div>
+									</div>
+								</div>
+								<div class="col-6" *ngIf="isVisiblePromoPriceLimit">
+									<input [ngClass]="{
+													'form-control-danger': isInvalidField('promo_code_price_limit'),
+													'form-control-plaintext': isFormDisabled()
+													}"
+									       type="number"
+									       class="form-control form-control-sm"
+									       placeholder="Max Limit"
+									       formControlName="promo_code_price_limit"
+									>
+									<div *ngIf="isInvalidField('promo_code_price_limit')">
+										<div *ngIf="form.get('promo_code_price_limit').hasError('required')" class="error">
+											Field is required.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="offset-5 col-3">
+							<div *ngFor="let option of dropdownLists.promo_code_offer_type" class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" [value]="option.id" name="promo_code_offer_type" formControlName="promo_code_offer_type">
+								<label class="form-check-label col-form-label col-form-label-sm">{{option.name}}</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Minimum Purchase Limit:</label>
+					<div class="col-3">
+						<select [ngClass]="{
+											'form-control-danger': isInvalidField('min_purchase_limit_type'),
+											'form-control-plaintext': isFormDisabled()
+											}"
+						        class="form-control form-control-sm"
+						        formControlName="min_purchase_limit_type"
+						>
+							<option selected disabled value="">Select...</option>
+							<option *ngFor="let option of dropdownLists.min_purchase_limit_type" [ngValue]="option.id">{{option.name}}</option>
+						</select>
+						<div *ngIf="isInvalidField('min_purchase_limit_type')">
+							<div *ngIf="form.get('min_purchase_limit_type').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row" *ngIf="isVisibleMinPurchaseLimit">
+					<div class="offset-5 col-3">
+						<input [ngClass]="{
+										'form-control-danger': isInvalidField('min_purchase_limit_value'),
+										'form-control-plaintext': isFormDisabled()
+										}"
+						       type="number"
+						       class="form-control form-control-sm"
+						       formControlName="min_purchase_limit_value"
+						       placeholder="Limit"
+						>
+						<div *ngIf="isInvalidField('min_purchase_limit_value')">
+							<div *ngIf="form.get('min_purchase_limit_value').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Purchase Count (Users) / Day:</label>
+					<div class="col-3">
+						<select [ngClass]="{
+											'form-control-danger': isInvalidField('purchase_count_type'),
+											'form-control-plaintext': isFormDisabled()
+										}"
+						        class="form-control form-control-sm"
+						        formControlName="purchase_count_type"
+						>
+							<option selected disabled value="">Select...</option>
+							<option *ngFor="let option of dropdownLists.purchase_count_type" [ngValue]="option.id">{{option.name}}</option>
+						</select>
+						<div *ngIf="isInvalidField('purchase_count_type')">
+							<div *ngIf="form.get('purchase_count_type').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row" *ngIf="isVisiblePurchaseCount">
+					<div class="offset-5 col-3">
+						<input [ngClass]="{
+											'form-control-danger': isInvalidField('purchase_count_value'),
+											'form-control-plaintext': isFormDisabled()
+										}"
+						       type="number"
+						       class="form-control form-control-sm"
+						       formControlName="purchase_count_value"
+						       placeholder="Limit"
+						>
+						<div *ngIf="isInvalidField('purchase_count_value')">
+							<div *ngIf="form.get('purchase_count_value').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Promo Usage Per User:</label>
+					<div class="col-3">
+						<select [ngClass]="{
+											'form-control-danger': isInvalidField('promo_usage_per_user'),
+											'form-control-plaintext': isFormDisabled()
+										}"
+						        class="form-control form-control-sm"
+						        formControlName="promo_usage_per_user"
+						>
+							<option selected disabled value="">Select...</option>
+							<option *ngFor="let option of dropdownLists.promo_usage_per_user" [ngValue]="option.id">{{option.name}}</option>
+						</select>
+						<div *ngIf="isInvalidField('promo_usage_per_user')">
+							<div *ngIf="form.get('promo_usage_per_user').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row" *ngIf="isVisibleUsagePerUserValue">
+					<div class="offset-5 col-3">
+						<input [ngClass]="{
+											'form-control-danger': isInvalidField('promo_usage_per_user_value'),
+											'form-control-plaintext': isFormDisabled()
+										}"
+						       type="number"
+						       class="form-control form-control-sm"
+						       formControlName="promo_usage_per_user_value"
+						       placeholder="Max Limit"
+						>
+						<div *ngIf="isInvalidField('promo_usage_per_user_value')">
+							<div *ngIf="form.get('promo_usage_per_user_value').hasError('required')" class="error">
+								Field is required.
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Only For Scratch Card:</label>
+					<div class="col-3">
+						<select [ngClass]="{'form-control-plaintext': isFormDisabled()}"
+						        class="form-control form-control-sm"
+						        formControlName="is_scratch_card"
+						>
+							<option [ngValue]="true">Yes</option>
+							<option [ngValue]="false">No</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Location:</label>
+					<div class="col-3">
+						<select class="form-control form-control-sm" formControlName="promo_location" [ngClass]="{'form-control-plaintext': isFormDisabled()}">
+							<option *ngFor="let location of locations$ | async" [ngValue]="location.id">{{location.name}}</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group row align-items-start">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Select store:</label>
+					<div class="col-3">
+						<ng-select [items]="stores$ | async"
+						           class="bootstrap ng-select-sm"
+						           bindLabel="display_name"
+						           bindValue="_id"
+						           [addTag]="false"
+						           [multiple]="false"
+						           [hideSelected]="false"
+						           [clearable]="false"
+						           typeToSearchText="Please enter 2 or more characters"
+						           [typeahead]="storesTypeahead$"
+						           [loading]="storesLoading"
+						           placeholder="Search and select"
+						           formControlName="store">
+						</ng-select>
+					</div>
+				</div>
+			</fieldset>
+
+			<div *ngIf="!isFormDisabled()" class="text-center mt-5">
+				<button type="button" class="btn btn-sm btn-outline-primary px-5" (click)="onSave()">
+					{{isAddPage ? 'Create' : 'Update'}} Promo Code
+				</button>
+			</div>
+
+		</form>
+
+	</div>
+</div>

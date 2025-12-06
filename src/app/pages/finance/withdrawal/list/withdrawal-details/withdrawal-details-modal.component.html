@@ -1,0 +1,92 @@
+<div class="modal-header">
+	<h5 class="modal-title">Merchant withdrawal details</h5>
+	<button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-5">
+			<div class="row">
+				<div class="col-6 text-right">Requested date:</div>
+				<div class="col-6 text-left px-0">{{data.requested.at | date:'dd/MM/yy'}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Merchant&nbsp;name:</div>
+				<div class="col-6 text-left px-0">{{data.merchant.name}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">PhoneNo:</div>
+				<div class="col-6 text-left px-0">+{{data.merchant.mobile.dialing_code}}&nbsp;{{data.merchant.mobile.number}}</div>
+			</div>
+		</div>
+		<div class="col-7">
+			<div class="row">
+				<div class="col-6 text-right"><strong>Total balance:</strong></div>
+				<div class="col-6 text-left pl-0"><strong>{{data.merchant.wallet_available | number:'1.1-1'}}</strong></div>
+			</div>
+			<div class="row">
+				<div class="col-6 text-right">Withdrawal amount:</div>
+				<div class="col-6 text-left pl-0"><strong>{{data.amount | number:'1.1-1'}}</strong></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-3">
+		<div class="col-5">
+			<div class="mb-2">
+				<strong>Bank details</strong>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Account name:</div>
+				<div class="col-6 text-left px-0">{{data.account.account_name}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Bank name:</div>
+				<div class="col-6 text-left px-0">{{data.account.bank_name}}</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-6 text-right">Account&nbsp;number:</div>
+				<div class="col-6 text-left px-0">{{data.account.account_number}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">IFSC Code:</div>
+				<div class="col-6 text-left px-0">{{data.account.ifsc_code}}</div>
+			</div>
+		</div>
+
+		<div *ngIf="isStatusTransferred()" class="col-7">
+			<div class="mb-2">
+				<strong>Transaction details</strong>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Confirmation ID:</div>
+				<div class="col-6 text-left pl-0 text-break-all">{{data.transferred.reference_id}}</div>
+			</div>
+
+			<div class="row">
+				<div class="col-6 text-right">Status:</div>
+				<div class="col-6 text-left pl-0">Transferred</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer d-flex justify-content-between">
+	<div>
+		<button [disabled]="true" type="button" class="btn btn-outline-primary mr-2" (click)="close('view_billing')">View
+			Merchant Billing
+		</button>
+		<button *ngIf="isStatusRequested()" type="button" class="btn btn-outline-primary mr-2" (click)="close('transfer')">Transfer</button>
+		<button *ngIf="isStatusRequested()" type="button" class="btn btn-outline-primary" (click)="close('reject')">Reject</button>
+	</div>
+
+	<button type="button" class="btn btn-primary px-4" (click)="dismiss()">Ok</button>
+</div>

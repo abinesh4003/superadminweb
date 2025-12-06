@@ -1,0 +1,247 @@
+<div class="mt-3" *ngIf="isPageLoaded">
+	<pkz-filter-form [config]="filterFormSettings$ | async"
+	                 (filterChanged)="onFilter($event)"
+	                 [values]="filterValues"
+	></pkz-filter-form>
+
+	<div class="mt-3 mb-2 d-flex justify-content-between">
+		<div class="d-inline-flex align-items-center">
+			<pkz-table-delete-btn
+					*ngIf="isDeleteAllowed() && hasPermission(perms.delete)"
+					[disabled]="!selectedProducts?.length"
+					(delete)="onDeleteProducts()"
+			></pkz-table-delete-btn>
+		</div>
+
+		<div class="d-inline-flex align-items-center">
+			<fieldset *ngIf="hasPermission(perms.manage)" class="form-inline">
+				<div class="form-group">
+					<label class="col-form-label col-form-label-sm">View</label>
+					<select class="form-control form-control-sm ml-3 mr-3"
+					        [ngModel]="selectedViewUser"
+					        (ngModelChange)="onChangeViewUser($event)"
+					>
+						<option value="">All</option>
+						<option *ngFor="let user of assignUsers" [value]="user._id">{{user.user_name}}</option>
+					</select>
+				</div>
+			</fieldset>
+
+			<fieldset *ngIf="isAllowedAssign() && hasPermission(perms.manage)" class="form-inline">
+				<div class="form-group">
+					<label class="col-form-label col-form-label-sm">Assign To</label>
+					<select class="form-control form-control-sm ml-3 mr-3" [(ngModel)]="selectedAssignUser">
+						<option value=""></option>
+						<option *ngFor="let user of assignUsers" [value]="user._id">{{user.user_name}}</option>
+					</select>
+					<button [disabled]="isDisabledAssignButton()" (click)="onAssign()" class="btn btn-primary btn-sm">Apply</button>
+				</div>
+			</fieldset>
+
+			<button *ngIf="isLiveTab() && hasPermission(perms.download)"
+			        [disabled]="!selectedProducts?.length"
+			        type="button"
+			        class="btn btn-sm btn-outline-secondary ml-3"
+			        (click)="onDownloadProducts()"
+			>
+				Download products
+			</button>
+
+			<pkz-switch-view-btn class="ml-3"
+			                     [tableView]="isTableView"
+			                     (switchView)="onSwitchView($event)"
+			></pkz-switch-view-btn>
+
+			<button *ngIf="isAllowedAddProduct() && hasPermission(perms.add_new_product)"
+			        type="button"
+			        class="btn btn-sm btn-outline-secondary ml-3"
+			        (click)="addProduct()"
+			>
+				<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+				Add new product
+			</button>
+
+			<button *ngIf="isAllowedBulkUpload() && hasPermission(perms.bulk_upload)"
+			        type="button"
+			        class="btn btn-sm btn-outline-secondary ml-3"
+			        (click)="onBulkUpload()"
+			>
+				<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+				Bulk Upload
+			</button>
+
+			<button *ngIf="isAllowedBulkUpload() && hasPermission(perms.bulk_upload_log)"
+			        type="button"
+			        class="btn btn-sm btn-outline-secondary ml-3"
+			        (click)="goToBulkLog()"
+			>
+				<i class="fa fa-upload" aria-hidden="true"></i>
+				Bulk Upload log
+			</button>
+
+			<pkz-table-configure-columns
+					*ngIf="isTableView && hasPermission(perms.configure_columns)"
+					[columns]="origColumns"
+					(changeColumns)="onChangeColumns($event)"
+			></pkz-table-configure-columns>
+
+		</div>
+	</div>
+
+	<div>
+		<ngx-datatable
+				*ngIf="isTableView"
+				#table
+				class="bootstrap"
+				pkzResponsiveDatatable
+				[rows]="rows"
+				[rowHeight]=35
+				[footerHeight]="40"
+				[selected]="selectedProducts"
+				columnMode="force"
+				selectionType="checkbox"
+				[scrollbarH]="true"
+				(select)="onSelect($event)"
+				[externalPaging]="true"
+				[count]="page.count"
+				[offset]="page.pageNumber"
+				[limit]="page.limit"
+				(page)="setPage($event)"
+		>
+			<ngx-datatable-column [sortable]="false"
+			                      [draggable]="false"
+			                      [headerCheckboxable]="true"
+			                      [checkboxable]="true"
+			                      [minWidth]="40"
+			                      [width]="45"
+			                      [maxWidth]="50"
+			></ngx-datatable-column>
+
+			<ngx-datatable-column [sortable]="false"
+			                      [draggable]="false"
+			                      name="Status"
+			                      prop="status"
+			                      [minWidth]="getStatusColumnWidth() * 0.95"
+			                      [width]="getStatusColumnWidth()"
+			                      [maxWidth]="getStatusColumnWidth() * 1.05"
+			>
+				<ng-template let-value="value" ngx-datatable-cell-template>
+					<span class="badge"
+					      [ngClass]="{
+					        'badge-primary': value === 4,
+					        'badge-danger': value === 3 || value === 5,
+					        'badge-success': value === 2,
+					        'badge-dark': value === 6,
+					        'badge-warning': value === 1 || value === 11
+					      }"
+					>
+						{{getStatusName(value)}}
+					</span>
+				</ng-template>
+			</ngx-datatable-column>
+
+			<ngx-datatable-column [sortable]="false"
+			                      name="Actions"
+			                      [minWidth]="120"
+			                      [width]="125"
+			                      [maxWidth]="130"
+			>
+				<ng-template let-row="row" ngx-datatable-cell-template>
+					<div class="actions">
+						<a *ngIf="!isLiveTab() && hasPermission(perms.edit)" href="#" title="Edit" (click)="onEditProduct($event, row)" class="actions__item">
+							<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+						</a>
+						<a *ngIf="isAllowedAddProduct() && hasPermission(perms.add_new_product)" href="#" title="Copy" (click)="onCopyProduct($event, row)" class="actions__item">
+							<i class="fa fa-files-o" aria-hidden="true"></i>
+						</a>
+						<a href="#" *ngIf="hasPermission(perms.view)" title="View" (click)="onViewProduct($event, row)" class="actions__item">
+							<i class="fa fa-list-alt" aria-hidden="true"></i>
+						</a>
+					</div>
+				</ng-template>
+			</ngx-datatable-column>
+
+			<ngx-datatable-column *ngFor="let column of columns" [name]="column.name" [prop]="column.prop"></ngx-datatable-column>
+
+			<ngx-datatable-footer>
+				<ng-template
+						ngx-datatable-footer-template
+						let-rowCount="rowCount"
+						let-pageSize="pageSize"
+						let-selectedCount="selectedCount"
+						let-offset="offset">
+
+					<pkz-table-pagination
+							[rowCount]="rowCount"
+							[pageSize]="pageSize"
+							[selectedCount]="selectedCount"
+							[offset]="offset"
+							(page)="table.onFooterPage($event)"
+					></pkz-table-pagination>
+				</ng-template>
+			</ngx-datatable-footer>
+
+		</ngx-datatable>
+
+		<div *ngIf="!isTableView">
+			<div class="row mt-3">
+				<div class="col-4 d-inline-flex mb-3" *ngFor="let item of rows">
+					<div class="card product-card" (click)="hasPermission(perms.view) ? onViewProduct($event, item) : null">
+						<div class="card-body">
+							<div class="product-card__image">
+								<img [src]="(item.images[0]?.name || 'placeholder') | imageSecure:imageOptions | async"
+								     [alt]="item.product_name"
+								>
+							</div>
+							<ul class="product-card__fields">
+								<li>Product name: {{item.product_name}}</li>
+								<li *ngIf="item.category" class="text-danger text-break-all">Category: {{item.category}}</li>
+								<li *ngIf="item.mrp">MRP: {{item.mrp}}</li>
+								<li *ngIf="item.keywords?.length">keywords: {{item.keywords}}</li>
+							</ul>
+							<a *ngIf="!isLiveTab() && hasPermission(perms.edit)" class="product-card__edit" (click)="onEditProduct($event, item)">
+								<i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<ngx-datatable
+					#table
+					class="bootstrap"
+					pkzResponsiveDatatable
+					[rows]="[{}]"
+					[headerHeight]="0"
+					[rowHeight]="0"
+					[footerHeight]="40"
+					[externalPaging]="true"
+					[count]="page.count"
+					[offset]="page.pageNumber"
+					[limit]="page.limit"
+					(page)="setPage($event)"
+			>
+				<ngx-datatable-footer>
+					<ng-template
+							ngx-datatable-footer-template
+							let-rowCount="rowCount"
+							let-pageSize="pageSize"
+							let-selectedCount="selectedCount"
+							let-offset="offset">
+
+						<pkz-table-pagination
+								[rowCount]="rowCount"
+								[pageSize]="pageSize"
+								[selectedCount]="selectedCount"
+								[offset]="offset"
+								(page)="table.onFooterPage($event)"
+						></pkz-table-pagination>
+					</ng-template>
+				</ngx-datatable-footer>
+			</ngx-datatable>
+
+		</div>
+
+	</div>
+
+</div>

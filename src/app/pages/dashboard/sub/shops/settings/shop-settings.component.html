@@ -1,0 +1,405 @@
+<nav *ngIf="isPageLoaded" aria-label="breadcrumb">
+    <ol class="breadcrumb smaller-font">
+        <li class="breadcrumb-item">
+            <a href="#" routerLink="../../">{{rootBreadcrumbName}}</a>
+        </li>
+        <!--TODO: add implementation when Shop form will be implemented-->
+
+        <!--<li class="breadcrumb-item active" aria-current="page"> <a href="#" -->
+        <!--(click)="navigateToShopsStore($event)">{{getSubBreadcrumbName()}}</a></li>-->
+        <li class="breadcrumb-item" aria-current="page">
+            <a href="#" (click)="onViewStore($event)">{{storeData?.display_name}}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Settings</li>
+    </ol>
+</nav>
+
+<div *ngIf="isPageLoaded" class="card">
+    <div class="card-body bg-light pb-5">
+        <form [formGroup]="form" novalidate>
+            <fieldset [disabled]="isFormDisabled()">
+                <div class="row">
+                    <div class="col-6">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group row align-items-center">
+                                    <label class="col-5 col-form-label">
+                                        <span>Total free months</span>
+                                    </label>
+                                    <div class="col-3">
+                                        <input formControlName="free_months"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('free_months')}"
+                                        >
+                                        <div *ngIf="isInvalidField('free_months')">
+                                            <div *ngIf="getFormField('free_months').errors.required" class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span *ngIf="estimatedFreeMonthsDate?.length"
+                                          class="col align-items-center">End @ {{estimatedFreeMonthsDate}}</span>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5 col-form-label">
+                                        <span>UPC Product limit</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="upc_limit"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('upc_limit')}"
+                                        >
+                                        <div *ngIf="isInvalidField('upc_limit')">
+                                            <div *ngIf="getFormField('upc_limit').errors.required" class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5 col-form-label">
+                                        <span>SKU Product limit</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="sku_limit"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('sku_limit')}"
+                                        >
+                                        <div *ngIf="isInvalidField('sku_limit')">
+                                            <div *ngIf="getFormField('sku_limit').errors.required" class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5 col-form-label">
+                                        <span>UPC Stock limit</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="upc_limit_stock"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('upc_limit_stock')}"
+                                        >
+                                        <div *ngIf="isInvalidField('upc_limit_stock')">
+                                            <div *ngIf="getFormField('upc_limit_stock').errors.required" class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5 col-form-label">
+                                        <span>SKU Stock limit</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="sku_limit_stock"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('sku_limit_stock')}"
+                                        >
+                                        <div *ngIf="isInvalidField('sku_limit_stock')">
+                                            <div *ngIf="getFormField('sku_limit_stock').errors.required" class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5 col-form-label">
+                                        <span>UPC Commission cost</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="upc_commission_cost"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('upc_commission_cost')}"
+                                        >
+                                        <div *ngIf="isInvalidField('upc_commission_cost')">
+                                            <div *ngIf="getFormField('upc_commission_cost').errors.required"
+                                                 class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5 col-form-label">
+                                        <span>SKU Commission cost</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="sku_commission_cost"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('sku_commission_cost')}"
+                                        >
+                                        <div *ngIf="isInvalidField('sku_commission_cost')">
+                                            <div *ngIf="getFormField('sku_commission_cost').errors.required"
+                                                 class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-5" for="paymentFee">
+                                        <span>Including payment gateway fee:</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input mr-2 mt-2" id="paymentFee"
+                                                   formControlName="including_fee">
+                                        </div>
+                                        <div *ngIf="isActiveTab && isSaveAllowed()" class="text-center">
+                                            <button type="button" class="btn btn btn-outline-danger mb-2"
+                                                    (click)="onApplyFee()">Apply
+                                                Service Fee
+                                            </button>
+                                            <div *ngIf="isSubmittingFee">wait...</div>
+                                            <div *ngIf="affectedProductsCount">Products
+                                                affected: {{affectedProductsCount}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div *ngIf="isPrivateShop" class="col-6">
+                        <div class="card h-100">
+                            <span class="badge badge-primary badge-private-shop">Private Shop</span>
+
+                            <div class="card-body">
+                                <div class="text-center mb-3"
+                                     *ngIf="!isFormDisabled() || isFormDisabled() && !!shopIcon">
+                                    <pkz-image-upload
+                                            [disabled]="isFormDisabled()"
+                                            [deleteAvailable]="isAllowedDeleteImage"
+                                            [imageUrl]="shopIcon"
+                                            [path]="imageOptions.path"
+                                            [width]="imageOptions.width"
+                                            [height]="imageOptions.width"
+                                            (imageChange)="onImageChange($event)"
+                                            (zoom)="onZoom()"
+                                    ></pkz-image-upload>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col col-form-label text-right">
+                                        <span>Subscription cost / month</span>
+                                    </label>
+                                    <div class="col">
+                                        <input formControlName="subscription_cost_per_month"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('subscription_cost_per_month')}"
+                                        >
+                                        <div *ngIf="isInvalidField('subscription_cost_per_month')">
+                                            <div *ngIf="getFormField('subscription_cost_per_month').errors.required"
+                                                 class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col col-form-label text-right">
+                                        <span>Subscription / Renewal Date</span>
+                                    </label>
+                                    <div class="col">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control" placeholder="dd/mm/yyyy"
+                                                   name="dpFrom" formControlName="subscription_renewal_date"
+                                                   [ngClass]="{'form-control-danger' : isInvalidField('subscription_renewal_date')}"
+                                                   ngbDatepicker #dFrom="ngbDatepicker">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" (click)="dFrom.toggle()"
+                                                        type="button">
+                                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6 text-right">End date</div>
+                                    <div class="col-6">12/12/2020</div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-6 text-right">Last renewal status</div>
+                                    <div class="col-6">{{status}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <div class="card h-100">
+                            <div class="card-body position-relative">
+                                <span class="card-title-mini">Merchant Bank Details</span>
+                                <div class="form-group row mt-3">
+                                    <label class="col-5" for="paymentFee">
+                                        <span>Merchant Wallet:</span>
+                                    </label>
+                                    <div class="col-7">
+                                        <input formControlName="merchant_wallet"
+                                               type="number"
+                                               readonly
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isInvalidField('merchant_wallet')}"
+                                        >
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="storeData?.payment?.methods">
+                                    <div class="row">
+                                        <span class="col">Primary Method:</span>
+                                    </div>
+                                    <div class="col-12" *ngFor="let acc of sortedMethods(storeData?.payment?.methods)">
+                                        <div class="row">
+                                            <span class="col-5 text-right">Bank name</span>
+                                            <span class="col-7">{{acc.bank_name}}</span>
+                                        </div>
+                                        <div class="row">
+                                            <span class="col-5 text-right">Account number</span>
+                                            <span class="col-7">{{acc.account_number}}</span>
+                                        </div>
+                                        <div class="row">
+                                            <span class="col-5 text-right">IFSC</span>
+                                            <span class="col-7">{{acc.ifsc_code}}</span>
+                                        </div>
+                                        <div class="separator"></div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card h-100">
+                            <div class="card-body position-relative">
+                                <span class="card-title-mini">Agency Commission Settings</span>
+                                <div class="form-group row mt-3">
+                                    <label class="col-6 col-form-label text-right">
+                                        Select Agency
+                                    </label>
+                                    <div class="col-6">
+                                        <ng-select [items]="agencies$ | async"
+                                                   class="bootstrap ng-select-sm search-agency"
+                                                   [ngClass]="{'black-placeholder' : merchantName !== EMPTY_MERCHANT,
+                                                   'form-control-danger' : isSelectedAgencyInvalid}"
+                                                   bindLabel="label"
+                                                   bindValue="value"
+                                                   [addTag]="false"
+                                                   [multiple]="false"
+                                                   [hideSelected]="false"
+                                                   [clearable]="false"
+                                                   typeToSearchText="Please enter 2 or more characters"
+                                                   [typeahead]="agenciesTypeahead$"
+                                                   [loading]="agenciesLoading"
+                                                   [placeholder]="merchantName"
+                                                   formControlName="selectedAgency">
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-6 col-form-label text-right">
+                                        UPC Commission cost
+                                    </label>
+                                    <div class="col-6">
+                                        <input formControlName="agency_upc_commission_cost"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger' : isAgencyUPInvalid}"
+                                        >
+                                        <div *ngIf="isInvalidField('agency_upc_commission_cost')">
+                                            <div *ngIf="getFormField('agency_upc_commission_cost').errors.required"
+                                                 class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-6 col-form-label text-right">
+                                        SKU Commission cost
+                                    </label>
+                                    <div class="col-6">
+                                        <input formControlName="agency_sku_commission_cost"
+                                               type="number"
+                                               class="form-control"
+                                               [ngClass]="{'form-control-danger': isAgencySKUInvalid}"
+                                        >
+                                        <div *ngIf="isInvalidField('agency_sku_commission_cost')">
+                                            <div *ngIf="getFormField('agency_sku_commission_cost').errors.required"
+                                                 class="error">
+                                                Field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-6 text-right" for="agencyPaymentFee">
+                                        Including payment gateway fee:
+                                    </label>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input mr-2" id="agencyPaymentFee"
+                                                   formControlName="agency_including_fee">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-6 text-right" for="agencyDeliveryFee">
+                                        Including delivery fee:
+                                    </label>
+                                    <div class="col-6">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input mr-2" id="agencyDeliveryFee"
+                                                   formControlName="including_delivery_fee">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="card-footer text-muted d-flex justify-content-between settings-actions">
+        <div class="flex-0-5 d-flex justify-content-center">
+            <button type="button" class="btn btn btn-outline-primary px-4" (click)="openMerchantSettingsModal()">
+                Merchant Settings
+            </button>
+        </div>
+        <div class="flex-0-5 d-flex justify-content-end">
+            <button type="button" class="btn btn btn-outline-primary settings-btn" (click)="onCancel()">Back</button>
+            <button type="button" class="btn btn btn-primary ml-3 settings-btn" *ngIf="isSaveAllowed()"
+                    (click)="onSave()">Save
+            </button>
+        </div>
+    </div>
+</div>

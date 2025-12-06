@@ -1,0 +1,86 @@
+<div *ngIf="isPageLoaded" class="d-flex align-items-center justify-content-between">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb smaller-font">
+			<li class="breadcrumb-item">
+				<a href="#" routerLink="../../">{{rootBreadcrumbName}}</a>
+			</li>
+			<li class="breadcrumb-item" aria-current="page">
+				<a href="#" (click)="onViewStore($event)">{{storeData.display_name}}</a>
+			</li>
+			<li class="breadcrumb-item active" aria-current="page">Inventory</li>
+		</ol>
+	</nav>
+
+	<span *ngIf="origData"><small>Last updated on: {{origData.last_updated | date:'dd/MM/yy'}}</small></span>
+</div>
+
+<div *ngIf="isPageLoaded">
+	<ng-container *ngIf="(filterFormSettings$ | async) as settings">
+		<pkz-filter-form [config]="settings"
+		                 (filterChanged)="onFilter($event)"
+		                 [values]="filterValues"
+		>
+			<span *ngIf="origData" class="col-2">Total products: {{origData.total}}</span>
+		</pkz-filter-form>
+	</ng-container>
+
+	<ngx-datatable
+      #table
+			class="bootstrap mt-2"
+			pkzResponsiveDatatable
+			[rows]="rows"
+			[rowHeight]="80"
+			columnMode="force"
+			[footerHeight]="40"
+			[externalPaging]="true"
+      [scrollbarH]="true"
+			[count]="page.count"
+			[offset]="page.pageNumber"
+			[limit]="page.limit"
+			(page)="setPage($event)"
+	>
+		<ngx-datatable-column name="Product icon" prop="image" [minWidth]="105" [width]="110" [maxWidth]="120">
+			<ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+				<img [src]="(value[0]?.name || 'placeholder') | imageSecure:imageOptions | async"
+				     [alt]="row.product_name"
+				     [attr.height]="imageOptions.height / 2"
+				>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="UPC\SKU" [minWidth]="120" [width]="130" [maxWidth]="140">
+			<ng-template let-row="row" ngx-datatable-cell-template>
+				<span *ngIf="row.upc">{{row.upc}}</span>
+				<span *ngIf="row.sku">{{row.sku}}</span>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Product name" prop="product_name"></ngx-datatable-column>
+		<ngx-datatable-column name="Unit" prop="unit" [minWidth]="70" [width]="75" [maxWidth]="80"></ngx-datatable-column>
+		<ngx-datatable-column name="Stock" prop="stock" [minWidth]="65" [width]="70" [maxWidth]="75"></ngx-datatable-column>
+		<ngx-datatable-column name="Selling price" prop="selling_price" [minWidth]="105" [width]="110" [maxWidth]="120"></ngx-datatable-column>
+		<ngx-datatable-column name="Tax %" prop="tax" [minWidth]="60" [width]="65" [maxWidth]="70"></ngx-datatable-column>
+		<ngx-datatable-column name="Offer %" prop="offer" [minWidth]="65" [width]="70" [maxWidth]="75"></ngx-datatable-column>
+		<ngx-datatable-column name="Final price" prop="net_price" [minWidth]="105" [width]="110" [maxWidth]="120"></ngx-datatable-column>
+
+		<ngx-datatable-footer>
+			<ng-template
+					ngx-datatable-footer-template
+					let-rowCount="rowCount"
+					let-pageSize="pageSize"
+					let-selectedCount="selectedCount"
+					let-offset="offset">
+
+				<pkz-table-pagination
+						[rowCount]="rowCount"
+						[pageSize]="pageSize"
+						[selectedCount]="selectedCount"
+						[offset]="offset"
+						(page)="table.onFooterPage($event)"
+				></pkz-table-pagination>
+			</ng-template>
+		</ngx-datatable-footer>
+
+
+	</ngx-datatable>
+</div>

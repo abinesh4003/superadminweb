@@ -1,0 +1,37 @@
+<pkz-sidebar>
+	<div class="sidebar">
+		<button type="button"
+		        class="btn sidebar__btn-home"
+		        routerLink="main"
+		        routerLinkActive="active">Dashboard</button>
+		<div class="list-group list-group-flush" *ngxPermissionsOnly="permsSub">
+			<button *ngFor="let item of items$ | async"
+			        type="button"
+			        class="list-group-item list-group-item-action"
+			        [routerLink]="item._id"
+			        (click)="navigateToCategory(item._id)"
+			        routerLinkActive="active">
+				<span class="icon">
+					<img [src]="item.image | imageSecure:imageOptions | async" [alt]="item.display_name">
+				</span>
+				<span class="name">{{item.display_name}}</span>
+				<span class="badge"
+				      [ngClass]="{
+				        'badge-danger': item.status === 1,
+				        'badge-success': item.status === 2
+				      }">
+					{{getStatusName(item.status)}}
+				</span>
+			</button>
+		</div>
+	</div>
+
+	<div class="content">
+		<router-outlet></router-outlet>
+	</div>
+
+	<div class="footer">
+		<pkz-footer></pkz-footer>
+	</div>
+
+</pkz-sidebar>

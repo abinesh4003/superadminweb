@@ -1,0 +1,50 @@
+/***
+	Don't edit manually, run npm command instead
+ */
+
+%svg-common {
+	background: url('svg/sprite.css.svg') no-repeat;
+}
+
+.svg-information {
+	@extend %svg-common;
+	background-position: 0 0;
+	width: 30px;
+	height: 30px;
+}
+
+.svg-profile {
+	@extend %svg-common;
+	background-position: 50% 0;
+	width: 30px;
+	height: 30px;
+}
+
+.svg-roles-permission {
+	@extend %svg-common;
+	background-position: 0 100%;
+	width: 30px;
+	height: 30px;
+}
+
+.svg-settings {
+	@extend %svg-common;
+	background-position: 50% 100%;
+	width: 30px;
+	height: 30px;
+}
+
+.svg-store-category {
+	@extend %svg-common;
+	background-position: 100% 0;
+	width: 30px;
+	height: 30px;
+}
+
+.svg-users {
+	@extend %svg-common;
+	background-position: 100% 100%;
+	width: 30px;
+	height: 30px;
+}
+

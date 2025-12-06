@@ -1,0 +1,49 @@
+@import 'variables';
+
+.ng-select.bootstrap {
+  &.ng-select-disabled {
+    .ng-select-container {
+      background: none;
+      border-color: transparent;
+
+      &:hover {
+        box-shadow: none;
+      }
+    }
+
+    .ng-arrow-wrapper {
+      display: none;
+    }
+  }
+
+  .ng-select-container {
+    min-height: calc(2.25rem + 2px);
+    color: #495057;
+    font-size: 1rem;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+
+  &.ng-invalid.ng-dirty {
+    .ng-select-container {
+      border-color: $red-2;
+    }
+  }
+
+  &.ng-select-sm {
+    .ng-select-container {
+      height: calc(1.8125rem + 2px);
+      min-height: auto;
+      font-size: 0.875rem;
+
+      .ng-input {
+        top: 0;
+      }
+
+      .ng-value {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

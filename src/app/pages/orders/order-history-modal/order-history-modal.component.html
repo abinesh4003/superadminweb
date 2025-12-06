@@ -1,0 +1,52 @@
+<div class="support-call-log-modal">
+  <div class="modal-header">
+    <h5 class="modal-title silver-text font-size-1-2rem">Order History:</h5>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body pt-0">
+
+<!--    for spinner while loading -->
+    <select class="form-control form-control-sm distance-select d-none" [(ngModel)]="spin">
+      <option *ngFor="let p of ordersList">spin</option>
+    </select>
+
+<!--    empty value text -->
+    <b *ngIf="!isLoading && !ordersList?.length">Orders not found...</b>
+
+    <div class="card mt-3"
+         *ngFor="let order of ordersList">
+      <div class="card-header">
+        <div class="row">
+          <div class="row col-12 m-auto">
+            <div class="col-6 text-right">Order Placed Date:</div>
+            <div class="col-6 color-purple">{{order.ordered.at | date: 'dd/MM/yyyy - hh:mm a'}}</div>
+          </div>
+          <div class="row col-12 m-auto">
+            <div class="col-6 text-right">Order Id:</div>
+            <div class="col-6">{{order.order_id}}</div>
+          </div>
+          <div class="row col-12 m-auto">
+            <div class="col-6 text-right">Purchase Amount:</div>
+            <div class="col-6 color-light-blue">₹ {{order.prices.net_price}}</div>
+          </div>
+          <div class="row col-12 m-auto">
+            <div class="col-6 text-right">Status:</div>
+            <div class="col-6"
+                 [ngClass]="getDtByStatusId(order.status).textColor || 'color-light-blue'">{{getDtByStatusId(order.status).statusName}}</div>
+          </div>
+          <div class="row col-12 m-auto">
+            <div class="col-6 text-right">Delivered At:</div>
+            <div class="col-6"
+                 [ngClass]="getDtByStatusId(order.status).textColor || 'color-light-blue'">{{order[getDtByStatusId(order.status).objName]?.at | date: 'dd/MM/yyyy - hh:mm a'}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer actions d-flex justify-content-center text-center">
+    <button type="button" class="btn btn-outline-grayed" (click)="dismiss()">Close</button>
+  </div>
+</div>

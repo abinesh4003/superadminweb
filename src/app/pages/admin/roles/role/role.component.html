@@ -1,0 +1,24 @@
+<div class="info-row mb-3" *ngIf="(role$ | async) as role">
+	<span class="title">{{role.name}}</span>
+
+	<div class="actions" *ngIf="role.is_editable">
+		<a *ngxPermissionsOnly="[perms.edit]"
+		   href="#"
+		   title="Edit"
+		   (click)="onEdit($event, role)"
+		   class="actions__item"
+		>
+			<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+		</a>
+		<a *ngxPermissionsOnly="[perms.delete]"
+		   href="#"
+		   title="Delete"
+		   (click)="onDelete($event, role)"
+		   class="actions__item"
+		>
+			<i class="fa fa-trash text-danger" aria-hidden="true"></i>
+		</a>
+	</div>
+
+</div>
+<pkz-routed-tabs *ngIf="tabs" [tabs]="tabs"></pkz-routed-tabs>

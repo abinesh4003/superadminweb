@@ -1,0 +1,37 @@
+.font-size-20px {
+  font-size: 20px;
+}
+
+.fa-check-circle {
+  color: lawngreen !important;
+}
+
+.fa-pause {
+  color: silver;
+}
+
+.table-container {
+  ::ng-deep {
+    .datatable-body-row {
+      &:hover {
+        cursor: pointer;
+        border: 1px solid #616161 !important;
+      }
+    }
+
+    .datatable-header {
+      background-color: #e0e0e0;
+      color: #000000;
+    }
+
+    .datatable-row-even {
+      background-color: #ffffff !important;
+      border: none !important;
+    }
+
+    .datatable-row-odd {
+      background-color: #f5f5f5 !important;
+      border: none !important;
+    }
+  }
+}

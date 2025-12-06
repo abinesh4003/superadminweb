@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h5 class="modal-title">Shop photos for review</h5>
+  <button type="button" class="close" aria-label="Close" (click)="dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="row">
+    <ng-container *ngFor="let image of data">
+      <div class="col-4 image-upload-field">
+        <pkz-image-upload
+                [disabled]="true"
+                [deleteAvailable]="false"
+                [imageUrl]="image.name"
+                [path]="imageOptions.path"
+                [width]="imageOptions.width"
+                [height]="imageOptions.width"
+                (zoom)="onZoom(image.keyid)">
+        </pkz-image-upload>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="card">
+	<div class="card-body pt-0">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb smaller-font">
+				<li class="breadcrumb-item">
+					<a href="#" routerLink="../../">{{rootBreadcrumbName}}</a>
+				</li>
+				<li class="breadcrumb-item active" aria-current="page">Message Details</li>
+			</ol>
+		</nav>
+
+		<form *ngIf="isPageLoaded" [formGroup]="form" novalidate>
+			<fieldset [disabled]="isFormDisabled()">
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Number Of Users:</label>
+					<div class="col-3">
+						<input type="text" readonly class="form-control form-control-sm form-control-plaintext" [value]="promoDetails.user_count">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<div class="offset-3 col-5">
+						<div class="row">
+							<div class="col">
+								<div class="row">
+									<label class="col-6 text-right col-form-label col-form-label-sm">SMS:</label>
+									<div class="col-6 px-0">
+										<input type="number" [ngClass]="{'form-control-plaintext': isFormDisabled()}" class="form-control form-control-sm" formControlName="smsCount">
+									</div>
+								</div>
+							</div>
+
+							<div class="col">
+								<div class="row">
+									<label class="col-6 text-right col-form-label col-form-label-sm">Push:</label>
+									<div class="col-6 px-0">
+										<input type="number" [ngClass]="{'form-control-plaintext': isFormDisabled()}" class="form-control form-control-sm" formControlName="pushCount">
+									</div>
+								</div>
+							</div>
+
+							<div class="col">
+								<div class="row">
+									<label class="col-6 text-right col-form-label col-form-label-sm">Email</label>
+									<div class="col-6 px-0">
+										<input type="number" [ngClass]="{'form-control-plaintext': isFormDisabled()}" class="form-control form-control-sm" formControlName="emailCount">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">SMS Template:</label>
+					<div class="col-3">
+						<input formControlName="shortMessageTitle" type="text" [ngClass]="{'form-control-plaintext': isFormDisabled()}" class="form-control form-control-sm">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-5 text-right col-form-label col-form-label-sm">Email Template:</label>
+					<div class="col-3">
+						<input formControlName="emailTemplateTitle" type="text" [ngClass]="{'form-control-plaintext': isFormDisabled()}" class="form-control form-control-sm">
+					</div>
+				</div>
+
+				<div class="form-group row mb-5">
+					<div class="offset-3 col-6">
+						<label class="d-flex justify-content-between col-form-label col-form-label-sm">
+							<span>Push and SMS message</span>
+							<span *ngIf="!isFormDisabled()">{{form.get('shortMessage').value.length}}/160</span>
+						</label>
+						<textarea [readOnly]="isFormDisabled()" formControlName="shortMessage" class="form-control" rows="5"></textarea>
+						<div *ngIf="form.get('shortMessage').hasError('maxlength') && !isFormDisabled()" class="error">
+							Max length should be less or equal 160 characters
+						</div>
+						<button *ngIf="!isFormDisabled()" type="button" class="pull-right btn btn-sm btn-outline-primary px-4 mt-2" (click)="onTestSMS()">Test SMS</button>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="row mb-5">
+				<div class="offset-2 col-8">
+					<div  class="row">
+						<div class="col-3">
+							<button type="button" class="btn btn-sm btn-outline-secondary w-100" (click)="onCancel()">Cancel</button>
+						</div>
+
+						<ng-container *ngIf="!isFormDisabled()">
+							<div class="col-3">
+								<button type="button" class="btn btn-sm btn-outline-danger w-100" (click)="onReject()">Reject</button>
+							</div>
+
+							<div class="col-3">
+								<button type="button" class="btn btn-sm btn-outline-primary w-100" (click)="onApprove()">Approve for Broadcast</button>
+							</div>
+
+							<div class="col-3">
+								<button type="button" class="btn btn-sm btn-outline-primary w-100" (click)="onTestEmail()">Test Email</button>
+							</div>
+						</ng-container>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="offset-3 col-3 px-0">
+					Shop Contact: <strong>{{promoDetails.shop_contact}}</strong>
+				</div>
+				<div class="col-3 px-0">
+					Merchant Contact: <strong>{{promoDetails.merchant_contact}}</strong>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+

@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  width: 100%;
+}
+
+.pager-limit {
+  text-align: left;
+  display: flex;
+
+  &__title {
+    margin: 10px 5px 10px 0;
+    display: inline-block;
+  }
+}

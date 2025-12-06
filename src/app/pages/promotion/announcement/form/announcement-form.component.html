@@ -1,0 +1,113 @@
+<form *ngIf="isPageLoaded" [formGroup]="form" novalidate class="p-4">
+	<fieldset [disabled]="isFormDisabled()">
+		<div class="form-group row align-items-start">
+			<label class="col-1 px-0 col-form-label col-form-label-sm">Target type:</label>
+			<div class="col-3">
+				<select [ngClass]="{'form-control-plaintext': isFormDisabled()}"
+				        class="form-control form-control-sm"
+				        formControlName="targetType"
+				>
+					<option selected disabled value="">Select...</option>
+					<option *ngFor="let option of targetTypes" [ngValue]="option.id">{{option.name}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="row align-items-start">
+			<label class="col-1 px-0 col-form-label col-form-label-sm">Select store:</label>
+			<div class="col-3">
+				<ng-select [items]="stores$ | async"
+				           class="bootstrap ng-select-sm"
+				           bindLabel="display_name"
+				           [addTag]="false"
+				           [multiple]="false"
+				           [hideSelected]="false"
+				           [clearable]="false"
+				           typeToSearchText="Please enter 2 or more characters"
+				           [typeahead]="storesTypeahead$"
+				           [loading]="storesLoading"
+				           placeholder="Search and select"
+				           formControlName="selectedStore">
+				</ng-select>
+			</div>
+			<button class="btn btn-sm btn-outline-secondary" (click)="onReset()">Reset</button>
+		</div>
+
+		<div class="row mt-1 small" [ngClass]="{'form-group': !isSMSPage()}">
+			<div class="offset-1"></div>
+			<div class="col-2">Total Customers: {{customerCount}}</div>
+			<div *ngIf="isEmailPage()" class="col-3">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="option" id="plainTextOption" [value]="1" formControlName="option">
+					<label class="form-check-label" for="plainTextOption">Plain Text</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="option" id="htmlCodeOption" [value]="2" formControlName="option">
+					<label class="form-check-label" for="htmlCodeOption">HTML Code</label>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="isPushPage()" class="row">
+			<div class="col-6">
+				<input type="text"
+				       class="form-control form-control-sm"
+				       formControlName="pushTitle"
+				       placeholder="Title"
+				       [ngClass]="{'form-control-danger': isInvalidField('pushTitle')}"
+				>
+			</div>
+		</div>
+
+		<div *ngIf="isEmailPage()" class="row form-group">
+			<div class="col-6">
+				<input type="text"
+				       class="form-control form-control-sm"
+				       formControlName="emailSubject"
+				       placeholder="Subject"
+				       [ngClass]="{'form-control-danger': isInvalidField('emailSubject')}"
+				>
+			</div>
+		</div>
+
+		<div class="row align-items-start">
+			<div class="col-6">
+				<label *ngIf="!isEmailPage()" class="col-form-label col-form-label-sm pull-right">
+					<span>{{message.value?.length || 0}}/{{allowedMessageLength}}</span>
+				</label>
+				<editor *ngIf="isEmailPage()" [hidden]="form.get('option').value === 1" [init]="{plugins: 'link', height: 500}" formControlName="message"></editor>
+				<textarea [hidden]="isEmailPage() ? form.get('option').value === 2 : false"
+				          [readOnly]="isFormDisabled()"
+				          [ngClass]="{'form-control-danger': isInvalidField('message')}"
+				          formControlName="message"
+				          class="form-control form-control-sm"
+				          [rows]="textareaRowsCount()"
+				></textarea>
+			</div>
+		</div>
+
+		<div class="row mt-3">
+			<div class="offset-3 col-3">
+				<div class="row">
+					<div class="col">
+						<button type="button"
+						        class="btn btn-sm btn-outline-primary w-100"
+						        (click)="onTest()"
+						>
+							Test
+						</button>
+					</div>
+
+					<div class="col">
+						<button type="button"
+						        class="btn btn-sm btn-outline-primary w-100"
+						        (click)="onPublish()"
+						>
+							Publish
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+
+</form>

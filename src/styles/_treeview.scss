@@ -1,0 +1,12 @@
+.treeview-container {
+  max-height: none !important;
+
+  > ngx-treeview-item {
+    > .treeview-item {
+      > div:not(.row-item) {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

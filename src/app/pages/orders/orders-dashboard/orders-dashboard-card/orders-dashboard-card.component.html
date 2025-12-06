@@ -1,0 +1,5 @@
+<div class="orders_dashboard_card_item">
+  <span class='orders_dashboard_card_label'>{{label}}</span>
+  <span class='orders_dashboard_card_value'>{{value}}</span>
+  <span class='orders_dashboard_card_percent' *ngIf="checkIfExist()" [ngClass]="{'red-percentage': isWarn}">({{percent}}%)</span>
+</div>

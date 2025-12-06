@@ -1,0 +1,104 @@
+
+<div *ngIf="isPageLoaded">
+    <ng-container *ngIf="(filterFormSettings$ | async) as settings">
+        <pkz-filter-form (filterChanged)="onFilter($event)"
+                         [config]="settings"
+                         [values]="filtersObj"
+        >
+        </pkz-filter-form>
+    </ng-container>
+
+    <ngx-datatable
+        #table
+        (page)="setPage($event)"
+        [count]="page.count"
+        [externalPaging]="true"
+        [footerHeight]="40"
+        [limit]="page.limit"
+        [offset]="page.pageNumber"
+        [rowHeight]="35"
+        [rows]="rows"
+        class="bootstrap"
+        columnMode="flex"
+        pkzResponsiveDatatable
+    >
+        <ngx-datatable-column [flexGrow]="0.5"
+                              name="Date"
+                              prop="created_at">
+            <ng-template let-row="row"
+                         let-value="value"
+                         ngx-datatable-cell-template>
+                <span>{{value | date:'dd/MM/yy'}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [flexGrow]="1"
+                              name="Merchant Name"
+                              prop="full_name">
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [flexGrow]="1"
+                              name="Remittance amount"
+                              prop="amount">
+            <ng-template let-value="value"
+                         ngx-datatable-cell-template>
+                {{value | number:'1.1-1'}}
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [flexGrow]="0.5"
+                              name="Reference Id"
+                              prop="reference_id"></ngx-datatable-column>
+        <ngx-datatable-column [flexGrow]="0.5"
+                              name="Status">
+            <ng-template let-row="row"
+                         ngx-datatable-cell-template>
+                <span>{{row.status | remittanceStatus: statusTypes}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column [flexGrow]="0.5"
+                              [sortable]="false"
+                              name="Actions">
+            <ng-template let-row="row"
+                         ngx-datatable-cell-template>
+                <div class="actions actions__holder">
+                    <a class="actions__item"
+                       *ngIf="row.delivered_orders"
+                       (click)="openCodHistory(row)"
+                       title="Orders History"
+                    >
+                        <img src="assets/images/order.png" alt="">
+                    </a>
+                    <ng-container *ngIf="showEditBtn(row.status)">
+                        <a (click)="onOpenDetailsModal($event, row)"
+                           *ngxPermissionsOnly="[perms.edit]"
+                           class="actions__item"
+                           title="Edit"
+                        >
+                            <img src="assets/images/edit.png" alt="">
+                        </a>
+                    </ng-container>
+                </div>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-footer>
+            <ng-template
+                    let-offset="offset"
+                    let-pageSize="pageSize"
+                    let-rowCount="rowCount"
+                    let-selectedCount="selectedCount"
+                    ngx-datatable-footer-template>
+
+                <pkz-table-pagination
+                        (page)="table.onFooterPage($event)"
+                        [offset]="offset"
+                        [pageSize]="pageSize"
+                        [rowCount]="rowCount"
+                        [selectedCount]="selectedCount"
+                ></pkz-table-pagination>
+            </ng-template>
+        </ngx-datatable-footer>
+
+    </ngx-datatable>
+</div>

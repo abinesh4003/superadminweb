@@ -1,0 +1,8 @@
+<div class="form-group mt-1 mb-1 flex-nowrap" [formGroup]="form">
+	<label class="mr-3">{{fieldConfig.label}}</label>
+	<select class="form-control form-control-sm"
+	        [formControlName]="fieldConfig.name"
+	>
+		<option *ngFor="let option of fieldConfig.options" [ngValue]="option.id">{{option.name}}</option>
+	</select>
+</div>

@@ -1,0 +1,191 @@
+<div *ngIf="isPageLoaded">
+	<div class="select-date">
+		<span class="text-muted mr-4">Dashboard</span>
+
+		<div class="select-date__range btn-group btn-group-sm btn-group-toggle mr-4" ngbRadioGroup [(ngModel)]="rangeModel">
+			<label ngbButtonLabel class="btn-primary m-0 col">
+				<input ngbButton type="radio" [value]="1"> Today
+			</label>
+			<label ngbButtonLabel class="btn-primary m-0 col">
+				<input ngbButton type="radio" [value]="2"> Last 7 days
+			</label>
+			<label ngbButtonLabel class="btn-primary m-0 col">
+				<input ngbButton type="radio" [value]="3"> Last 30 days
+			</label>
+		</div>
+		<label class="m-0 mr-4 select-date__direction">
+			<input type="radio">
+			From
+		</label>
+
+		<div class="select-date__dp col-4">
+			<div class="form-group mb-0">
+				<div class="input-group input-group-sm">
+					<input class="form-control" placeholder="dd/mm/yyyy"
+					       name="dpFrom" [(ngModel)]="datepickerModelFrom" ngbDatepicker #dFrom="ngbDatepicker">
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" (click)="dFrom.toggle()" type="button">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<span class="ml-3 mr-3 select-date__direction">To</span>
+
+			<div class="form-group mb-0">
+				<div class="input-group input-group-sm">
+					<input class="form-control" placeholder="dd/mm/yyyy"
+					       name="dpTo" [(ngModel)]="datepickerModelTo" ngbDatepicker #dTo="ngbDatepicker">
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" (click)="dTo.toggle()" type="button">
+							<i class="fa fa-calendar" aria-hidden="true"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<a href="#" class="select-date__report">Download report</a>
+	</div>
+
+	<div class="row">
+		<div class="col">
+			<div class="podium-block">
+				<span class="podium-block__title bg-red-1">Escalation/Refund</span>
+				<div class="podium-block__body bg-red-1">{{dbData.order.escalation}}/{{dbData.order.refund}}</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="podium-block">
+				<span class="podium-block__title bg-blue-1">Total new orders</span>
+				<div class="podium-block__body bg-blue-1">{{dbData.order.total_new_orders}}</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="podium-block">
+				<span class="podium-block__title bg-green-1">Orders delivered</span>
+				<div class="podium-block__body bg-green-1">{{dbData.order.orders_delivered}}</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="podium-block">
+				<span class="podium-block__title bg-violet-1">Total cancelled</span>
+				<div class="podium-block__body bg-violet-1">{{dbData.order.total_cancelled}}</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="podium-block">
+				<span class="podium-block__title bg-orange-1">Replacement request</span>
+				<div class="podium-block__body bg-orange-1">{{dbData.order.replacement_request}}</div>
+			</div>
+		</div>
+	</div>
+
+	<h6 class="dashboard-status-title font-weight-bold">UPC product status</h6>
+
+	<div class="row">
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-green-1">Live products</span>
+				<span class="card-block__body">{{dbData.upc.live_products}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-green-2">New product request</span>
+				<span class="card-block__body">{{dbData.upc.new_product_request}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-blue-1">Waiting for review</span>
+				<span class="card-block__body">{{dbData.upc.waiting_for_review}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-blue-2">Suspended</span>
+				<span class="card-block__body">{{dbData.upc.suspended}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-red-1">Todays upload</span>
+				<span class="card-block__body">{{dbData.upc.todays_upload}}</span>
+			</div>
+		</div>
+	</div>
+
+	<h6 class="dashboard-status-title font-weight-bold">SKU product status</h6>
+
+	<div class="row">
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-green-1">Live products</span>
+				<span class="card-block__body">{{dbData.sku.live_products}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-green-2">New product request</span>
+				<span class="card-block__body">{{dbData.upc.new_product_request}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-blue-1">Waiting for review</span>
+				<span class="card-block__body">{{dbData.upc.waiting_for_review}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-blue-2">Suspended</span>
+				<span class="card-block__body">{{dbData.upc.suspended}}</span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card-block">
+				<span class="card-block__title bg-red-1">Todays upload</span>
+				<span class="card-block__body">{{dbData.upc.todays_upload}}</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="charts row">
+
+		<div class="col-12">
+			<div class="row ">
+				<div class="col-6">
+					<h6 class="text-center font-weight-bold mb-4">Last 3 months orders chart</h6>
+				</div>
+				<div class="col-6">
+					<h6 class="text-center font-weight-bold mb-4">Last 3 months orders chart</h6>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-6">
+			<div class="chart">
+				<ngx-charts-bar-vertical
+						[scheme]="colorScheme"
+						[results]="monthsChartResults"
+						[xAxis]="true"
+						[yAxis]="true"
+						[xAxisLabel]="xAxisLabel"
+						[yAxisLabel]="yAxisLabel"
+						[roundEdges]="false"
+						[barPadding]="50"
+				></ngx-charts-bar-vertical>
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="chart">
+				<ngx-charts-pie-chart
+						[results]="locationChartResults"
+						[labels]="true">
+				</ngx-charts-pie-chart>
+			</div>
+		</div>
+	</div>
+</div>

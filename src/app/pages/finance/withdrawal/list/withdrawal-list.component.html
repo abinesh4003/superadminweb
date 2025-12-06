@@ -1,0 +1,94 @@
+<div class="breadcrumbs-container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active" aria-current="page">Merchant Withdrawal Request</li>
+		</ol>
+	</nav>
+</div>
+
+<div *ngIf="isPageLoaded">
+	<ng-container *ngIf="(filterFormSettings$ | async) as settings">
+		<pkz-filter-form [config]="settings"
+		                 (filterChanged)="onFilter($event)"
+		                 [values]="filtersObj"
+		>
+			<button [disabled]="isDisabledDownloadSheet"
+			        (click)="onDownloadSheet()"
+			        class="btn btn-primary btn-sm col-2"
+			>
+				Download Sheet
+			</button>
+		</pkz-filter-form>
+	</ng-container>
+
+	<ngx-datatable
+      #table
+			class="bootstrap"
+			pkzResponsiveDatatable
+			[rows]="rows"
+			[rowHeight]="35"
+			columnMode="flex"
+			[footerHeight]="40"
+			[externalPaging]="true"
+			[count]="page.count"
+			[offset]="page.pageNumber"
+			[limit]="page.limit"
+			(page)="setPage($event)"
+	>
+		<ngx-datatable-column name="Date" prop="requested.at" [flexGrow]="0.5">
+			<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+				<span>{{value | date:'dd/MM/yy'}}</span>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Merchant Name" prop="merchant.name" [flexGrow]="1"></ngx-datatable-column>
+		<ngx-datatable-column name="Email" prop="merchant.email_id" [flexGrow]="1.5"></ngx-datatable-column>
+		<ngx-datatable-column name="Method" prop="method" [flexGrow]="0.5"></ngx-datatable-column>
+
+		<ngx-datatable-column name="Withdrawal amount" prop="amount" [flexGrow]="1">
+			<ng-template ngx-datatable-cell-template let-value="value">
+				{{value | number:'1.1-1'}}
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Balance" prop="merchant.wallet_available" [flexGrow]="0.5">
+			<ng-template ngx-datatable-cell-template let-value="value">
+				{{value | number:'1.1-1'}}
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Actions" [sortable]="false" [flexGrow]="0.5">
+			<ng-template let-row="row" ngx-datatable-cell-template>
+				<div class="actions">
+					<a *ngxPermissionsOnly="[perms.edit]"
+					   href="#"
+					   (click)="onOpenDetailsModal($event, row)"
+					   title="Edit"
+					   class="actions__item"
+					>
+						<i class="fa fa-calculator" aria-hidden="true"></i>
+					</a>
+				</div>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-footer>
+			<ng-template
+					ngx-datatable-footer-template
+					let-rowCount="rowCount"
+					let-pageSize="pageSize"
+					let-selectedCount="selectedCount"
+					let-offset="offset">
+
+				<pkz-table-pagination
+						[rowCount]="rowCount"
+						[pageSize]="pageSize"
+						[selectedCount]="selectedCount"
+						[offset]="offset"
+						(page)="table.onFooterPage($event)"
+				></pkz-table-pagination>
+			</ng-template>
+		</ngx-datatable-footer>
+
+	</ngx-datatable>
+</div>

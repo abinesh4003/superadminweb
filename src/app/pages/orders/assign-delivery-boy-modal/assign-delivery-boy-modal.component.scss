@@ -1,0 +1,47 @@
+.delivery-boy-actions {
+  .btn {
+    width: 120px;
+    border-radius: 0;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.silver-text {
+  color: #616161;
+}
+
+.separator-eeeeee {
+  width: 100%;
+  height: 1px;
+  background-color: #eeeeee;
+  margin: 16px 0;
+}
+
+.distance-select {
+  width: 100px;
+  height: 28px !important;
+}
+
+.radio-button-wrapper {
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  input {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}

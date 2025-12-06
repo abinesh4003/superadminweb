@@ -1,0 +1,74 @@
+@import 'variables';
+
+:host {
+  height: 50px;
+  display: block;
+}
+
+.navbar {
+  height: 50px;
+  background-color: $top-bar-bg;
+  border: 1px solid $top-bar-edge-color;
+
+  .w-90px {
+    width: 90px !important;
+  }
+
+  .border-radius-0 {
+    border-radius: 0 !important;
+  }
+
+  &__toggle-sidebar {
+    appearance: none;
+    border: none;
+    background: no-repeat;
+    color: #fff;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  &-brand {
+    width: 70px;
+    //border: 1px solid #fff;
+    margin: 0 20px;
+    height: 100%;
+  }
+
+  &-menu {
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+
+    &__item {
+      margin-left: 10px;
+      margin-right: 10px;
+
+      &.active {
+        .btn {
+          color: #fff;
+          background-color: #007bff;
+          border-color: #007bff;
+          box-shadow: none;
+        }
+      }
+
+    }
+  }
+
+  &-user-picture {
+    border-radius: 50%;
+    border: 1px solid #fff;
+    width: 31px;
+    height: 31px;
+    flex-shrink: 0;
+    background-size: cover;
+    margin: 0 20px;
+    font-size: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

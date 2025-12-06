@@ -1,0 +1,32 @@
+<div class="product-replacement-modal" *ngIf="chat">
+    <div class="modal-header">
+        <span class="modal-title font-size-1-2rem">Product Name: {{productName}} (Replacement/Undelivered)</span>
+        <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body replacement-modal-body">
+        <div class="d-flex">
+            <span class="flex-0-5">Customer:</span>
+            <span class="flex-0-5 d-flex justify-content-end">Merchant:</span>
+        </div>
+        <div class="chat-message" *ngFor="let c of chat"
+             [ngClass]="{'justify-content-start': isExist(c.first_name), 'justify-content-end': isExist(c.mfirst_name)}">
+            <div class="message">
+                <span class="mb-1">
+                    <span class="font-weight-bold mr-1">{{c.first_name ? c.first_name : c.mfirst_name}}</span>
+                    <span>{{formatDate(c.at)}}</span>
+                </span>
+                <span class="ml-1" *ngIf="isExist(c.message)">{{c.message}}</span>
+                <img [src]="c.image.name | imageSecure:imageOptions | async" alt="chatImage"
+                     *ngIf="isExist(c?.image?.name)" (click)="viewImage(c.image.name)"
+                     class="chat-image ml-1">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer product-replacement-buttons">
+        <button type="button" class="btn btn-primary mr-3" (click)="onConfirm(1)">Customer Resolve</button>
+        <button type="button" class="btn btn-primary mr-2" (click)="onConfirm(2)">Merchant Resolve</button>
+    </div>
+
+</div>

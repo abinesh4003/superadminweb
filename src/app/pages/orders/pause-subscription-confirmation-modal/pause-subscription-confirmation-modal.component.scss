@@ -1,0 +1,22 @@
+.actions {
+  margin: 8px 0 0 0;
+
+  .btn {
+    width: 120px;
+    border-radius: 0;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+input {
+  width: 20px;
+  height: 20px;
+}
+label {
+  line-height: 30px;
+}
+

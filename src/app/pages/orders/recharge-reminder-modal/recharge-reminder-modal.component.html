@@ -1,0 +1,23 @@
+<div class="support-call-log-modal">
+  <div class="modal-header">
+    <h5 class="modal-title silver-text font-size-1-2rem">Reminder Confirmation</h5>
+    <button type="button" class="close" aria-label="Close" (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body pt-0">
+
+    <p class="text-center mt-4">Are you sure you want to send Reminder?</p>
+
+  </div>
+  <div class="modal-footer actions">
+    <div class="float-right d-flex">
+      <button type="button"
+              class="btn btn-primary mr-2"
+              (click)="confirm()">Yes</button>
+      <button type="button"
+              class="btn btn-outline-grayed"
+              (click)="dismiss()">No</button>
+    </div>
+  </div>
+</div>

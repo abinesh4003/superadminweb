@@ -1,0 +1,12 @@
+.image-upload-field {
+  display: flex;
+  margin-bottom: 2rem;
+
+  &:nth-of-type(odd) {
+    justify-content: flex-start;
+  }
+
+  &:nth-of-type(even) {
+    justify-content: flex-end;
+  }
+}

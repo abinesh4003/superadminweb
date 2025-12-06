@@ -1,0 +1,113 @@
+<div class="breadcrumbs-container">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item active" aria-current="page">Store Category</li>
+		</ol>
+	</nav>
+	<button *ngxPermissionsOnly="[perms.create]" type="button" class="btn btn-success" routerLink="add">+ New Store Category</button>
+</div>
+
+<div *ngIf="isPageLoaded">
+	<ng-container *ngIf="filterFormSettings">
+		<pkz-filter-form [config]="filterFormSettings"
+		                 (filterChanged)="onFilter($event)"
+		                 [values]="filtersObj"
+		></pkz-filter-form>
+	</ng-container>
+
+	<ngx-datatable
+			#table
+			class="bootstrap"
+			pkzResponsiveDatatable
+			[rows]="rows"
+			[rowHeight]="35"
+			columnMode="force"
+			[footerHeight]="40"
+			[sorts]="sorts"
+			[externalPaging]="true"
+			[count]="page.count"
+			[offset]="page.pageNumber"
+			[limit]="page.limit"
+			(page)="setPage($event)"
+	>
+		<ngx-datatable-column name="S.no" prop="category_number" [minWidth]="55" [maxWidth]="80"></ngx-datatable-column>
+
+		<ngx-datatable-column name="Store Icon" prop="image" [minWidth]="90" [maxWidth]="110" [sortable]="false">
+			<ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+				<img [src]="value | imageSecure:imageOptions | async" alt="" [attr.height]="imageOptions.height / 2">
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Category Name" prop="display_name"></ngx-datatable-column>
+
+		<ngx-datatable-column name="Shop Type" prop="type">
+			<ng-template let-value="value" ngx-datatable-cell-template>
+				{{getShopTypeName(value)}}
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Status" prop="status">
+			<ng-template let-value="value" ngx-datatable-cell-template>
+				{{getStatusName(value)}}
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-column name="Actions" [sortable]="false" [minWidth]="110" [maxWidth]="130">
+			<ng-template let-row="row" ngx-datatable-cell-template>
+				<div class="actions">
+					<a *ngxPermissionsOnly="[perms.edit]"
+					   href="#"
+					   [routerLink]="['edit', row._id]"
+					   title="Edit"
+					   class="actions__item"
+					>
+						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+					</a>
+
+					<a *ngxPermissionsOnly="[perms.read]"
+					   href="#"
+					   [routerLink]="['view', row._id]"
+					   title="View"
+					   class="actions__item"
+					>
+						<i class="fa fa-list-alt" aria-hidden="true"></i>
+					</a>
+
+					<a  *ngxPermissionsOnly="[perms.suspend]"
+							href="#"
+					   (click)="onChangeSuspend($event, row)"
+					   [title]="isSuspendedStoreCategory(row.status) ? 'Unsuspend' : 'Suspend'"
+					   class="actions__item"
+					>
+						<i class="fa"
+						   [ngClass]="{
+						    'fa-eye': isSuspendedStoreCategory(row.status),
+						    'fa-eye-slash': !isSuspendedStoreCategory(row.status)
+						   }"
+						   aria-hidden="true"
+						></i>
+					</a>
+				</div>
+			</ng-template>
+		</ngx-datatable-column>
+
+		<ngx-datatable-footer>
+			<ng-template
+					ngx-datatable-footer-template
+					let-rowCount="rowCount"
+					let-pageSize="pageSize"
+					let-selectedCount="selectedCount"
+					let-offset="offset">
+
+				<pkz-table-pagination
+						[rowCount]="rowCount"
+						[pageSize]="pageSize"
+						[selectedCount]="selectedCount"
+						[offset]="offset"
+						(page)="table.onFooterPage($event)"
+				></pkz-table-pagination>
+			</ng-template>
+		</ngx-datatable-footer>
+
+	</ngx-datatable>
+</div>

@@ -1,0 +1,33 @@
+.delivery-assistants-list-filter {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  margin-top: 20px;
+
+  .delivery-assistants-list-filter-container {
+    width: 100%;
+    max-width: 1000px;
+
+    ::ng-deep .search-agency.ng-select {
+      .ng-select-container {
+        height: 31px;
+      }
+    }
+
+    ::ng-deep pkz-filter-form {
+
+      select, input {
+        height: 31px;
+      }
+
+      label {
+        width: 100px !important;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+.flex-grow-1 {
+  flex-grow: 1;
+}
