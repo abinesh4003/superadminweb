@@ -1,6 +1,0 @@
-node_modules
-src
-.angular-cli.json
-tsconfig.json
-tslint.json
-*.md
