@@ -2,6 +2,8 @@
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npm run build:prod:client -- --env=prod",
   "outputDirectory": "dist/browser",
+  "framework": null,
+
   "rewrites": [
     {
       "source": "/(.*)",
