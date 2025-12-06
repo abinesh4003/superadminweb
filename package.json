@@ -43,6 +43,9 @@
     "sprites": "node_modules/.bin/svg-sprite --config sprite-config.json src/assets/svg/*.svg"
   },
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@angular/animations": "^5.0.0",
     "@angular/common": "^5.0.0",
