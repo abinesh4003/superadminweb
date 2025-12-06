@@ -1,16 +1,11 @@
 {
-  "version": 2,
   "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "npm run build:ssr:prod",
-  "functions": {
-    "api/index.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
+  "buildCommand": "npm run build:prod:client -- --env=prod",
+  "outputDirectory": "dist/browser",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/index.js"
+      "destination": "/index.html"
     }
   ]
 }
