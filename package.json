@@ -25,7 +25,7 @@
     "lint:styles:win": "stylelint src/**/*.scss",
     "linting": "npm run lint && npm run lint:styles",
     "linting:win": "npm run lint && npm run lint:styles:win",
-    "build:prod:client": "ng build --prod",
+    "build:prod:client": "NODE_OPTIONS=--openssl-legacy-provider ng build --prod",
     "build:prod:server": "ng build --prod --app 1 --output-hashing=false",
     "build:prod": "npm run build:prod:client -- --env=prod && npm run build:prod:server -- --env=prod",
     "build:dev": "npm run build:prod:client -- --env=dev && npm run build:prod:server -- --env=dev",
@@ -43,9 +43,6 @@
     "sprites": "node_modules/.bin/svg-sprite --config sprite-config.json src/assets/svg/*.svg"
   },
   "private": true,
-  "engines": {
-    "node": "14.x"
-  },
   "dependencies": {
     "@angular/animations": "^5.0.0",
     "@angular/common": "^5.0.0",
